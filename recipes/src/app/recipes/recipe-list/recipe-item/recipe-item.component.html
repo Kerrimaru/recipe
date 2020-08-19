@@ -1,0 +1,14 @@
+<!-- <div class="bg" [style.background-image]="'url(' + recipe.imagePath + ')'"> -->
+<div class="recipe-item" style="cursor: pointer;" [routerLink]="[index]" routerLinkActive="active">
+  <!-- <a class="recipe-item" style="cursor: pointer;" [routerLink]="[index]" routerLinkActive="active"> -->
+  <!-- <div class="pull-left">
+    <h4 class="list-group-item-heading">{{ recipe.name }}</h4>
+    <p class="list-group-item-text">{{ recipe.description }}</p>
+  </div> -->
+
+  <img [src]="recipe.imagePath" alt="{{ recipe.name }}" class="img-responsive recipe-img" />
+  <div class="name">
+    <h4 class="title">{{ recipe.name }}</h4>
+  </div>
+  <!-- </a> -->
+</div>

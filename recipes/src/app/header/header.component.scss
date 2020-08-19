@@ -1,0 +1,51 @@
+.app-nav {
+  // position: absolute;
+  width: 100%;
+  z-index: 1;
+  top: 0;
+  height: 80px;
+  img {
+    // width: 100px;
+    height: 80px;
+    cursor: pointer;
+  }
+  // .navbar-header a {
+  //   color: #333333;
+  //   font-size: 16px;
+  // }
+
+  // margin-bottom: 0;
+  // background-color: transparent;
+  .nav-items {
+    // display: none;
+  }
+}
+
+a {
+  color: #333333;
+}
+
+.background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  // max-height: 1px;
+  background-color: #ffffff;
+  transition: all 2s ease-in-out;
+  height: 80px;
+}
+
+// .app-nav:hover {
+//   .background {
+//     max-height: 50px;
+//     height: 50px;
+//   }
+//   a {
+//     color: #333333;
+//   }
+//   // background-color: #ffffff;
+//   .nav-items {
+//     display: block;
+//   }
+// }

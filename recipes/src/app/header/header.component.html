@@ -1,0 +1,40 @@
+<nav class="app-nav">
+  <!-- <div class="container-fluid"> -->
+  <div class="background"></div>
+  <div class="navbar-header">
+    <!-- <button type="button" class="navbar-toggle" (click)="collapsed = !collapsed">
+      <span class="icon-bar" *ngFor="let iconBar of [1, 2, 3]"></span>
+    </button> -->
+    <!-- <a routerLink="/" class="navbar-brand"> -->
+    <!-- <img src="/assets/images/judy-logo-1.png" routerLink="/" /> -->
+    <!-- <img src="/assets/images/judith-kitchen-1.png" routerLink="/" /> -->
+    <img class="logo" src="/assets/images/judith-2.png" routerLink="/" />
+    <!-- <img src="/assets/images/judith-2-transparent.png" routerLink="/" /> -->
+    <!-- </a> -->
+  </div>
+
+  <!-- <div class="navbar-collapse" [class.collapse]="collapsed" (window:resize)="collapsed = true"> -->
+  <div class="nav-items">
+    <ul class="nav navbar-nav">
+      <li routerLinkActive="active" *ngIf="isAuth"><a routerLink="/recipes">Recipes</a></li>
+      <li routerLinkActive="active" *ngIf="isAuth"><a routerLink="/new">Add New Recipe</a></li>
+      <!-- <li routerLinkActive="active"><a routerLink="/shopping-list">Shopping List</a></li> -->
+      <!-- <li routerLinkActive="active" *ngIf="!isAuth"><a routerLink="/login">Login</a></li> -->
+    </ul>
+
+    <ul class="nav navbar-nav navbar-right">
+      <li style="cursor: pointer;" *ngIf="isAuth" (click)="logout()"><a>Logout</a></li>
+      <li class="dropdown" appDropdown *ngIf="isAuth">
+        <a style="cursor: pointer;" class="dropdown-toggle" role="button">
+          Manage
+          <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu">
+          <li><a style="cursor: pointer;" (click)="onSaveData()">Save Data</a></li>
+          <li><a style="cursor: pointer;" (click)="onFetchData()">Fetch Data</a></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+  <!-- </div> -->
+</nav>

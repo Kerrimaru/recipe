@@ -1,0 +1,29 @@
+input.ng-invalid.ng-touched,
+textarea.ng-invalid.ng-touched {
+  border: 1px solid red;
+}
+
+img.preview {
+  width: 250px;
+}
+
+.actions {
+  button {
+    margin-right: 10px;
+  }
+}
+
+.delete-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.ingredient {
+  display: flex;
+  align-items: center;
+}
+
+.test-ingerdient textarea {
+  width: 500px;
+  height: 500px;
+}

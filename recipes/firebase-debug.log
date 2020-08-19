@@ -1,0 +1,30 @@
+[debug] [2020-08-19T18:07:44.418Z] ----------------------------------------------------------------------
+[debug] [2020-08-19T18:07:44.420Z] Command:       /usr/local/bin/node /usr/local/bin/firebase deploy --only hosting:judiths-kitchen
+[debug] [2020-08-19T18:07:44.420Z] CLI Version:   8.7.0
+[debug] [2020-08-19T18:07:44.420Z] Platform:      darwin
+[debug] [2020-08-19T18:07:44.420Z] Node Version:  v12.16.1
+[debug] [2020-08-19T18:07:44.421Z] Time:          Wed Aug 19 2020 19:07:44 GMT+0100 (British Summer Time)
+[debug] [2020-08-19T18:07:44.421Z] ----------------------------------------------------------------------
+[debug] [2020-08-19T18:07:44.421Z] 
+[debug] [2020-08-19T18:07:44.428Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2020-08-19T18:07:44.429Z] > authorizing via signed-in user
+[debug] [2020-08-19T18:07:44.429Z] [iam] checking project kerr-recipe for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2020-08-19T18:07:44.431Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/kerr-recipe:testIamPermissions  
+ {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2020-08-19T18:07:44.794Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Wed, 19 Aug 2020 18:07:44 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","server-timing":"gfet4t7; dur=119","alt-svc":"h3-29=\":443\"; ma=2592000,h3-27=\":443\"; ma=2592000,h3-T050=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2020-08-19T18:07:44.795Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/kerr-recipe  
+ 
+[debug] [2020-08-19T18:07:45.098Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Wed, 19 Aug 2020 18:07:45 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-29=\":443\"; ma=2592000,h3-27=\":443\"; ma=2592000,h3-T050=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[info] 
+[info] === Deploying to 'kerr-recipe'...
+[info] 
+[info] i  deploying hosting 
+[info] 
+[info] ✔  Deploy complete! 
+[info] 
+[info] Project Console: https://console.firebase.google.com/project/kerr-recipe/overview
+[debug] [2020-08-19T18:07:45.103Z] TypeError: Cannot read property 'deploys' of undefined
+    at /usr/local/lib/node_modules/firebase-tools/lib/deploy/index.js:84:36
+    at processTicksAndRejections (internal/process/task_queues.js:97:5)
+[error] 
+[error] Error: An unexpected error has occurred.
