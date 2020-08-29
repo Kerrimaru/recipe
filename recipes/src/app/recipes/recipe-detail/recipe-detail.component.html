@@ -1,19 +1,25 @@
-<div class="row">
-  <div class="col-xs-12">
-    <h1>{{ recipe.name }}</h1>
-  </div>
-  <div class="actions">
-    <a style="cursor: pointer;" (click)="editRecipe()">Edit</a>
-    <a style="cursor: pointer;" (click)="deleteRecipe()">Delete</a>
-  </div>
-</div>
-<div class="row">
-  <div class="col-xs-12">
-    <img [src]="recipe.imagePath" alt="{{ recipe.name }}" class="img-responsive" style="max-height: '300px';" />
-  </div>
-</div>
+<ng-container *ngIf="!recipe"><p>...loading</p></ng-container>
 
-<!-- <div class="row">
+<ng-container *ngIf="recipe">
+  <div class="row">
+    <div class="col-xs-12">
+      <h1>{{ recipe.name }}</h1>
+    </div>
+    <div class="actions">
+      <a style="cursor: pointer;" (click)="editRecipe()">Edit</a>
+      <a style="cursor: pointer;" (click)="deleteRecipe()">Delete</a>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <img [src]="recipe.imagePath" alt="{{ recipe.name }}" class="img-responsive" style="max-height: '300px';" />
+    </div>
+  </div>
+  <div *ngIf="recipe.addedBy">
+    <h6>Added by {{ recipe.addedBy }}</h6>
+  </div>
+
+  <!-- <div class="row">
   <div class="col-xs-12">
     <div class="btn-group" appDropdown>
       <button type="button" class="btn btn-primary dropdown-toggle">
@@ -29,18 +35,19 @@
   </div>
 </div> -->
 
-<div class="row">
-  <div class="col-xs-12 ingredient-list">
-    <h4>Ingredients</h4>
-    <ul class="list-group">
-      <li *ngFor="let i of recipe.ingredients" class="list-group-item">~{{ i.amount }} {{ i.name }}</li>
-    </ul>
+  <div class="row">
+    <div class="col-xs-12 ingredient-list">
+      <h4>Ingredients</h4>
+      <ul class="list-group" *ngIf="recipe.ingredients?.length">
+        <li *ngFor="let i of recipe.ingredients" class="list-group-item">~{{ i?.name }}</li>
+      </ul>
+    </div>
   </div>
-</div>
 
-<div class="row">
-  <div class="col-xs-12">
-    <h4>Method</h4>
-    {{ recipe.description }}
+  <div class="row">
+    <div class="col-xs-12">
+      <h4>Method</h4>
+      {{ recipe.description }}
+    </div>
   </div>
-</div>
+</ng-container>

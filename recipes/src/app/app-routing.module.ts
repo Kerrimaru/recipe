@@ -5,14 +5,24 @@ import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
 // import { RecipeDetailComponent } from './recipes/recipe-detail/recipe-detail.component';
 // import { EmptyRecipeComponent } from './recipes/empty-recipe/empty-recipe.component';
 import { RecipeEditComponent } from './recipes/recipe-edit/recipe-edit.component';
+import { canActivate, redirectUnauthorizedTo, redirectLoggedInTo } from '@angular/fire/auth-guard';
+// import { canActivate } from '@angular/fire/auth-guard';
+// import { map } from 'rxjs/operators';
 // import { RecipesResolverService } from './recipes/recipes-resolver.service';
 // import { AuthComponent } from './auth/auth.component';
 // import { AuthGuard } from './auth/auth.guard';
 
+const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
+const redirectLoggedInToRecipes = () => redirectLoggedInTo(['recipes']);
+
 const routes: Routes = [
   { path: '', redirectTo: '/recipes', pathMatch: 'full' },
   // { path: 'recipes', loadChildren: './recipes/recipes.module#RecipesModule' }, <= older syntax
-  { path: 'recipes', loadChildren: () => import('./recipes/recipes.module').then((module) => module.RecipesModule) },
+  {
+    path: 'recipes',
+    ...canActivate(redirectUnauthorizedToLogin),
+    loadChildren: () => import('./recipes/recipes.module').then((module) => module.RecipesModule),
+  },
   // {
   //   path: 'recipes',
   //   component: RecipesComponent,
@@ -24,13 +34,17 @@ const routes: Routes = [
   //     { path: ':id/edit', component: RecipeEditComponent, resolve: [RecipesResolverService] },
   //   ],
   // },
-  { path: 'new', component: RecipeEditComponent },
+  // { path: 'new', component: RecipeEditComponent },
   {
     path: 'shopping-list',
     loadChildren: () => import('./shopping-list/shopping-list.module').then((module) => module.ShoppingListModule),
   },
   // { path: 'shopping-list', component: ShoppingListComponent },
-  { path: 'login', loadChildren: () => import('./auth/auth.module').then((module) => module.AuthModule) },
+  {
+    path: 'login',
+    ...canActivate(redirectLoggedInToRecipes),
+    loadChildren: () => import('./auth/auth.module').then((module) => module.AuthModule),
+  },
   // { path: 'login', component: AuthComponent },
 ];
 

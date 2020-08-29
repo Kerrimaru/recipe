@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from './auth/auth.service';
+import { AngularFireAuth } from '@angular/fire/auth';
+import { map } from 'rxjs/operators';
+// import { AngularFireDatabase } from 'angularfire2/database';
+// import { AngularFireDatabase } from '@angular/fire/database';
 // import firebase
 
 @Component({
@@ -8,19 +12,39 @@ import { AuthService } from './auth/auth.service';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, public fbAuth: AngularFireAuth) {}
 
   ngOnInit() {
-    this.authService.autoLogin();
+    // if (this.authService.user) {
+    //   console.log('there is a user in app component: ', this.authService.user);
+    //   this.authService.autoLogin();
+    // }
 
-    // const config = {
-    //   apiKey: 'AIzaSyBaSbh-bfBWCkpkU8X1V_f9VcK3OsJ4mww',
-    //   authDomain: 'kerr-recipe.firebaseapp.com',
-    //   databaseURL: 'https://kerr-recipe.firebaseio.com/',
-    //   storageBucket: 'bucket.appspot.com',
-    // };
-    // firebase.initializeApp(config);
-    // // Get a reference to the database service
-    // var database = firebase.database();
+    this.fbAuth.authState.subscribe((user) => {
+      console.log('autologin user: ', user);
+      // user ? this.handleAuth(user.email, user.uid, user.displayName, user.refuserhToken) : this.user.next(null);
+      if (user) {
+        // const user = {user.email, user.uid, user.displayName, user.refreshToken}
+        // this.authService.user.next(user)
+        this.authService.autoLogin(user);
+        // this.authService.handleAuth(user.email, user.uid, user.displayName, user.refreshToken).pipe(
+        //   map(res => {
+
+        //   })
+        // );
+      }
+
+      // this.initializer.init().subscribe(
+      //   () => {
+      //     console.log('Welcome to TouchNote Web App V' + AppConfig.appVersion);
+      //     this.status = 'loaded';
+      //     this.handleQueryParamFlags();
+      //     this.otherStuffAfterLoadSuccess();
+      //   },
+      //   (err) => {
+      //     this.status = 'error';
+      //   }
+      // );
+    });
   }
 }

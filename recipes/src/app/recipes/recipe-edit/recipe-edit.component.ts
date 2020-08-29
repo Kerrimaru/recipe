@@ -4,6 +4,9 @@ import { FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
 import { RecipeService } from '../recipe.service';
 import { Recipe } from '../recipe.model';
 import { DataStorageService } from 'src/app/shared/data-storage.service';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { TagService } from 'src/app/tags/tags.service';
+import { Tag } from 'src/app/tags/tag.model';
 
 @Component({
   selector: 'app-recipe-edit',
@@ -17,6 +20,7 @@ export class RecipeEditComponent implements OnInit {
   fileToUpload: File = null;
 
   test: any;
+  tags: Tag[];
 
   public previewImagePath;
   imgURL: any;
@@ -26,7 +30,8 @@ export class RecipeEditComponent implements OnInit {
     private route: ActivatedRoute,
     private recipeService: RecipeService,
     private router: Router,
-    private dataService: DataStorageService
+    private dataService: DataStorageService,
+    private tagService: TagService
   ) {}
 
   get ingredientControls() {
@@ -39,6 +44,10 @@ export class RecipeEditComponent implements OnInit {
       this.selectedRecipeId = +params['id'];
       this.editMode = !!params['id'];
       this.initForm();
+      // this.tagService.fetchTags().subscribe((tags) => {
+      //   this.tags = tags;
+      //   console.log('tags: ', tags, this.tags);
+      // });
 
       // const ele = document.querySelector('div[contenteditable]');
       // console.log('ele: ', ele);
@@ -75,22 +84,22 @@ export class RecipeEditComponent implements OnInit {
 
     if (this.editMode) {
       const recipe = this.recipeService.getRecipe(this.selectedRecipeId);
-      console.log('edit mode ', recipe);
       console.log('recipe: ', recipe);
       recipeName = recipe.name;
       recipeImagePath = recipe.imagePath;
       recipeDescription = recipe.description;
-      console.log(this.previewImagePath, recipe.imagePath);
       this.previewImagePath = recipe.imagePath;
       if (recipe.ingredients.length) {
-        console.log('ingredients ', recipe.ingredients);
-        for (let ing of recipe.ingredients) {
-          recipeIngredients.push(
-            new FormGroup({
-              name: new FormControl(ing.name, Validators.required),
-              amount: new FormControl(ing.amount, Validators.required),
-            })
-          );
+        for (const ing of recipe.ingredients) {
+          console.log('ing: ', ing);
+          if (!!ing) {
+            recipeIngredients.push(
+              new FormGroup({
+                name: new FormControl(ing.name),
+                // amount: new FormControl(ing.amount, Validators.required),
+              })
+            );
+          }
         }
       }
     }
@@ -99,29 +108,38 @@ export class RecipeEditComponent implements OnInit {
       name: new FormControl(recipeName, Validators.required),
       imagePath: new FormControl(recipeImagePath, Validators.required),
       description: new FormControl(recipeDescription, Validators.required),
-      test: new FormControl(''),
       ingredients: recipeIngredients,
     });
 
     this.onAddIngredient();
   }
 
-  onSubmit() {
-    console.log('val: ', this.recipeForm.value);
+  drop(event: CdkDragDrop<string[]>) {
+    console.log(this.ingredientControls);
+    moveItemInArray(this.ingredientControls, event.previousIndex, event.currentIndex);
+  }
 
+  onSubmit() {
     if (!this.recipeForm.valid) {
       console.log('not valid but why? ', this.recipeForm);
       return;
     }
-    if (this.editMode) {
-      this.recipeService.updateRecipe(this.selectedRecipeId, this.recipeForm.value);
-      this.onCancel();
-    } else {
-      this.recipeService.addRecipe(this.recipeForm.value);
-      // this.dataService.createRecipe(this.recipeForm.value);
-      // this.router.navigate(['..'], { relativeTo: this.route });
-    }
+    // remove empty ingredients
+    const _ing = this.recipeForm.get('ingredients') as FormArray;
+    const ingArr = _ing.value.filter((i) => !!i.name);
+    const _recipe = { ...this.recipeForm.value };
+    // const _recipe = { ...this.recipeForm.value, ingredients: ingArr, tags: this.tags };
+    console.log('rec on submit: ', _recipe);
 
+    if (this.editMode) {
+      const recipe = this.recipeService.getRecipe(this.selectedRecipeId);
+      this.dataService.editRecipe(recipe.id, _recipe);
+      this.recipeService.updateRecipe(this.selectedRecipeId, _recipe);
+    } else {
+      this.recipeService.addRecipe(_recipe);
+      // this.dataService.createRecipe(_recipe);
+    }
+    this.onCancel();
     // this.recipeForm.reset();
   }
 
@@ -134,9 +152,9 @@ export class RecipeEditComponent implements OnInit {
     // );
     (this.recipeForm.get('ingredients') as FormArray).push(
       new FormGroup({
-        name: new FormControl(ingredient ? ingredient : null, Validators.required),
+        name: new FormControl(ingredient ? ingredient : null),
         // amount: new FormControl(null, Validators.required),
-        amount: new FormControl(null),
+        // amount: new FormControl(null),
       })
     );
   }
@@ -195,32 +213,20 @@ export class RecipeEditComponent implements OnInit {
     }
   }
 
-  testIng() {
-    console.log(this.test);
-    console.log(this.recipeForm.controls.test.value);
-    const elem = document.getElementById('testel');
-    console.log('tesetl', elem);
-    console.log('elem.textContent ', elem.textContent);
-    console.log('elem.innerHTML ', elem.innerHTML);
-    console.log('elem.innerText ', elem.innerText);
-  }
-
-  onPaste(e) {
+  onPaste(e, index: number) {
     console.log('e: ', e);
-
     e.preventDefault();
-    console.log('e: ', (e.originalEvent || e).clipboardData.getData('text/richtext'));
     // get text representation of clipboard
-    var text = (e.originalEvent || e).clipboardData.getData('text/plain');
-    const split = text.split(/\n/);
-    split.forEach((i) => {
-      this.onAddIngredient(i);
-    });
-    console.log('split: ', split);
-    console.log('text: ', text.trim());
+    const text = (e.originalEvent || e).clipboardData.getData('text/plain');
+    const ingArray = text.split(/\n/);
+    ingArray.filter((i) => !!i).forEach((i) => this.onAddIngredient(i));
+
+    this.onRemoveIngredient(index);
 
     // insert text manually
-    document.execCommand('insertText', false, text);
+    // document.execCommand('insertText', false, text);
+    // this.
+
     // document.execCommand('insertHTML', false, text);
   }
 }

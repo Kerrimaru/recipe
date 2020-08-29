@@ -7,6 +7,7 @@ export const environment = {
     projectId: 'kerr-recipe',
     storageBucket: 'kerr-recipe.appspot.com',
     messagingSenderId: '1083330506711',
-    appId: '1:1083330506711:web:742df0ca278b02396c2592',
+    // appId: '1:1083330506711:web:742df0ca278b02396c2592',
+    appId: '1:1083330506711:web:92df3d06e76ed5cc6c2592',
   },
 };

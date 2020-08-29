@@ -3,18 +3,42 @@ import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/r
 import { Recipe } from './recipe.model';
 import { DataStorageService } from '../shared/data-storage.service';
 import { RecipeService } from './recipe.service';
+import { map, take, first } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class RecipesResolverService implements Resolve<Recipe[]> {
   constructor(private datStorageService: DataStorageService, private recipeService: RecipeService) {}
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    const recipes = this.recipeService.getRecipes();
+    let recipes = this.recipeService.getRecipes();
+    const id = route.params.id;
 
     if (recipes.length === 0) {
-      return this.datStorageService.fetchRecipes();
+      return this.recipeService.fetchRecipes().pipe(
+        first(),
+        map((res) => {
+          console.log('res: ', res);
+          return res;
+        })
+      );
     } else {
       return recipes;
     }
   }
 }
+
+// @Injectable({ providedIn: 'root' })
+// export class RecipesResolverService implements Resolve<Recipe[]> {
+//   constructor(private datStorageService: DataStorageService, private recipeService: RecipeService) {}
+
+//   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+//     const recipes = this.recipeService.getRecipes();
+
+//     if (recipes.length === 0) {
+//       return this.datStorageService.fetchRecipes();
+//     } else {
+//       return recipes;
+//     }
+//   }
+// }

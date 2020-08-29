@@ -1,9 +1,14 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+
+import { AngularFireModule } from '@angular/fire';
+import { AngularFireDatabaseModule } from '@angular/fire/database';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
+import { environment } from '../environments/environment';
 // import { RecipesComponent } from './recipes/recipes.component';
 // import { RecipeListComponent } from './recipes/recipe-list/recipe-list.component';
 // import { RecipeDetailComponent } from './recipes/recipe-detail/recipe-detail.component';
@@ -24,6 +29,13 @@ import { AppRoutingModule } from './app-routing.module';
 // import { ShoppingListModule } from './shopping-list/shopping-list.module';
 import { SharedModule } from './shared/shared.module';
 import { CoreModule } from './core.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+// import { AngularFireDatabaseModule } from '@angular/fire/database';
+// import { AngularFirestoreModule } from '@angular/fire/firestore';
+// import { AngularFireStorageModule } from '@angular/fire/storage';
+// import { AngularFireAuthModule } from '@angular/fire/auth';
+
 // import { AuthModule } from './auth/auth.module';
 
 @NgModule({
@@ -44,6 +56,8 @@ import { CoreModule } from './core.module';
   ],
   imports: [
     BrowserModule,
+    AngularFireModule.initializeApp(environment.firebase, 'kerr-recipe'),
+    AngularFireDatabaseModule,
     // FormsModule,
     AppRoutingModule,
     // ReactiveFormsModule,
@@ -52,13 +66,19 @@ import { CoreModule } from './core.module';
     // ShoppingListModule, // is lazy load
     SharedModule,
     CoreModule,
+    DragDropModule,
+    BrowserAnimationsModule,
     // AuthModule, // is lazy load
+
+    // AngularFirestoreModule, // firestore
+    // AngularFireAuthModule, // auth
+    // AngularFireStorageModule, // storage
   ],
-  // providers: [
-  // ShoppingListService,
-  // RecipeService,
-  // { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true },
-  // ],
+  providers: [
+    // ShoppingListService,
+    // RecipeService,
+    // { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

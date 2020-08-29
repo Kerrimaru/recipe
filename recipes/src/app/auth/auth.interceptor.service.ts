@@ -7,6 +7,7 @@ import { take, exhaustMap, retry } from 'rxjs/operators';
 export class AuthInterceptorService implements HttpInterceptor {
   constructor(private authService: AuthService) {}
   intercept(request: HttpRequest<any>, next: HttpHandler) {
+    debugger;
     return this.authService.user.pipe(
       take(1),
       exhaustMap((user) => {

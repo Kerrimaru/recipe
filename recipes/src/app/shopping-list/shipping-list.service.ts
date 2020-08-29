@@ -4,34 +4,34 @@ import { Subject } from 'rxjs';
 export class ShoppingListService {
   ingredientsChanged = new Subject<Ingredient[]>();
   ingredientSelected = new Subject<number>();
-  private ingredients: Ingredient[] = [new Ingredient('chocolate', '2 bars'), new Ingredient('chilli', 1)];
+  // private ingredients: Ingredient[] = [new Ingredient('chocolate', '2 bars'), new Ingredient('chilli', 1)];
 
   getIngredients() {
-    return this.ingredients.slice();
+    // return this.ingredients.slice();
   }
 
-  getIngredient(index: number): Ingredient {
-    return this.ingredients[index];
+  getIngredient(index: number) {
+    // return this.ingredients[index];
   }
 
   addIngredient(ingredient: Ingredient) {
-    this.ingredients.push(ingredient);
-    this.ingredientsChanged.next(this.ingredients.slice());
+    // this.ingredients.push(ingredient);
+    // this.ingredientsChanged.next(this.ingredients.slice());
   }
 
   addIngredients(ingredients: Ingredient[]) {
-    this.ingredients.push(...ingredients);
-    this.ingredientsChanged.next(this.ingredients.slice());
+    // this.ingredients.push(...ingredients);
+    // this.ingredientsChanged.next(this.ingredients.slice());
   }
 
   updateIngredient(index: number, newIngredient: Ingredient) {
-    this.ingredients[index] = newIngredient;
-    this.ingredientsChanged.next(this.ingredients.slice());
+    // this.ingredients[index] = newIngredient;
+    // this.ingredientsChanged.next(this.ingredients.slice());
   }
 
   deleteIngredient(index: number) {
-    this.ingredients.splice(index, 1);
-    console.log(this.ingredients, index);
-    this.ingredientsChanged.next(this.ingredients.slice());
+    // this.ingredients.splice(index, 1);
+    // console.log(this.ingredients, index);
+    // this.ingredientsChanged.next(this.ingredients.slice());
   }
 }
