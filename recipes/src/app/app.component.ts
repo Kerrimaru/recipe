@@ -15,6 +15,7 @@ export class AppComponent implements OnInit {
   constructor(private authService: AuthService, public fbAuth: AngularFireAuth) {}
 
   ngOnInit() {
+    document.documentElement.className = 'theme-vanilla';
     // if (this.authService.user) {
     //   console.log('there is a user in app component: ', this.authService.user);
     //   this.authService.autoLogin();
@@ -36,7 +37,7 @@ export class AppComponent implements OnInit {
 
       // this.initializer.init().subscribe(
       //   () => {
-      //     console.log('Welcome to TouchNote Web App V' + AppConfig.appVersion);
+      //
       //     this.status = 'loaded';
       //     this.handleQueryParamFlags();
       //     this.otherStuffAfterLoadSuccess();

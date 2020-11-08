@@ -3,7 +3,6 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { RecipesComponent } from './recipes.component';
 import { AuthGuard } from '../auth/auth.guard';
-import { EmptyRecipeComponent } from './empty-recipe/empty-recipe.component';
 import { RecipeDetailComponent } from './recipe-detail/recipe-detail.component';
 import { RecipesResolverService } from './recipes-resolver.service';
 import { RecipeEditComponent } from './recipe-edit/recipe-edit.component';
@@ -11,19 +10,9 @@ import { AngularFireAuthGuard } from '@angular/fire/auth-guard';
 import { canActivate } from '@angular/fire/auth-guard';
 import { map } from 'rxjs/operators';
 import { User } from '../auth/user.model';
+import { RecipeListComponent } from './recipe-list/recipe-list.component';
 
-const redirectLoggedInToRecipes = () =>
-  map((user) => {
-    console.log('user in routing: ', user);
-    if (!user) {
-      console.log('login');
-      return ['login'];
-    } else {
-      console.log('empty');
-      return true;
-    }
-    // return !user ? ['login'] : [''];
-  });
+const redirectLoggedInToRecipes = () => map((user) => (!user ? ['login'] : true));
 
 const routes: Routes = [
   {
@@ -34,8 +23,14 @@ const routes: Routes = [
     resolve: { recipes: RecipesResolverService },
     ...canActivate(redirectLoggedInToRecipes),
     children: [
-      { path: '', component: EmptyRecipeComponent },
+      { path: '', component: RecipeListComponent },
       { path: 'new', component: RecipeEditComponent },
+      {
+        path: 'favourites',
+        component: RecipeListComponent,
+        // resolve: { recipes: RecipesResolverService },
+        // loadChildren: () => import('./favourites/favourites.module').then((module) => module.FavouritesModule),
+      },
       // { path: ':id', component: RecipeDetailComponent, resolve: { recipes: RecipesResolverService } },
       // { path: ':id/edit', component: RecipeEditComponent, resolve: { recipes: RecipesResolverService } },
       { path: ':id', component: RecipeDetailComponent },

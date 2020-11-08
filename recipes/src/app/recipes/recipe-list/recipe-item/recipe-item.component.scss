@@ -35,7 +35,7 @@
   position: absolute;
   bottom: 0;
   left: 0;
-  width: 100%;
+  // width: 100%;
   margin: 0;
   padding: 20px;
   opacity: 0;
@@ -52,7 +52,9 @@ img {
 }
 
 .recipe-item:hover {
-  // max-height: 1000px;
+  // transform: scale(1.02);
+  // transition: ease-in-out all 0.5s;
+  // box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.75);
   img {
     opacity: 0.3;
   }
@@ -71,4 +73,17 @@ img {
   // position: absolute;
   top: 0;
   left: 0;
+  width: 100% !important;
+  height: auto !important;
+}
+
+@media (max-width: 1000px) {
+  .recipe-item img {
+    opacity: 0.8;
+  }
+  .recipe-item .title {
+    font-size: 40px;
+    opacity: 1;
+    color: #333333;
+  }
 }

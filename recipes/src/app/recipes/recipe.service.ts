@@ -3,9 +3,9 @@ import { EventEmitter, Injectable } from '@angular/core';
 import { Ingredient } from '../shared/ingredient.model';
 import { Subject, Observable, of } from 'rxjs';
 // import { DataStorageService } from '../shared/data-storage.service';
-import { AngularFireDatabase } from '@angular/fire/database';
+import { AngularFireDatabase, AngularFireList } from '@angular/fire/database';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { map, tap } from 'rxjs/operators';
+import { map, tap, switchMap } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class RecipeService {
@@ -13,9 +13,11 @@ export class RecipeService {
 
   recipesChanged = new Subject<Recipe[]>();
 
-  private recipes: Recipe[] = [];
-  recipeList: Observable<any[]>;
+  private recipes: any[] = [];
+  // recipeList: Observable<any[]>;
+  recipeList: AngularFireList<Recipe>;
 
+  recTest: Observable<any[]>;
   // init(): Observable<any> {
   //   // return this.fetchRecipes();
   // }
@@ -33,26 +35,26 @@ export class RecipeService {
   }
 
   getRecipe(index: number) {
-    console.log('this.recipes : ', this.recipes);
     return this.recipes[index];
   }
 
+  getRecipeSub(index: number) {
+    return this.recTest.pipe(map((r) => r[index]));
+  }
+
   addRecipe(recipe: Recipe) {
+    console.log('new recipe created: ', recipe);
     if (!this.recipes) {
       this.recipes = [];
     }
+    this.recipeList.push(recipe);
     // this.recipes.push(recipe);
-    // this.recipesChanged.next(this.recipes.slice());
-    debugger;
-    const recipeRef = this.fb.list('recipes');
-    console.log('recref: ', recipeRef);
-    console.log('re ipe to push: ', recipe);
-    recipeRef.push(recipe);
+    // this.setRecipes(this.recipes);
   }
 
-  updateRecipe(index: number, recipe: Recipe) {
-    this.recipes[index] = recipe;
-    this.recipesChanged.next(this.recipes.slice());
+  updateRecipe(recipe: Recipe, key: string) {
+    console.log('recip: ', recipe, ' key: ', key);
+    this.recipeList.update(key, { ...recipe });
   }
 
   deleteRecipe(index: number) {
@@ -60,43 +62,52 @@ export class RecipeService {
     this.recipesChanged.next(this.recipes.slice());
   }
 
-  fetchRecipes() {
-    // debugger;
-    // if (this.fbAuth.currentUser) {
-
-    return this.fb
-      .list('recipes')
-      .valueChanges()
-      .pipe(
-        map((recipes: Recipe[]) => {
-          // this.setRecipes(recipes);
-          console.log('recipes ', recipes);
-          return recipes;
-        }),
-        tap((recipes) => {
-          console.log('recipes ', recipes);
-          this.setRecipes(recipes);
-        })
-      );
-
-    // this.recipeList.subscribe((res) => {
-    //   console.log('fetched recipes res: ', res);
-    //   this.setRecipes(res);
-    //   return res;
-    // });
-    // } else {
-    //   return of([]);
-  }
-  // }
-
   // fetchRecipes() {
-  //   // debugger;
-
-  //   this.recipeList = this.fb.list('recipes').valueChanges();
-  //   return this.recipeList.subscribe((res) => {
-  //     console.log('fetched recipes res: ', res);
-  //     this.setRecipes(res);
-  //     return res;
-  //   });
+  //   return this.fb
+  //     .list('recipes')
+  //     .valueChanges()
+  //     .pipe(
+  //       map((recipes: Recipe[]) => {
+  //         this.setRecipes(recipes);
+  //         console.log('recipes ', recipes);
+  //         return recipes;
+  //       })
+  //       // tap((recipes) => {
+  //       //   console.log('recipes ', recipes);
+  //       //   this.setRecipes(recipes);
+  //       // })
+  //     );
   // }
+
+  toggleFavourite(key: string, favourite: boolean) {
+    this.recipeList.update(key, { favourite: !favourite });
+  }
+
+  fetchRecipes() {
+    this.recipeList = this.fb.list('recipes');
+    return (this.recTest = this.recipeList.snapshotChanges().pipe(
+      map((changes) => changes.map((c) => ({ key: c.payload.key, ...c.payload.val() }))),
+      tap((rec) => {
+        console.log('%c recipes! ', 'background: #222; color: #bada55', rec);
+        this.setRecipes(rec);
+      })
+    ));
+    // return this.fb
+    //   .list('recipes')
+    //   .valueChanges()
+    //   .pipe(
+    //     map((recipes: Recipe[]) => {
+    //       this.setRecipes(recipes);
+    //       console.log('recipes ', recipes);
+    //       console.log('res test: ', this.recTest);
+    //       return recipes;
+    //     }),
+    //     switchMap((res) => {
+    //       return this.recTest;
+    //     }),
+    //     tap((recipes) => {
+    //       console.log('%c recipes! ', 'background: #222; color: #bada55', recipes);
+    //     })
+    //   );
+  }
 }

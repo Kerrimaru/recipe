@@ -1,32 +1,22 @@
-<div class="row">
-  <div class="col-xs-12">
-    <form [formGroup]="recipeForm" (ngSubmit)="onSubmit()">
-      <div class="row">
-        <div class="col-xs-12">
-          <div class="form-group">
-            <!-- <label for="name">Name</label> -->
-            <input
-              type="text"
-              id="recipe-name"
-              class="app-form-control"
-              formControlName="name"
-              placeholder="Recipe title"
-            />
-          </div>
-        </div>
+<div class="edit-container">
+  <div>
+    <form [formGroup]="recipeForm" (ngSubmit)="onSubmit()" (keydown.enter)="$event.preventDefault()">
+      <div class="recipe-header">
+        <input
+          type="text"
+          id="recipe-name"
+          class="app-form-control"
+          formControlName="name"
+          placeholder="Recipe title"
+        />
       </div>
+      <hr />
 
       <!-- <div><app-tag-selector></app-tag-selector></div> -->
-      <div class="row ing-img-cont">
+      <div class="ing-img-cont">
         <div class="column column-left">
-          <h4>Ingredients</h4>
-          <div
-            class="col-xs-12"
-            formArrayName="ingredients"
-            cdkDropList
-            (cdkDropListDropped)="drop($event)"
-            class="ingredients-list"
-          >
+          <h2>Ingredients</h2>
+          <div formArrayName="ingredients" cdkDropList (cdkDropListDropped)="drop($event)" class="ingredients-list">
             <div
               cdkDrag
               class="ingredient"
@@ -35,7 +25,6 @@
               (blur)="checkIfLast(i)"
               (focus)="focus(i)"
             >
-              <!-- <label for="name">Name</label> -->
               <!-- drag handle -->
               <div class="ingredient-handle" cdkDragHandle matTooltip="Drag to reorder" matTooltipShowDelay="500">
                 <svg width="24px" fill="currentColor" viewBox="0 0 24 24">
@@ -55,8 +44,7 @@
                 (paste)="onPaste($event, i)"
               />
 
-              <!-- <div class="col-xs-2"> -->
-              <!-- <button type="button" class="btn btn-danger" (click)="onRemoveIngredient(i)">Delete</button> -->
+              <!-- <button type="button" class="btn btn-secondary" (click)="onRemoveIngredient(i)">Delete</button> -->
               <img
                 src="/assets/images/icons/delete-icon-3.png"
                 class="delete-icon"
@@ -64,26 +52,27 @@
                 matTooltip="Delete ingredient"
                 matTooltipShowDelay="500"
               />
-              <!-- </div> -->
-              <!-- <div *ngIf="i === controls.length" class="row add-ingredient">
+
+              <!-- <div *ngIf="i === controls.length" class=" add-ingredient">
               <input type="text" class="form-control" formControlName="name" />
             </div> -->
             </div>
-            <!-- <div *ngIf="controls.length === 0" class="row add-ingredient">
+            <!-- <div *ngIf="controls.length === 0" class=" add-ingredient">
             <input type="text" class="form-control" formControlName="name" />
           </div> -->
           </div>
-          <!-- <div class="row add-ingredient">
+          <!-- <div class=" add-ingredient">
           <input type="text" class="form-control" formControlName="name" />
         </div> -->
-          <!-- <div class="row">
-          <div class="col-xs-12">
-            <button type="button" class="btn btn-success" (click)="onAddIngredient()">Add ingredient</button>
+          <!-- <div class="">
+          <div >
+            <button type="button" class="btn btn-primary" (click)="onAddIngredient()">Add ingredient</button>
           </div>
         </div> -->
         </div>
 
         <div class="column column-right image-upload">
+          <!-- hidden upload input -->
           <div>
             <input
               #imgfile
@@ -92,8 +81,17 @@
               (change)="preview(imgfile.files)"
               #imagePath
               id="imagePath"
-              style="display: none;"
+              style="display: none"
             />
+            <!-- <input
+              #imgfile
+              type="file"
+              accept="image/*"
+              (change)="process($event)"
+              #imagePath
+              id="imagePath"
+              style="display: none"
+            /> -->
           </div>
 
           <div class="aspect-ratio-box" *ngIf="!imgURL && !previewImagePath">
@@ -106,15 +104,18 @@
               <div class="flexbox-centering">
                 <div class="viewport-sizing">
                   <img src="assets/images/icons/icons8-camera-100-2.png" class="empty-icon" />
+                  <span class="material-icons">insert_photo</span>
+                  <span class="material-icons">add_a_photo</span>
                   <p>
-                    Click to select an image
+                    Browse or
                     <br />
-                    or drag and drop your file here
+                    drop image here
                   </p>
                 </div>
               </div>
             </div>
           </div>
+
           <img class="preview" [src]="imgURL ? imgURL : previewImagePath" (click)="imgfile.click()" />
 
           <!-- <div class="col-xs-12 preview-cont">
@@ -160,47 +161,23 @@
         </div>
       </div>
 
-      <!-- <div class="row">
-        <div class="aspect-ratio-box">
-          <div class="aspect-ratio-box-inside">
-            <div class="flexbox-centering">
-              <div class="viewport-sizing">
-                <img src="assets/images/icons/icons8-camera-100-2.png" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div> -->
-
-      <div class="row">
-        <div class="col-xs-12">
-          <div class="form-group">
-            <h4>Method</h4>
-            <textarea
-              type="text"
-              id="description"
-              class="form-control"
-              rows="16"
-              formControlName="description"
-            ></textarea>
-          </div>
-        </div>
-      </div>
-
-      <!-- <div class="row">
-        <div class="col-xs-12">
-          <div class="form-group">
-            <label for="name">Name</label>
-            <input type="text" id="name" class="form-control" />
-          </div>
-        </div>
-      </div> -->
-
-      <div class="col-xs-12 actions">
-        <!-- <button type="submit" class="btn btn-success" [disabled]="!recipeForm.valid">Save</button> -->
-        <button type="submit" class="btn btn-success">Save</button>
-        <button type="button" class="btn btn-danger" (click)="onCancel()">Cancel</button>
+      <div class="form-group">
+        <h4>Method</h4>
+        <ckeditor [editor]="Editor" [config]="{ height: '300px' }" formControlName="description"></ckeditor>
       </div>
     </form>
+  </div>
+
+  <div class="actions">
+    <button
+      [style.opacity]="recipeForm.dirty ? 1 : 0"
+      [disabled]="!recipeForm.valid"
+      type="submit"
+      class="btn btn-primary"
+      (click)="onSubmit()"
+    >
+      Save
+    </button>
+    <button type="button" class="btn btn-secondary" (click)="onCancel()">Cancel</button>
   </div>
 </div>

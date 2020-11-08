@@ -13,6 +13,8 @@ export const environment = {
     // messagingSenderId: '1083330506711',
     // // appId: '1:1083330506711:web:742df0ca278b02396c2592',
     // appId: '1:1083330506711:web:92df3d06e76ed5cc6c2592',
+
+    //  judiths kitchen:
     apiKey: 'AIzaSyBaSbh-bfBWCkpkU8X1V_f9VcK3OsJ4mww',
     authDomain: 'kerr-recipe.firebaseapp.com',
     databaseURL: 'https://kerr-recipe.firebaseio.com',
@@ -20,6 +22,15 @@ export const environment = {
     storageBucket: 'kerr-recipe.appspot.com',
     messagingSenderId: '1083330506711',
     appId: '1:1083330506711:web:742df0ca278b02396c2592',
+
+    // test-kerr
+    // apiKey: 'AIzaSyDY-FoporpVVQ1Mz_BRMlYhdr5dj_3JfdQ',
+    // authDomain: 'test-kerr.firebaseapp.com',
+    // databaseURL: 'https://test-kerr.firebaseio.com',
+    // projectId: 'test-kerr',
+    // storageBucket: 'test-kerr.appspot.com',
+    // messagingSenderId: '990311827059',
+    // appId: '1:990311827059:web:a1abf889befcad23e8cc06',
   },
 };
 

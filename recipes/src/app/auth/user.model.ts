@@ -14,3 +14,10 @@ export class User {
     return this._token;
   }
 }
+
+export class UserSettings {
+  userId: string;
+  favourites: string[];
+  diet: string;
+  theme: string;
+}

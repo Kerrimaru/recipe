@@ -16,22 +16,24 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private authService: AuthService
   ) {}
-  collapsed = true;
+
   login = true;
-  private userSub: Subscription;
   user: User;
   isAuth = false;
+
+  private userSub: Subscription;
   // @Output() featureSelected = new EventEmitter<string>();
 
   ngOnInit(): void {
     this.userSub = this.authService.user.subscribe((user) => {
       this.user = user;
-      console.log('user in header: ', user);
+      // console.log('user in header: ', user);
       this.isAuth = !!user;
     });
 
     this.route.url.subscribe((params) => {
       this.login = params['login'];
+      console.log('params in header: ', params);
     });
   }
 

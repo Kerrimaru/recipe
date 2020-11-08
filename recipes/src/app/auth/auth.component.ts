@@ -25,7 +25,7 @@ export class AuthComponent implements OnInit {
   }
 
   onSubmit(form: NgForm) {
-    console.log('form: ', !form.valid, form.value);
+    console.log('form: ', form.valid, form.value);
     if (!form.valid) {
       return;
     }

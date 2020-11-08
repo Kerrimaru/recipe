@@ -1,10 +1,23 @@
-<hr />
+<div class="search">
+  <input [ngModelOptions]="{ standalone: true }" type="text" placeholder="Search" [(ngModel)]="searchTerm" />
+</div>
 
 <div class="recipe-list">
+  <ng-container *ngFor="let recipe of recipes | recipeFilter: searchTerm; index as index">
+    <app-recipe-item
+      *ngIf="recipe | arrayIncludes: favouritesArr:'key'"
+      class="recipe-item"
+      [recipe]="recipe"
+      [index]="index"
+    ></app-recipe-item>
+  </ng-container>
+</div>
+
+<!--   
   <app-recipe-item
     class="recipe-item"
-    *ngFor="let recipe of recipes; index as index"
+    *ngFor="let recipe of recipes | arrayIncludes: favouritesArr:'key' | recipeFilter: searchTerm; index as index"
     [recipe]="recipe"
     [index]="index"
-  ></app-recipe-item>
-</div>
+  ></app-recipe-item> 
+-->

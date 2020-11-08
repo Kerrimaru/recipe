@@ -1,0 +1,30 @@
+.theme-icon {
+  height: 35px;
+}
+
+.theme-preview {
+  height: 150px;
+}
+
+form {
+  display: flex;
+}
+
+.user-details {
+  margin-right: 50px;
+}
+
+.one {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.three {
+  background-color: var(--color-3);
+  border-color: var(--color-3);
+}
+
+.four {
+  background-color: var(--color-4);
+  border-color: var(--color-4);
+}

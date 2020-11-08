@@ -9,6 +9,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import * as firebase from 'firebase/app';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { RecipeService } from '../recipes/recipe.service';
+import { UserSettingsService } from '../settings/user-settings.service';
 // import { auth } from 'firebase/app';
 
 export interface AuthResponseData {
@@ -28,14 +29,14 @@ export class AuthService {
     private router: Router,
     public fbAuth: AngularFireAuth,
     private fb: AngularFireDatabase, // private initializer: InitializerService
-    private recipeService: RecipeService
+    private recipeService: RecipeService,
+    private settingsService: UserSettingsService
   ) {}
 
   user = new BehaviorSubject<User>(null);
   private tokenExpirationCountdown: any;
 
   signup(email: string, password: string, name: string) {
-    debugger;
     return this.http
       .post<AuthResponseData>(
         `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${environment.firebase.apiKey}`,
@@ -134,6 +135,10 @@ export class AuthService {
 
     this.handleAuth(user.email, user.uid, user.displayName, user.refreshToken)
       .pipe(
+        map((res) => {
+          console.log('login res: ', res);
+          this.settingsService.fetchUserSettings(res.id);
+        }),
         map((res) => {
           console.log('Res: ', res);
           return this.recipeService.fetchRecipes();

@@ -1,19 +1,148 @@
-h4 {
+.recipe-details {
+  padding: 20px;
+  border: 1px solid #333333;
+  box-shadow: 0 1px 4px 0 rgba(154, 154, 154, 0.62);
+}
+
+h2 {
   font-family: 'BodoniItal';
   font-style: italic;
   font-weight: bold;
 }
 
-h1 {
-  font-family: 'BodoniBold';
+.rec-title {
+  display: flex;
+  align-items: center;
+  h1 {
+    font-family: 'BodoniBold';
+    flex-grow: 2;
+  }
 }
 
 .ingredient-list {
+  h2 {
+    margin-bottom: 30px;
+  }
   ul {
     padding-left: 10px;
   }
   li {
     border: none;
     padding: 0;
+    margin: 8px;
+    display: flex;
   }
+}
+
+.section {
+  display: flex;
+  margin: 20px auto;
+}
+
+h2 {
+  margin: 0;
+}
+
+.actions a {
+  cursor: pointer;
+  margin-left: 10px;
+}
+.actions {
+  justify-content: flex-end;
+  button {
+    margin-right: 10px;
+  }
+}
+
+.method {
+  padding: 30px;
+  .desc {
+    padding: 20px;
+    p {
+      margin: 3px;
+    }
+  }
+}
+
+.column {
+  width: 50%;
+  padding: 30px;
+  display: inline-block;
+}
+
+.column-right {
+  position: relative;
+  .favourite {
+    position: absolute;
+    right: 50px;
+    top: 50px;
+    &:hover {
+      transform: scale(1.2);
+    }
+  }
+  .recipe-img {
+    width: 100% !important;
+    height: auto !important;
+    // margin-top: 28px;
+    // max-height: 600px;
+    // max-height: 60vh;
+  }
+}
+
+.added-cont {
+  text-align: right;
+  p {
+    margin: 3px;
+    font-family: 'BodoniBold';
+    letter-spacing: 1.2px;
+    font-size: 14px;
+    display: flex;
+    margin: auto;
+    justify-content: center;
+  }
+}
+
+.aspect-ratio-box {
+  height: 0;
+  overflow: hidden;
+  padding-top: 66%;
+  background: #e8e6e6;
+  position: relative;
+  outline: 1px solid #ccc;
+  backdrop-filter: 5px;
+  outline-offset: 15px;
+  border-radius: 7px;
+}
+
+.aspect-ratio-box-inside {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+.flexbox-centering {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.viewport-sizing {
+  // font-size: 5vw;
+  text-align: center;
+  p {
+    margin: auto;
+    margin: auto;
+    /* overflow: visible; */
+    /* text-align: center; */
+    opacity: 0.9;
+    /* line-height: 1.4; */
+    margin-top: 7px;
+  }
+}
+
+.tilda {
+  width: 20px;
 }

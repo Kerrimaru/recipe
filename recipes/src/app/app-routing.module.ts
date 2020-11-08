@@ -3,9 +3,10 @@ import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
 // import { ShoppingListComponent } from './shopping-list/shopping-list.component';
 // import { RecipesComponent } from './recipes/recipes.component';
 // import { RecipeDetailComponent } from './recipes/recipe-detail/recipe-detail.component';
-// import { EmptyRecipeComponent } from './recipes/empty-recipe/empty-recipe.component';
+
 import { RecipeEditComponent } from './recipes/recipe-edit/recipe-edit.component';
 import { canActivate, redirectUnauthorizedTo, redirectLoggedInTo } from '@angular/fire/auth-guard';
+import { RecipesResolverService } from './recipes/recipes-resolver.service';
 // import { canActivate } from '@angular/fire/auth-guard';
 // import { map } from 'rxjs/operators';
 // import { RecipesResolverService } from './recipes/recipes-resolver.service';
@@ -28,17 +29,25 @@ const routes: Routes = [
   //   component: RecipesComponent,
   //   canActivate: [AuthGuard],
   //   children: [
-  //     { path: '', component: EmptyRecipeComponent },
   //     // { path: 'new', component: RecipeEditComponent },
   //     { path: ':id', component: RecipeDetailComponent, resolve: [RecipesResolverService] },
   //     { path: ':id/edit', component: RecipeEditComponent, resolve: [RecipesResolverService] },
   //   ],
   // },
   // { path: 'new', component: RecipeEditComponent },
+  // {
+  //   path: 'favourites',
+  //   resolve: { recipes: RecipesResolverService },
+  //   loadChildren: () => import('./favourites/favourites.module').then((module) => module.FavouritesModule),
+  // },
   {
-    path: 'shopping-list',
-    loadChildren: () => import('./shopping-list/shopping-list.module').then((module) => module.ShoppingListModule),
+    path: 'settings',
+    loadChildren: () => import('./settings/settings.module').then((module) => module.SettingsModule),
   },
+  // {
+  //   path: 'shopping-list',
+  //   loadChildren: () => import('./shopping-list/shopping-list.module').then((module) => module.ShoppingListModule),
+  // },
   // { path: 'shopping-list', component: ShoppingListComponent },
   {
     path: 'login',

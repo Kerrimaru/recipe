@@ -1,8 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-loading',
-  template: '<div class="lds-heart"><div></div></div>',
+  templateUrl: './loading.component.html',
   styleUrls: ['./loading.component.scss'],
 })
-export class LoadingComponent {}
+export class LoadingComponent {
+  @Input() color = '#fff';
+  @Input() animate = false;
+  @Input() size = 120;
+}

@@ -12,7 +12,6 @@ import { environment } from '../environments/environment';
 // import { RecipesComponent } from './recipes/recipes.component';
 // import { RecipeListComponent } from './recipes/recipe-list/recipe-list.component';
 // import { RecipeDetailComponent } from './recipes/recipe-detail/recipe-detail.component';
-// import { EmptyRecipeComponent } from './recipes/empty-recipe/empty-recipe.component';
 // import { RecipeEditComponent } from './recipes/recipe-edit/recipe-edit.component';
 // import { RecipeItemComponent } from './recipes/recipe-list/recipe-item/recipe-item.component';
 // import { ShoppingListComponent } from './shopping-list/shopping-list.component';
@@ -47,7 +46,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     // RecipeListComponent,
     // RecipeDetailComponent,
     // RecipeItemComponent,
-    // EmptyRecipeComponent,
     // RecipeEditComponent,
     // ShoppingListComponent,
     // ShoppingEditComponent,

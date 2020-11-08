@@ -24,6 +24,7 @@ export class DataStorageService {
 
   createRecipe(recipe: Recipe) {
     debugger;
+    return;
     recipe.addedBy = this.authService.user.value.name;
     // const recipes = this.recipeService.getRecipes();
     this.http
@@ -33,6 +34,7 @@ export class DataStorageService {
 
   editRecipe(recipeId: string, recipe: Recipe) {
     debugger;
+    return;
     console.log('id; ', recipeId, ' recipe : ', recipe);
     this.http
       .put(`https://kerr-recipe.firebaseio.com/recipes/${recipeId}.json`, recipe)
@@ -41,6 +43,7 @@ export class DataStorageService {
 
   fetchRecipes() {
     debugger;
+    return;
     return this.http.get('https://kerr-recipe.firebaseio.com/recipes.json').pipe(
       takeWhile((recipes) => !!recipes),
       map((recipes) => {

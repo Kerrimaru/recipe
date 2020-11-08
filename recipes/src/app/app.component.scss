@@ -1,3 +1,11 @@
-.main-recipes-container {
-  padding: 50px 0 0 0;
+.app-layout {
+  max-width: 1600px;
+  margin: auto;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  padding: 25px 50px;
 }

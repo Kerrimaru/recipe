@@ -1,12 +1,15 @@
-import { Component, OnInit, Output, EventEmitter, OnDestroy } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, OnDestroy, Input } from '@angular/core';
 import { Recipe } from '../recipe.model';
 import { RecipeService } from '../recipe.service';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { Subscription, Observable } from 'rxjs';
 import { DataStorageService } from 'src/app/shared/data-storage.service';
 // import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { AngularFireAuth } from '@angular/fire/auth';
+import { RecipesConst } from '../../../assets/seeds';
+import { filter } from 'rxjs/operators';
+import { UserSettingsService } from 'src/app/settings/user-settings.service';
 // import { auth } from 'firebase/app';
 
 @Component({
@@ -18,6 +21,8 @@ export class RecipeListComponent implements OnInit, OnDestroy {
   recipes: Recipe[];
   recipesSub: Subscription;
   recipeList: Observable<any[]>;
+  searchTerm: string;
+  favouritesArr: any[];
 
   constructor(
     public fbAuth: AngularFireAuth,
@@ -25,58 +30,42 @@ export class RecipeListComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private dataStorageService: DataStorageService,
-    private fb: AngularFireDatabase // private fb: AngularFirestore
-  ) {
-    // this.recipeList = this.fb.list('recipes');
-    // this.stuff = fb.database.ref().child('recipes');
-
-    // const userSub = this.fbAuth.user.subscribe((res) => console.log('user? : ', res));
-    // this.fbAuth.signInWithEmailAndPassword('kerri.maru@gmail.com', 'pass123').then((res) => {
-    //   console.log('sign res: ', res);
-    //   this.recipeList = fb.list<Recipe[]>('recipes').valueChanges();
-    // });
-    // if (this.fbAuth.currentUser) {
-    //   console.log('this.fbAuth.currentUser ', this.fbAuth.currentUser);
-    //   this.recipeList = fb.list('recipes').valueChanges();
-    //   this.recipeList.subscribe((res) => {
-    //     console.log(res);
-    //     this.recipeService.setRecipes(res);
-    //   });
-    // }
-
-    // this.recipeList = recipeList()
-
-    console.log('recipeList: ', this.recipeList, 'val? ', this.recipeList);
-    // const things = fb.collection('recipes').valueChanges();
-    // things.subscribe(console.log);
-  }
+    private fb: AngularFireDatabase,
+    // private fb: AngularFirestore
+    private settingsService: UserSettingsService
+  ) {}
 
   ngOnInit(): void {
-    // setTimeout(() => {
-    //   let recRef = this.fb.database.ref(`/recipes`);
-    //   console.log('recref: ', recRef);
-    //   recRef.once('value', (snapshot) => {
-    //     console.log('snap: ', snapshot, 'val: ', snapshot.val());
-    //     let recInfo = snapshot.val() || {};
-    //     const username = recInfo['name'];
-    //     const addsnotes = [];
-    //   });
-    // }, 1000);
+    this.favouritesArr = this.router.url.valueOf() === '/recipes/favourites' ? this.settingsService.favourites : [];
+    this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((e: NavigationEnd) => {
+      this.favouritesArr = e.url === '/recipes/favourites' ? this.settingsService.favourites : null;
+    });
 
-    // this.dataStorageService.fetchRecipes().subscribe();
-    this.recipes = this.recipeService.getRecipes();
-    this.recipesSub = this.recipeService.recipesChanged.subscribe((recipes: Recipe[]) => {
-      console.log('recipes changed:', recipes);
+    this.recipesSub = this.recipeService.recTest.subscribe((recipes) => {
+      this.recipes = recipes;
       let recipeEdited = false;
+
       if (this.recipes.length === recipes.length) {
         recipeEdited = true;
       }
-      this.recipes = recipes;
       if (!recipeEdited) {
         const index = recipes.length - 1;
-        // this.router.navigate([index], { relativeTo: this.route });
+        this.router.navigate([index], { relativeTo: this.route });
       }
     });
+    // this.recipes = this.recipeService.getRecipes();
+    // this.recipesSub = this.recipeService.recipesChanged.subscribe((recipes: Recipe[]) => {
+    //   console.log('recipes changed:', recipes);
+    //   let recipeEdited = false;
+    //   if (this.recipes.length === recipes.length) {
+    //     recipeEdited = true;
+    //   }
+    //   this.recipes = recipes;
+    //   if (!recipeEdited) {
+    //     const index = recipes.length - 1;
+    //     // this.router.navigate([index], { relativeTo: this.route });
+    //   }
+    // });
   }
 
   ngOnDestroy() {
