@@ -10,9 +10,17 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { RecipeFilterPipe } from './pipes/recipe-filter.pipe';
 import { ArrayIncludesPipe } from './pipes/array-includes.pipe';
+import { ShowOnScrollDirective } from './directives/show-on-scroll.directive';
 
 @NgModule({
-  declarations: [LoadingComponent, DropdownDirective, TitlePipe, RecipeFilterPipe, ArrayIncludesPipe],
+  declarations: [
+    LoadingComponent,
+    DropdownDirective,
+    TitlePipe,
+    RecipeFilterPipe,
+    ArrayIncludesPipe,
+    ShowOnScrollDirective,
+  ],
   imports: [
     CommonModule,
     FormsModule,
@@ -36,6 +44,7 @@ import { ArrayIncludesPipe } from './pipes/array-includes.pipe';
     TitlePipe,
     RecipeFilterPipe,
     ArrayIncludesPipe,
+    ShowOnScrollDirective,
   ],
 })
 export class SharedModule {

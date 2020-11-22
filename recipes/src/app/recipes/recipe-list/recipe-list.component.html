@@ -1,15 +1,46 @@
 <div class="search">
-  <input [ngModelOptions]="{ standalone: true }" type="text" placeholder="Search" [(ngModel)]="searchTerm" />
+  <span *ngIf="!searchOn" class="material-icons" (click)="searchOn = true">search</span>
+  <input
+    *ngIf="searchOn"
+    [ngModelOptions]="{ standalone: true }"
+    type="text"
+    placeholder="Search"
+    [(ngModel)]="searchTerm"
+    (blur)="!searchTerm ? (searchOn = false) : (searchOn = true)"
+  />
 </div>
 
 <div class="recipe-list">
   <ng-container *ngFor="let recipe of recipes | recipeFilter: searchTerm; index as index">
-    <app-recipe-item
-      *ngIf="recipe | arrayIncludes: favouritesArr:'key'"
-      class="recipe-item"
-      [recipe]="recipe"
-      [index]="index"
-    ></app-recipe-item>
+    <!-- [index]="index" -->
+    <div class="rec-container">
+      <app-recipe-item
+        [ngClass]="{
+          selected: selectedRecipe === recipe,
+          grow: selectedRecipe !== recipe,
+          shrink: selectedRecipe === recipe
+        }"
+        *ngIf="recipe | arrayIncludes: favouritesArr:'key'"
+        class="recipe-item"
+        [recipe]="recipe"
+        (click)="toggleRecipe(recipe, elRef)"
+        #elRef
+      ></app-recipe-item>
+      <!-- [ngClass]="{ grow: recipe.selected, shrink: !recipe.selected }" -->
+
+      <div class="recipe-detail-cont grow" *ngIf="recipe === selectedRecipe" #recipeDetail>
+        <span class="material-icons" (click)="toggleRecipe(recipe, recipeDetail)">expand_less</span>
+        <app-recipe-detail [recipeInput]="recipe"></app-recipe-detail>
+      </div>
+    </div>
+    <!-- <div class="recipe-detail-cont" (click)="toggleRecipe(recipe)">
+    <app-recipe-detail
+      *ngIf="recipe === selectedRecipe"
+      class="recipe-detail-cont grow"
+      (click)="toggleRecipe(recipe)"
+      [recipeInput]="recipe"
+    ></app-recipe-detail>
+    </div> -->
   </ng-container>
 </div>
 

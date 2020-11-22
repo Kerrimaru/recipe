@@ -3,23 +3,25 @@
   <p>loading...</p>
 </ng-container> -->
 
-<div *ngIf="recipe" class="recipe-details">
-  <div class="rec-title">
-    <h1>{{ recipe.name | title }}</h1>
+<div *ngIf="recipe" class="recipe-details" #recipeRef>
+  <div class="rec-header">
+    <div class="rec-title">
+      <h1>{{ recipe.name | title }}</h1>
 
-    <div *ngIf="recipe.addedBy" class="added-cont">
-      <p>Added by {{ recipe.addedBy }}</p>
-      <ng-container *ngIf="recipe.created">
-        <p [style.font-style]="'italic'">
-          <img src="assets/images/svg/fancy-tilda.svg" class="tilda" />
-          on
-          <img src="assets/images/svg/fancy-tilda.svg" class="tilda" />
-        </p>
-        <p>{{ recipe.created | date }}</p>
-      </ng-container>
+      <div *ngIf="recipe.addedBy" class="added-cont">
+        <p>Added by {{ recipe.addedBy }}</p>
+        <ng-container *ngIf="recipe.created">
+          <p [style.font-style]="'italic'">
+            <img src="assets/images/svg/fancy-tilda.svg" class="tilda" />
+            on
+            <img src="assets/images/svg/fancy-tilda.svg" class="tilda" />
+          </p>
+          <p>{{ recipe.created | date }}</p>
+        </ng-container>
+      </div>
     </div>
+    <hr />
   </div>
-  <hr />
 
   <div class="section">
     <div class="ingredient-list column column-left">
@@ -30,7 +32,10 @@
           {{ i }}
         </li>
       </ul>
+      <h2>Method</h2>
+      <div [innerHtml]="recipe.description" class="desc"></div>
     </div>
+
     <div class="column column-right">
       <app-loading
         class="favourite"
@@ -43,13 +48,13 @@
     </div>
   </div>
 
-  <div class="method">
+  <!-- <div class="method">
     <h2>Method</h2>
     <div [innerHtml]="recipe.description" class="desc"></div>
-  </div>
+  </div> -->
 </div>
 
-<div *ngIf="showActions" class="actions">
+<div *ngIf="showActions" class="actions" [appShowOnScroll]="'hello'">
   <a (click)="editRecipe()">Edit</a>
   <a (click)="deleteRecipe()">Delete</a>
 </div>

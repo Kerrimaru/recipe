@@ -4,6 +4,8 @@ import { ActivatedRoute } from '@angular/router';
 import { AuthService } from '../auth/auth.service';
 import { Subscription } from 'rxjs';
 import { User } from '../auth/user.model';
+import { HostBinding } from '@angular/core';
+import { HostListener } from '@angular/core';
 
 @Component({
   selector: 'app-header',
@@ -20,11 +22,26 @@ export class HeaderComponent implements OnInit, OnDestroy {
   login = true;
   user: User;
   isAuth = false;
+  isMobile = false;
+  headerExpanded = false;
+  width: number = window.innerWidth;
+  // height: number = window.innerHeight;
+  mobileWidth = 760;
 
   private userSub: Subscription;
   // @Output() featureSelected = new EventEmitter<string>();
 
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.width = event.target.innerWidth;
+    // this.height = event.target.innerHeight;
+    this.isMobile = this.width < this.mobileWidth;
+    console.log('resize: ', this.isMobile);
+    // event.target.innerWidth;
+  }
+
   ngOnInit(): void {
+    this.isMobile = this.width < this.mobileWidth;
     this.userSub = this.authService.user.subscribe((user) => {
       this.user = user;
       // console.log('user in header: ', user);
@@ -55,5 +72,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   logout() {
     this.authService.logout();
+  }
+
+  toggleMenu() {
+    if (!this.isMobile) {
+      return;
+    }
+    console.log('click');
+    this.headerExpanded = !this.headerExpanded;
   }
 }

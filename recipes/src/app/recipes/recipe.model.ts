@@ -15,6 +15,7 @@ export class Recipe {
   public favourite = false; // need to move to user settings
   public key: string;
   public created = moment().format();
+  public selected = false;
 
   // constructor(name: string, desc: string, imagePath: string, ingredients: Ingredient[], addedBy: string) {
   //   this.name = name;

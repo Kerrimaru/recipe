@@ -5,15 +5,14 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class TitlePipe implements PipeTransform {
   transform(input: string): string {
+    if (!input) {
+      return;
+    }
     // console.log('input: ', input);
-    const words = input.split(' ');
+    const words = input.trim().split(' ');
     for (let i = 0; i < words.length; i++) {
       const word = words[i];
-      // if (this.isJoiningWord(word)) {
-      //   return null;
-      // } else {
-      //   return word;
-      // }
+
       if (this.isJoiningWord(word) && i !== 0) {
         words[i] = word.toLowerCase() + ' ';
       } else {

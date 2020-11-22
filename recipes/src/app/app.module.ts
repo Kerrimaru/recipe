@@ -29,6 +29,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { SharedModule } from './shared/shared.module';
 import { CoreModule } from './core.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HammerModule } from '@angular/platform-browser';
 
 // import { AngularFireDatabaseModule } from '@angular/fire/database';
 // import { AngularFirestoreModule } from '@angular/fire/firestore';
@@ -36,6 +37,19 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // import { AngularFireAuthModule } from '@angular/fire/auth';
 
 // import { AuthModule } from './auth/auth.module';
+
+import { HammerGestureConfig, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
+import * as Hammer from 'hammerjs';
+
+export class MyHammerConfig extends HammerGestureConfig {
+  buildHammer(element: HTMLElement) {
+    const mc = new Hammer(element, {
+      touchAction: 'pan-y',
+    });
+
+    return mc;
+  }
+}
 
 @NgModule({
   declarations: [
@@ -66,6 +80,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     CoreModule,
     DragDropModule,
     BrowserAnimationsModule,
+    HammerModule,
     // AuthModule, // is lazy load
 
     // AngularFirestoreModule, // firestore
@@ -73,6 +88,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     // AngularFireStorageModule, // storage
   ],
   providers: [
+    {
+      provide: HAMMER_GESTURE_CONFIG,
+      useClass: MyHammerConfig,
+    },
     // ShoppingListService,
     // RecipeService,
     // { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true },

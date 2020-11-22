@@ -7,20 +7,13 @@
 .app-nav {
   max-width: 100vw;
   position: relative;
-  // z-index: 1;
   overflow: hidden;
-  // display: flex;
   font-family: 'BenchNine';
   flex-direction: column;
   align-items: center;
 }
 
 .nav-list {
-  // display: flex;
-  // justify-content: space-between;
-  // flex-grow: 1;
-  // height: 50px;
-  // margin-top: 150px;
   display: flex;
   justify-content: center;
   flex-grow: 1;
@@ -34,17 +27,14 @@ h1 {
 }
 
 h1 {
-  // margin: 30px;
-  padding: 30px;
+  padding: 20px;
   font-size: 32px;
   position: fixed;
   background-color: white;
   z-index: 10;
   width: 100vw;
   text-align: center;
-  /* height: 60px; */
   margin: 0;
-  // border-bottom: 1px solid black;
 }
 
 .menu-tab {
@@ -66,7 +56,6 @@ h1 {
     background-color: $white-alt;
   }
   &.active {
-    // background-color: $white-alt;
     border: 2px solid $white-alt;
   }
 }
@@ -124,46 +113,78 @@ a {
   position: fixed;
   width: 37px;
   height: 37px;
-  top: 30px;
+  top: 20px;
   right: 50px;
   border: 1px solid transparent;
-  transition: 0.2s;
-  overflow: hidden;
   span {
-    background-color: white;
-    position: absolute;
-    right: 0;
+    transition: 0.5s all;
+    background-color: transparent;
+    // position: fixed;
+    // top: 30px;
+    // right: 50px;
+    color: grey;
+    z-index: 1;
   }
 }
 
-.account-actions:hover {
-  border: 2px solid #efeeef;
-  border-radius: 5px 15px 5px 5px;
-  background-color: white;
-  width: 120px;
-  height: 108px;
+.account-actions:hover:not(.mobile),
+.account-actions.expanded {
+  span {
+    color: $white;
+  }
+  .account-nav {
+    max-height: 1000px;
+    max-width: 1000px;
+    background-color: $white-alt;
+    box-shadow: 0px 3px 6px 8px #eaeaea;
+    h4 {
+      display: block;
+    }
+  }
 }
 
 .account-actions .account-nav {
-  display: flex;
-  flex-direction: column;
+  transition: 1.2s all;
+  max-height: 0;
+  max-width: 0;
   position: absolute;
-  top: 0px;
+  top: 0;
   right: 0;
-  margin-top: 36px;
 
-  // border: 1px solid $white-alt;
+  padding-top: 36px;
+  background-color: white;
+  border-radius: 5px 0px 5px 5px;
+  overflow: hidden;
+  .material-icons {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
   h4 {
     cursor: pointer;
     margin: 0;
     text-align: right;
-    width: 100%;
     padding: 7px 5px 7px 32px;
-    // a:hover {
-    //   color: $white-alt;
-    // }
   }
   h4:hover {
-    background-color: $white-alt;
+    background-color: $white;
+  }
+}
+
+@media (max-width: 760px) {
+  h1 {
+    font-size: 26px;
+    padding: 20px;
+  }
+
+  .account-actions {
+    top: 18px;
+    right: 18px;
+    .active {
+      background-color: white;
+    }
+    h4 {
+      font-size: 20px;
+    }
   }
 }

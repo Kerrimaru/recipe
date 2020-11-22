@@ -23,6 +23,8 @@ export class RecipeListComponent implements OnInit, OnDestroy {
   recipeList: Observable<any[]>;
   searchTerm: string;
   favouritesArr: any[];
+  selectedRecipe: Recipe;
+  searchOn = false;
 
   constructor(
     public fbAuth: AngularFireAuth,
@@ -70,5 +72,31 @@ export class RecipeListComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.recipesSub.unsubscribe();
+  }
+
+  onChange(el2Ref) {
+    console.log('cahnge: ', el2Ref);
+  }
+
+  toggleRecipe(recipe: any, ref?) {
+    console.log('ref: ', ref);
+    if (recipe === this.selectedRecipe) {
+      ref.classList.remove('grow');
+      ref.classList.add('shrink');
+      setTimeout(() => {
+        this.selectedRecipe = null;
+      }, 1000);
+    } else {
+      this.selectedRecipe = recipe;
+      // setTimeout(() => {
+      //   this.scroll(ref);
+      // }, 100);
+    }
+
+    // recipe.selected = !recipe.selected;
+  }
+
+  scroll(el) {
+    el.scrollIntoView({ behavior: 'smooth' });
   }
 }

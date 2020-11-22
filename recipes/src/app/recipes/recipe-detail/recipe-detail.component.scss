@@ -1,7 +1,8 @@
 .recipe-details {
-  padding: 20px;
   border: 1px solid #333333;
+  border-top: 1px solid white;
   box-shadow: 0 1px 4px 0 rgba(154, 154, 154, 0.62);
+  // padding: 20px;
 }
 
 h2 {
@@ -10,12 +11,25 @@ h2 {
   font-weight: bold;
 }
 
+.rec-header {
+  position: sticky;
+  top: 79px;
+  padding-bottom: 15px;
+  background-color: white;
+  z-index: 1;
+  border-top: 1px solid black;
+  hr {
+    margin: 0px 20px;
+  }
+}
+
 .rec-title {
+  padding: 0 25px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   h1 {
     font-family: 'BodoniBold';
-    flex-grow: 2;
   }
 }
 
@@ -35,8 +49,9 @@ h2 {
 }
 
 .section {
+  padding: 20px;
   display: flex;
-  margin: 20px auto;
+  // margin: 20px auto;
 }
 
 h2 {
@@ -71,7 +86,11 @@ h2 {
 }
 
 .column-right {
-  position: relative;
+  // position: relative;
+  // height: 100%;
+  position: sticky;
+  top: 70px;
+  align-self: flex-start;
   .favourite {
     position: absolute;
     right: 50px;
@@ -104,7 +123,7 @@ h2 {
 
 .aspect-ratio-box {
   height: 0;
-  overflow: hidden;
+  // overflow: hidden;
   padding-top: 66%;
   background: #e8e6e6;
   position: relative;
@@ -145,4 +164,8 @@ h2 {
 
 .tilda {
   width: 20px;
+}
+
+.anchor {
+  height: 100px;
 }

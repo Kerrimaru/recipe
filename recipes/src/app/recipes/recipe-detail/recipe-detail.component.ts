@@ -1,4 +1,13 @@
-import { Component, OnInit, OnChanges, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnChanges,
+  SimpleChanges,
+  Input,
+  AfterViewInit,
+  ElementRef,
+  ViewChild,
+} from '@angular/core';
 import { Recipe } from '../recipe.model';
 import { RecipeService } from '../recipe.service';
 import { ShoppingListService } from 'src/app/shopping-list/shipping-list.service';
@@ -14,7 +23,8 @@ import { UserSettingsService } from 'src/app/settings/user-settings.service';
   templateUrl: './recipe-detail.component.html',
   styleUrls: ['./recipe-detail.component.scss'],
 })
-export class RecipeDetailComponent implements OnInit, OnChanges {
+export class RecipeDetailComponent implements OnInit, OnChanges, AfterViewInit {
+  @Input() recipeInput: Recipe;
   recipe: Recipe;
   recipeId: number;
   loading = false;
@@ -24,6 +34,8 @@ export class RecipeDetailComponent implements OnInit, OnChanges {
   userSub: any;
   showActions = false;
   isFavourite: boolean;
+
+  @ViewChild('recipeRef', { static: false }) recipeElRef: ElementRef;
 
   constructor(
     private shoppingService: ShoppingListService,
@@ -41,20 +53,41 @@ export class RecipeDetailComponent implements OnInit, OnChanges {
 
     // this.recipes = this.route.snapshot.data.recipes;
     // console.log('REIPCE DETAILS INIT', 'route? ', this.route);
+    if (this.recipeInput) {
+      this.recipe = this.recipeInput;
+      this.showActions = !environment.production || this.recipe.userId === this.user.userId;
+    } else {
+      this.route.params.subscribe((params) => {
+        this.recipeId = +params['id'];
+        this.recSub = this.recipeService.getRecipeSub(this.recipeId).subscribe((r) => {
+          this.recipe = r;
+          this.isFavourite = this.settingsService.favourites.includes(r.key);
+          this.showActions = !environment.production || this.recipe.userId === this.user.userId;
+        });
+        if (!this.recipe) {
+          this.loading = true;
+        }
 
-    this.route.params.subscribe((params) => {
-      this.recipeId = +params['id'];
-      this.recSub = this.recipeService.getRecipeSub(this.recipeId).subscribe((r) => {
-        this.recipe = r;
-        this.isFavourite = this.settingsService.favourites.includes(r.key);
-        this.showActions = !environment.production || this.recipe.userId === this.user.userId;
+        // console.log('this rec: ', this.recipe);
       });
-      if (!this.recipe) {
-        this.loading = true;
-      }
+    }
+  }
 
-      // console.log('this rec: ', this.recipe);
-    });
+  ngAfterViewInit() {
+    setTimeout(() => {
+      window.scrollTo({
+        top: this.recipeElRef.nativeElement.offsetTop - 100,
+        left: 0,
+        behavior: 'smooth',
+      });
+      // this.recipeElRef.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 0o0);
+
+    // this.recipeElRef.nativeElement.scrollTo({
+    //   top: this.recipeElRef.nativeElement.offsetTop,
+    //   left: 0,
+    //   behavior: 'smooth',
+    // });
   }
 
   favourite() {
