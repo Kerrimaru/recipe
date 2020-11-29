@@ -18,13 +18,15 @@ import { UserSettingsService } from 'src/app/settings/user-settings.service';
   styleUrls: ['./recipe-list.component.scss'],
 })
 export class RecipeListComponent implements OnInit, OnDestroy {
-  recipes: Recipe[];
+  recipes: Recipe[] = [];
   recipesSub: Subscription;
   recipeList: Observable<any[]>;
   searchTerm: string;
   favouritesArr: any[];
   selectedRecipe: Recipe;
   searchOn = false;
+  isShowFavourites: boolean;
+  favsSub: Subscription;
 
   constructor(
     public fbAuth: AngularFireAuth,
@@ -38,65 +40,42 @@ export class RecipeListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.favouritesArr = this.router.url.valueOf() === '/recipes/favourites' ? this.settingsService.favourites : [];
+    this.favsSub = this.settingsService.favs$.subscribe((res) => {
+      this.favouritesArr = res;
+    });
+
+    this.isShowFavourites = this.router.url.valueOf() === '/recipes/favourites' ? true : false;
     this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((e: NavigationEnd) => {
-      this.favouritesArr = e.url === '/recipes/favourites' ? this.settingsService.favourites : null;
+      this.isShowFavourites = e.url === '/recipes/favourites' ? true : false;
     });
 
-    this.recipesSub = this.recipeService.recTest.subscribe((recipes) => {
+    this.recipesSub = this.recipeService.recipes$.subscribe((recipes) => {
       this.recipes = recipes;
-      let recipeEdited = false;
-
-      if (this.recipes.length === recipes.length) {
-        recipeEdited = true;
-      }
-      if (!recipeEdited) {
-        const index = recipes.length - 1;
-        this.router.navigate([index], { relativeTo: this.route });
-      }
     });
-    // this.recipes = this.recipeService.getRecipes();
-    // this.recipesSub = this.recipeService.recipesChanged.subscribe((recipes: Recipe[]) => {
-    //   console.log('recipes changed:', recipes);
-    //   let recipeEdited = false;
-    //   if (this.recipes.length === recipes.length) {
-    //     recipeEdited = true;
-    //   }
-    //   this.recipes = recipes;
-    //   if (!recipeEdited) {
-    //     const index = recipes.length - 1;
-    //     // this.router.navigate([index], { relativeTo: this.route });
-    //   }
-    // });
   }
 
   ngOnDestroy() {
     this.recipesSub.unsubscribe();
-  }
-
-  onChange(el2Ref) {
-    console.log('cahnge: ', el2Ref);
+    this.favsSub.unsubscribe();
   }
 
   toggleRecipe(recipe: any, ref?) {
-    console.log('ref: ', ref);
-    if (recipe === this.selectedRecipe) {
-      ref.classList.remove('grow');
-      ref.classList.add('shrink');
-      setTimeout(() => {
-        this.selectedRecipe = null;
-      }, 1000);
-    } else {
-      this.selectedRecipe = recipe;
-      // setTimeout(() => {
-      //   this.scroll(ref);
-      // }, 100);
-    }
-
+    // if (recipe === this.selectedRecipe) {
+    //   ref.classList.remove('grow');
+    //   ref.classList.add('shrink');
+    //   setTimeout(() => {
+    //     this.selectedRecipe = null;
+    //   }, 1000);
+    // } else {
+    //   this.selectedRecipe = recipe;
+    //   // setTimeout(() => {
+    //   //   this.scroll(ref);
+    //   // }, 100);
+    // }
     // recipe.selected = !recipe.selected;
   }
 
-  scroll(el) {
+  scroll(el?) {
     el.scrollIntoView({ behavior: 'smooth' });
   }
 }

@@ -77,8 +77,4 @@ export class SettingsComponent implements OnInit, OnDestroy {
   saveTest() {
     this.settingsService.saveChanges(this.user.id);
   }
-
-  favTest() {
-    this.settingsService.toggleFavourite('someid', true);
-  }
 }

@@ -34,10 +34,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.width = event.target.innerWidth;
-    // this.height = event.target.innerHeight;
     this.isMobile = this.width < this.mobileWidth;
-    console.log('resize: ', this.isMobile);
-    // event.target.innerWidth;
   }
 
   ngOnInit(): void {

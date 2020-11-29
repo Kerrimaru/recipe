@@ -3,15 +3,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
 import { RecipeService } from '../recipe.service';
 import { Recipe } from '../recipe.model';
-import { DataStorageService } from 'src/app/shared/data-storage.service';
+// import { DataStorageService } from 'src/app/shared/data-storage.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { TagService } from 'src/app/tags/tags.service';
-import { Tag } from 'src/app/tags/tag.model';
+// import { TagService } from 'src/app/tags/tags.service';
+// import { Tag } from 'src/app/tags/tag.model';
 import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { AuthService } from 'src/app/auth/auth.service';
-import { EMPTY, interval, Observable } from 'rxjs';
-import { debounce, expand, map } from 'rxjs/operators';
-import { uniq } from 'lodash';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-recipe-edit',
@@ -19,11 +17,11 @@ import { uniq } from 'lodash';
   styleUrls: ['./recipe-edit.component.scss'],
 })
 export class RecipeEditComponent implements OnInit {
-  selectedRecipeId: number;
+  selectedRecipeId: string;
   editMode = false;
   recipeForm: FormGroup;
   fileToUpload: File = null;
-  recipe = new Recipe();
+  recipe: Recipe;
 
   test: any;
   tags: any[];
@@ -32,26 +30,26 @@ export class RecipeEditComponent implements OnInit {
   imgURL: any;
   public message: string;
   public Editor = ClassicEditor;
+  ingredientsArrayRef: FormArray;
 
   constructor(
     private route: ActivatedRoute,
     private recipeService: RecipeService,
     private router: Router,
-    private dataService: DataStorageService,
+    // private dataService: DataStorageService,
     // private tagService: TagService
     private auth: AuthService
   ) {}
 
   get ingredientControls() {
     // (<FormArray>this.recipeForm.get('ingredients')).controls;
-    return (this.recipeForm.get('ingredients') as FormArray).controls;
+    // return (this.recipeForm.get('ingredients') as FormArray).controls;
+    return this.ingredientsArrayRef.controls;
   }
 
   ngOnInit(): void {
-    this.tags = ['the', 'cat', 'is', 'very', 'fast'];
-    console.log(this.tags);
     this.route.params.subscribe((params) => {
-      this.selectedRecipeId = +params['id'];
+      this.selectedRecipeId = params['id'];
       this.editMode = !!params['id'];
       this.initForm();
       // this.tagService.fetchTags().subscribe((tags) => {
@@ -59,76 +57,51 @@ export class RecipeEditComponent implements OnInit {
       //   console.log('tags: ', tags, this.tags);
       // });
     });
-
-    this.recipeForm
-      .get('name')
-      .valueChanges.pipe(
-        // map(change => {
-
-        // }),
-        debounce((change) => interval(500))
-      )
-      .subscribe((res) => {
-        console.log('tiile after deoubnce: ', res);
-        // this.recipeForm.get('name').setValue(this.formatTitle(res), { emitEvent: false });
-        this.recipeForm.get('name').setValue(res, { emitEvent: false });
-        // this.createTags(res);
-      });
   }
 
   private initForm() {
-    // let recipeName = '';
-    // let recipeImagePath = '';
-    // let recipeDescription = '';
-    const recipeIngredients = new FormArray([]);
+    this.ingredientsArrayRef = new FormArray([]);
 
     if (this.editMode) {
-      this.recipe = this.recipeService.getRecipe(this.selectedRecipeId);
-      // recipeName = recipe.name;
-      // recipeImagePath = recipe.imagePath;
-      // recipeDescription = recipe.description;
+      // this.recipe = this.recipeService.getRecipe(this.selectedRecipeId);
+      this.recipe = this.recipeService.getRecipeByKey(this.selectedRecipeId);
       this.previewImagePath = this.recipe.imagePath;
-      if (this.recipe.ingredients.length) {
+      if (this.recipe.ingredients && this.recipe.ingredients.length) {
         for (const ing of this.recipe.ingredients) {
           if (!!ing) {
-            recipeIngredients.push(
-              new FormGroup({
-                name: new FormControl(ing),
-              })
-            );
+            this.onAddIngredient(ing);
           }
         }
       }
+    } else {
+      this.recipe = new Recipe();
+      this.recipe.addedBy = this.auth.user.value.name;
+      this.recipe.userId = this.auth.user.value.id;
     }
 
     this.recipeForm = new FormGroup({
       name: new FormControl(this.recipe.name, Validators.required),
       imagePath: new FormControl(this.recipe.imagePath, Validators.required),
       description: new FormControl(this.recipe.description, Validators.required),
-      // name: new FormControl(recipeName, Validators.required),
-      // imagePath: new FormControl(recipeImagePath, Validators.required),
-      // description: new FormControl(recipeDescription, Validators.required),
-      ingredients: recipeIngredients,
+      ingredients: this.ingredientsArrayRef,
     });
 
     this.onAddIngredient();
-    console.log('this rcipe: ', this.recipe);
   }
 
-  formatTitle(text: string) {
-    const array = text.split(' ');
+  // there is really no need, just use a pipe?
+  formatTitle() {
+    const nameRef = this.recipeForm.get('name');
+    const array = nameRef.value.split(' ');
     for (let i = 0; i < array.length; i++) {
       const word = array[i];
-      console.log('index: ', i);
-      console.log('word: ', word);
       if (this.isJoiningWord(word) && i !== 0) {
         array[i] = word.toLowerCase();
       } else {
         array[i] = word[0].toUpperCase() + word.substr(1).toLowerCase();
       }
     }
-
-    return array.join(' ');
+    nameRef.setValue(array.join(' '));
   }
 
   createTag(word: string) {
@@ -139,7 +112,10 @@ export class RecipeEditComponent implements OnInit {
   }
 
   isJoiningWord(word: string): boolean {
-    const words = ['of', 'the', 'is', 'and', 'on', 'by'];
+    if (word.length <= 2) {
+      return true;
+    }
+    const words = ['the', 'and'];
     return words.includes(word.toLowerCase());
   }
 
@@ -150,60 +126,41 @@ export class RecipeEditComponent implements OnInit {
 
   onSubmit() {
     if (!this.recipeForm.valid) {
-      console.log('not valid but why? ', this.recipeForm);
+      console.log('form not valid ', this.recipeForm);
       return;
     }
-    // remove empty ingredients
-    const _ing = this.recipeForm.get('ingredients') as FormArray;
-    const ingArr = _ing.value.filter((i) => !!i.name).map((_i) => _i.name);
-    console.log('ing arr: ', ingArr);
-    // const _recipe = { ...this.recipeForm.value };
-    const _recipe = { ...this.recipeForm.value, ingredients: ingArr, tags: this.tags || null };
 
+    // remove empty ingredients and flatten obj
+    const ingArr = this.ingredientsArrayRef.value.filter((i) => !!i.name).map((_i) => _i.name);
+
+    const _recipe = Object.assign(this.recipe, {
+      ...this.recipeForm.value,
+      ingredients: ingArr,
+      tags: this.tags || null,
+    });
+    console.log('_recipe: ', _recipe);
     if (this.editMode) {
       // const key = this.recipeService.getRecipe(this.selectedRecipeId);
-      console.log('rec in edit mode: ', this.recipe.key);
       // this.dataService.editRecipe(recipe.id, _recipe);
       this.recipeService.updateRecipe(_recipe, this.recipe.key);
+      this.onCancel();
     } else {
-      // this.recipe.addedBy = this.auth.user.value.name;
-      // const _recipe = {
-      //   ...this.recipeForm.value,
-      //   addedBy: this.auth.user.value.name,
-      //   favourite: false,
-      //   created: moment().format(),
-      // };
-      // this.recipe = { ...this.recipeForm.value };
-      const _rec = Object.assign(this.recipe, { ..._recipe, addedBy: this.auth.user.value.name, tags: null });
-
-      console.log(this.recipe);
-      // do not upload - testing only
-      this.recipeService.addRecipe(_rec);
+      const key = this.recipeService.addRecipe(_recipe);
+      this.router.navigate(['recipes', key]);
     }
-    this.onCancel();
-    // this.recipeForm.reset();
   }
 
   onAddIngredient(ingredient?: string) {
-    // this.controls.push(
-    //   new FormGroup({
-    //     name: new FormControl(null, Validators.required),
-    //     amount: new FormControl(null, Validators.required),
-    //   })
-    // );
-    (this.recipeForm.get('ingredients') as FormArray).push(
+    // leave as form group in case I decide to add ingredient amount again, or other details in future
+    this.ingredientsArrayRef.push(
       new FormGroup({
         name: new FormControl(ingredient ? ingredient : null),
-        // amount: new FormControl(null, Validators.required),
-        // amount: new FormControl(null),
       })
     );
   }
 
   onRemoveIngredient(index: number) {
-    // (this.recipeForm.get('ingredients')).removeAt(index)
-    // this.controls.removeAt(index)
-    (this.recipeForm.get('ingredients') as FormArray).removeAt(index);
+    this.ingredientsArrayRef.removeAt(index);
   }
 
   onCancel() {
@@ -216,15 +173,13 @@ export class RecipeEditComponent implements OnInit {
   }
 
   checkIfLast(index: number) {
-    const ing = this.recipeForm.get('ingredients') as FormArray;
-    if (index + 1 === ing.controls.length && ing.controls[index].valid) {
+    if (index + 1 === this.ingredientsArrayRef.controls.length && this.ingredientsArrayRef.controls[index].valid) {
       this.onAddIngredient();
     }
   }
 
   focus(index: number) {
-    const ing = this.recipeForm.get('ingredients') as FormArray;
-    if (index + 1 === ing.controls.length) {
+    if (index + 1 === this.ingredientsArrayRef.controls.length) {
       this.onAddIngredient();
     }
   }

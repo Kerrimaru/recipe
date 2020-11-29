@@ -1,8 +1,3 @@
-<!-- <ng-container *ngIf="!recipe">
-  <app-loading [color]="'#ea2222'"></app-loading>
-  <p>loading...</p>
-</ng-container> -->
-
 <div *ngIf="recipe" class="recipe-details" #recipeRef>
   <div class="rec-header">
     <div class="rec-title">
@@ -54,7 +49,7 @@
   </div> -->
 </div>
 
-<div *ngIf="showActions" class="actions" [appShowOnScroll]="'hello'">
+<div *ngIf="showActions" class="actions">
   <a (click)="editRecipe()">Edit</a>
   <a (click)="deleteRecipe()">Delete</a>
 </div>

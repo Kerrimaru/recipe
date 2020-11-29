@@ -5,12 +5,10 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class ArrayIncludesPipe implements PipeTransform {
   transform(value: any, array: any[], key?: string): any {
-    if (!value) {
+    if (!value || !array || !array.length) {
       return;
     }
-    if (!array || !array.length) {
-      return value;
-    }
+
     if (array.includes(value[key])) {
       return value;
     } else {

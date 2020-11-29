@@ -14,11 +14,11 @@ export class RecipesResolverService implements Resolve<Recipe[]> {
     let recipes = this.recipeService.getRecipes();
     const id = route.params.id;
 
-    if (recipes.length === 0) {
+    if (!recipes.length) {
       return this.recipeService.fetchRecipes().pipe(
         first(),
         map((res) => {
-          console.log('res: ', res);
+          console.log('res in resolver: ', res);
           return res;
         })
       );

@@ -11,7 +11,7 @@ export class RecipeItemComponent implements OnInit {
   constructor() {}
 
   @Input() recipe: Recipe;
-  // @Input() index: number;
+  @Input() index: number;
 
   flipped = false;
   expanded = false;
@@ -22,10 +22,7 @@ export class RecipeItemComponent implements OnInit {
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.width = event.target.innerWidth;
-    // this.height = event.target.innerHeight;
     this.isMobile = this.width < this.mobileWidth;
-    console.log('resize: ', this.isMobile);
-    // event.target.innerWidth;
   }
 
   ngOnInit(): void {
@@ -33,8 +30,8 @@ export class RecipeItemComponent implements OnInit {
   }
 
   scroll() {
-    this.flipped = !this.flipped;
-    // window.scrollTo({ top: 0, behavior: 'smooth' });
+    // this.flipped = !this.flipped; // testing
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   swipe(e) {

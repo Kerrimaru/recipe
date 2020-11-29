@@ -12,35 +12,26 @@
 
 <div class="recipe-list">
   <ng-container *ngFor="let recipe of recipes | recipeFilter: searchTerm; index as index">
-    <!-- [index]="index" -->
     <div class="rec-container">
       <app-recipe-item
-        [ngClass]="{
-          selected: selectedRecipe === recipe,
-          grow: selectedRecipe !== recipe,
-          shrink: selectedRecipe === recipe
-        }"
-        *ngIf="recipe | arrayIncludes: favouritesArr:'key'"
+        *ngIf="isShowFavourites ? (recipe | arrayIncludes: favouritesArr:'key') : recipe"
         class="recipe-item"
         [recipe]="recipe"
-        (click)="toggleRecipe(recipe, elRef)"
+        [index]="index"
         #elRef
       ></app-recipe-item>
-      <!-- [ngClass]="{ grow: recipe.selected, shrink: !recipe.selected }" -->
-
-      <div class="recipe-detail-cont grow" *ngIf="recipe === selectedRecipe" #recipeDetail>
+      <!-- disabled -->
+      <!-- [ngClass]="{
+        selected: selectedRecipe === recipe,
+        grow: selectedRecipe !== recipe,
+        shrink: selectedRecipe === recipe
+      }"
+      (click)="toggleRecipe(recipe, elRef)" -->
+      <!-- <div class="recipe-detail-cont grow" *ngIf="recipe === selectedRecipe" #recipeDetail>
         <span class="material-icons" (click)="toggleRecipe(recipe, recipeDetail)">expand_less</span>
         <app-recipe-detail [recipeInput]="recipe"></app-recipe-detail>
-      </div>
+      </div> -->
     </div>
-    <!-- <div class="recipe-detail-cont" (click)="toggleRecipe(recipe)">
-    <app-recipe-detail
-      *ngIf="recipe === selectedRecipe"
-      class="recipe-detail-cont grow"
-      (click)="toggleRecipe(recipe)"
-      [recipeInput]="recipe"
-    ></app-recipe-detail>
-    </div> -->
   </ng-container>
 </div>
 

@@ -1,21 +1,18 @@
 import { Ingredient } from '../shared/ingredient.model';
 import { Tag } from '../tags/tag.model';
 
-import * as moment from 'moment';
-
 export class Recipe {
   private _id: string;
   public name: string;
   public description: string;
   public imagePath: string;
-  public ingredients: Ingredient[];
-  public addedBy: string; // user name
+  public ingredients: string[] = [];
+  public addedBy: string; // user display name
   public userId: string; // added by id
-  public tags: Tag[];
-  public favourite = false; // need to move to user settings
+  public tags: Tag[] = [];
   public key: string;
-  public created = moment().format();
-  public selected = false;
+  public created: number; // utc
+  // public selected = false;
 
   // constructor(name: string, desc: string, imagePath: string, ingredients: Ingredient[], addedBy: string) {
   //   this.name = name;

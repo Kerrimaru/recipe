@@ -1,34 +1,29 @@
 import { Recipe } from './recipe.model';
 import { EventEmitter, Injectable } from '@angular/core';
-import { Ingredient } from '../shared/ingredient.model';
-import { Subject, Observable, of } from 'rxjs';
+// import { Ingredient } from '../shared/ingredient.model';
+import { Subject, Observable, of, BehaviorSubject } from 'rxjs';
 // import { DataStorageService } from '../shared/data-storage.service';
 import { AngularFireDatabase, AngularFireList } from '@angular/fire/database';
-import { AngularFireAuth } from '@angular/fire/auth';
 import { map, tap, switchMap } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class RecipeService {
-  constructor(private fb: AngularFireDatabase, public fbAuth: AngularFireAuth) {}
-
-  recipesChanged = new Subject<Recipe[]>();
+  constructor(private fb: AngularFireDatabase) {}
 
   private recipes: any[] = [];
-  // recipeList: Observable<any[]>;
   recipeList: AngularFireList<Recipe>;
 
-  recTest: Observable<any[]>;
-  // init(): Observable<any> {
-  //   // return this.fetchRecipes();
-  // }
+  recipes$: Observable<Recipe[]>;
+  recipeBehaveSubj = new BehaviorSubject<Recipe[]>([]);
+  // recipesChanged = new Subject<Recipe[]>();
 
-  setRecipes(recipes: Recipe[]) {
-    this.recipes = recipes;
-    if (!this.recipes) {
-      this.recipes = [];
-    }
-    this.recipesChanged.next(this.recipes.slice());
-  }
+  // setRecipes(recipes: Recipe[]) {
+  //   this.recipes = recipes;
+  //   if (!this.recipes) {
+  //     this.recipes = [];
+  //   }
+  //   this.recipesChanged.next(this.recipes.slice());
+  // }
 
   getRecipes() {
     return this.recipes.slice();
@@ -38,18 +33,37 @@ export class RecipeService {
     return this.recipes[index];
   }
 
-  getRecipeSub(index: number) {
-    return this.recTest.pipe(map((r) => r[index]));
+  getRecipeByKey(key: string): Recipe {
+    console.log('key: ', key);
+    if (this.recipes) {
+      const rec = this.recipes.find((r) => r.key === key);
+      return rec;
+      // } else {
+      //   console.log('NONNE recipes:');
+      //   const recRef = this.fb.database.ref(`recipes/${key}`);
+      //   return recRef.once('value').then((snapshot) => {
+      //     console.log('snap: ', snapshot.val());
+      //     return snapshot.val();
+      //   });
+    }
+  }
+
+  getRecipeSub(key: string) {
+    return this.recipes$.pipe(map((recipes) => recipes.find((r) => r.key === key)));
   }
 
   addRecipe(recipe: Recipe) {
-    console.log('new recipe created: ', recipe);
     if (!this.recipes) {
       this.recipes = [];
     }
-    this.recipeList.push(recipe);
-    // this.recipes.push(recipe);
-    // this.setRecipes(this.recipes);
+    recipe.created = Date.now();
+    // this.recipeList.push(recipe);
+    // if key needed again later
+    // this.recipeList.push(recipe).then((ref) => {
+    //   this.linkIngredients(ref.key, recipe.ingredients);
+    // });
+    // or this?
+    return this.recipeList.push(recipe).key;
   }
 
   updateRecipe(recipe: Recipe, key: string) {
@@ -57,57 +71,44 @@ export class RecipeService {
     this.recipeList.update(key, { ...recipe });
   }
 
-  deleteRecipe(index: number) {
-    this.recipes.splice(index, 1);
-    this.recipesChanged.next(this.recipes.slice());
-  }
-
-  // fetchRecipes() {
-  //   return this.fb
-  //     .list('recipes')
-  //     .valueChanges()
-  //     .pipe(
-  //       map((recipes: Recipe[]) => {
-  //         this.setRecipes(recipes);
-  //         console.log('recipes ', recipes);
-  //         return recipes;
-  //       })
-  //       // tap((recipes) => {
-  //       //   console.log('recipes ', recipes);
-  //       //   this.setRecipes(recipes);
-  //       // })
-  //     );
+  // deleteRecipe(index: number) {
+  //   this.recipes.splice(index, 1);
+  //   this.recipesChanged.next(this.recipes.slice());
   // }
 
-  toggleFavourite(key: string, favourite: boolean) {
-    this.recipeList.update(key, { favourite: !favourite });
+  deleteRecipeByKey(key: string) {
+    this.fb.database.ref(`recipes`).child(key).remove();
   }
 
   fetchRecipes() {
     this.recipeList = this.fb.list('recipes');
-    return (this.recTest = this.recipeList.snapshotChanges().pipe(
-      map((changes) => changes.map((c) => ({ key: c.payload.key, ...c.payload.val() }))),
-      tap((rec) => {
-        console.log('%c recipes! ', 'background: #222; color: #bada55', rec);
-        this.setRecipes(rec);
+    this.recipes$ = this.recipeList.snapshotChanges().pipe(
+      map((changes) =>
+        changes.map((c) => {
+          // console.log('c: ', c);
+          return { key: c.payload.key, ...c.payload.val() };
+        })
+      ),
+      tap((recipes: Recipe[]) => {
+        console.log('%c recipes! ', 'background: #222; color: #bada55', recipes);
+        // this.setRecipes(rec);
+        this.recipes = recipes;
+        this.recipeBehaveSubj.next(recipes);
       })
-    ));
-    // return this.fb
-    //   .list('recipes')
-    //   .valueChanges()
-    //   .pipe(
-    //     map((recipes: Recipe[]) => {
-    //       this.setRecipes(recipes);
-    //       console.log('recipes ', recipes);
-    //       console.log('res test: ', this.recTest);
-    //       return recipes;
-    //     }),
-    //     switchMap((res) => {
-    //       return this.recTest;
-    //     }),
-    //     tap((recipes) => {
-    //       console.log('%c recipes! ', 'background: #222; color: #bada55', recipes);
-    //     })
-    //   );
+    );
+    return this.recipes$;
   }
+
+  // to do: move ingredients to separate key
+  // fetchRecipeIngredients(recipe: Recipe) {
+  //   const ingsRef = this.fb.database.ref(`recipeIngredients/${recipe.key}`);
+  //   return ingsRef.once('value').then((snapshot) => {
+  //     recipe.ingredients = snapshot.val();
+  //     return snapshot.val();
+  //   });
+  // }
+
+  // linkIngredients(recipeKey: string, ingredients: any[]) {
+  //   this.fb.database.ref('recipeIngredients/' + recipeKey).set(ingredients);
+  // }
 }

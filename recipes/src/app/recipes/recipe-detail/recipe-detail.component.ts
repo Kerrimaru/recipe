@@ -1,21 +1,9 @@
-import {
-  Component,
-  OnInit,
-  OnChanges,
-  SimpleChanges,
-  Input,
-  AfterViewInit,
-  ElementRef,
-  ViewChild,
-} from '@angular/core';
+import { Component, OnInit, Input, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 import { Recipe } from '../recipe.model';
 import { RecipeService } from '../recipe.service';
-import { ShoppingListService } from 'src/app/shopping-list/shipping-list.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { map } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth/auth.service';
 import { environment } from '../../../environments/environment';
-import { forkJoin } from 'rxjs';
 import { UserSettingsService } from 'src/app/settings/user-settings.service';
 
 @Component({
@@ -23,10 +11,10 @@ import { UserSettingsService } from 'src/app/settings/user-settings.service';
   templateUrl: './recipe-detail.component.html',
   styleUrls: ['./recipe-detail.component.scss'],
 })
-export class RecipeDetailComponent implements OnInit, OnChanges, AfterViewInit {
+export class RecipeDetailComponent implements OnInit, AfterViewInit {
   @Input() recipeInput: Recipe;
   recipe: Recipe;
-  recipeId: number;
+  recipeKey: any;
   loading = false;
   recipes: any;
   recSub: any;
@@ -38,7 +26,6 @@ export class RecipeDetailComponent implements OnInit, OnChanges, AfterViewInit {
   @ViewChild('recipeRef', { static: false }) recipeElRef: ElementRef;
 
   constructor(
-    private shoppingService: ShoppingListService,
     private recipeService: RecipeService,
     private router: Router,
     private route: ActivatedRoute,
@@ -48,69 +35,51 @@ export class RecipeDetailComponent implements OnInit, OnChanges, AfterViewInit {
 
   ngOnInit(): void {
     this.user = this.authService.user.getValue();
-    console.log('init');
     // window.scrollTo({ top: 0, behavior: 'smooth' });
-
-    // this.recipes = this.route.snapshot.data.recipes;
-    // console.log('REIPCE DETAILS INIT', 'route? ', this.route);
+    // this is disabled for now
     if (this.recipeInput) {
       this.recipe = this.recipeInput;
       this.showActions = !environment.production || this.recipe.userId === this.user.userId;
     } else {
       this.route.params.subscribe((params) => {
-        this.recipeId = +params['id'];
-        this.recSub = this.recipeService.getRecipeSub(this.recipeId).subscribe((r) => {
+        this.recipeKey = params['id'];
+        this.recSub = this.recipeService.getRecipeSub(this.recipeKey).subscribe((r) => {
+          if (!r) {
+            this.loading = true;
+          }
           this.recipe = r;
-          this.isFavourite = this.settingsService.favourites.includes(r.key);
+          this.isFavourite = this.settingsService.favourites.includes(this.recipeKey);
           this.showActions = !environment.production || this.recipe.userId === this.user.userId;
         });
-        if (!this.recipe) {
-          this.loading = true;
-        }
-
-        // console.log('this rec: ', this.recipe);
       });
     }
   }
 
   ngAfterViewInit() {
-    setTimeout(() => {
-      window.scrollTo({
-        top: this.recipeElRef.nativeElement.offsetTop - 100,
-        left: 0,
-        behavior: 'smooth',
-      });
-      // this.recipeElRef.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 0o0);
-
-    // this.recipeElRef.nativeElement.scrollTo({
-    //   top: this.recipeElRef.nativeElement.offsetTop,
-    //   left: 0,
-    //   behavior: 'smooth',
-    // });
+    // disabled?
+    // console.log('el ref: ', this.recipeElRef);
+    // if (this.recipeElRef) {
+    //   setTimeout(() => {
+    //     window.scrollTo({
+    //       top: this.recipeElRef.nativeElement.offsetTop - 100,
+    //       left: 0,
+    //       behavior: 'smooth',
+    //     });
+    //   }, 0o0);
+    // }
   }
 
   favourite() {
-    //  to do: move to user settings
-    this.settingsService.toggleFavourite(this.recipe.key, true);
-    // this.recipeService.toggleFavourite(this.recipe.key, this.recipe.favourite);
-    // this.recipe.favourite = !this.recipe.favourite;
+    this.isFavourite = !this.isFavourite;
+    this.settingsService.toggleFavourite(this.recipeKey);
   }
-
-  ngOnChanges(change: SimpleChanges) {
-    // console.log('changes: ', change);
-    // this.recipe = change[this.recipeId];
-  }
-
-  // addToShoppingList() {
-  //   this.shoppingService.addIngredients(this.recipe.ingredients);
-  // }
 
   editRecipe() {
     this.router.navigate(['edit'], { relativeTo: this.route });
   }
 
   deleteRecipe() {
-    this.recipeService.deleteRecipe(this.recipeId);
+    this.recipeService.deleteRecipeByKey(this.recipeKey);
+    this.router.navigate(['/']);
   }
 }

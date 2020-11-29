@@ -1,8 +1,8 @@
 <div class="recipe-item" style="cursor: pointer" (swipe)="swipe($event.type)" [ngClass]="{ flipped: flipped }">
-  <!-- [routerLink]="[index]" -->
   <div class="rec-inner">
     <!-- <div class="rec-front" [routerLink]="[index]" routerLinkActive="active" (click)="scroll()"> -->
-    <div class="rec-front" routerLinkActive="active" (click)="expand()">
+    <div class="rec-front" [routerLink]="recipe.key" routerLinkActive="active" (click)="scroll()">
+      <!-- <div class="rec-front" routerLinkActive="active" (click)="expand()"> -->
       <img [src]="recipe.imagePath" alt="{{ recipe.name }}" class="recipe-img" />
       <div class="title-cont">
         <h4 class="title">{{ recipe.name | title }}</h4>

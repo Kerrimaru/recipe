@@ -131,7 +131,6 @@ export class AuthService {
     //   user.refreshToken
     //   // new Date(userData._tokenExpirationDate)
     // );
-    console.log('auth state user: ', user);
 
     this.handleAuth(user.email, user.uid, user.displayName, user.refreshToken)
       .pipe(
@@ -139,16 +138,9 @@ export class AuthService {
           console.log('login res: ', res);
           this.settingsService.fetchUserSettings(res.id);
         }),
-        map((res) => {
-          console.log('Res: ', res);
-          return this.recipeService.fetchRecipes();
-        })
+        map(() => this.recipeService.fetchRecipes())
       )
-      .subscribe((res) => {
-        console.log('Res: ', res);
-        // this.loading = false;
-        // this.router.navigate(['/recipes']);
-      });
+      .subscribe();
     // this.user.next(user);
     //     } else {
     //       this.user.next(null);
