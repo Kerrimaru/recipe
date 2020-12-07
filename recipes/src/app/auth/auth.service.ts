@@ -36,102 +36,41 @@ export class AuthService {
   user = new BehaviorSubject<User>(null);
   private tokenExpirationCountdown: any;
 
-  signup(email: string, password: string, name: string) {
-    return this.http
-      .post<AuthResponseData>(
-        `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${environment.firebase.apiKey}`,
-        {
-          email: email,
-          password: password,
-          displayName: name,
-          returnSecureToken: true,
-        }
-      )
-      .pipe(
-        catchError(this.mapError),
-        tap((resData) => {
-          this.handleAuth(resData.email, resData.localId, resData.displayName, resData.idToken);
-          //   const expDate = new Date(new Date().getTime() + +resData.expiresIn * 1000);
-          //   const user = new User(resData.email, resData.localId, resData.idToken, expDate);
-          //   this.user.next(user);
-        })
-      );
-  }
+  // signup(email: string, password: string, name: string) {
+  //   return this.http
+  //     .post<AuthResponseData>(
+  //       `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${environment.firebase.apiKey}`,
+  //       {
+  //         email: email,
+  //         password: password,
+  //         displayName: name,
+  //         returnSecureToken: true,
+  //       }
+  //     )
+  //     .pipe(
+  //       catchError(this.mapError),
+  //       tap((resData) => {
+  //         this.handleAuth(resData.email, resData.localId, resData.displayName, resData.idToken);
+  //       })
+  //     );
+  // }
 
   login(email: string, password: string) {
-    return (
-      this.fbAuth
-        .signInWithEmailAndPassword(email, password)
-        // .then((res) => {
-        //   const user = res.user;
-        //   // return of(0);
-        //   // this.handleAuth(user.email, user.uid, user.displayName, user.refreshToken, +user.expiresIn);
-        //   this.handleAuth(user.email, user.uid, user.displayName, user.refreshToken);
-        // })
-        .catch((error) => this.mapError(error))
-    );
-
-    // return this.http
-    //   .post<AuthResponseData>(
-    //     `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${environment.firebase.apiKey}`,
-    //     {
-    //       email: email,
-    //       password: password,
-    //       returnSecureToken: true,
-    //     }
-    //   )
-    //   .pipe(
-    //     catchError(this.mapError),
-    //     tap((resData) => {
-
-    //       this.handleAuth(resData.email, resData.localId, resData.displayName, resData.idToken, +resData.expiresIn);
-    //       //   const expDate = new Date(new Date().getTime() + +resData.expiresIn * 1000);
-    //       //   const user = new User(resData.email, resData.localId, resData.idToken, expDate);
-    //       //   this.user.next(user);
-    //     })
-    //   );
+    return this.fbAuth.signInWithEmailAndPassword(email, password).catch((error) => this.mapError(error));
   }
 
   fbSignup(email: string, password: string, name: string) {
-    return (
-      this.fbAuth
-        .createUserWithEmailAndPassword(email, password)
-        .then((res) => {
-          const user = res.user;
-          user.updateProfile({ displayName: name });
-          this.handleAuth(user.email, user.uid, name, user.refreshToken);
-        })
-
-        // this.fbAuth.updateCurrentUser(user).then(user => {
-        //   user.displayName = name;
-        // }
-        // return of(0);
-        // this.handleAuth(user.email, user.uid, user.displayName, user.refreshToken, +user.expiresIn);
-
-        // .then((user) => {
-        //   console.log('user? : ', user);
-        //   // this.handleAuth(user.email, user.uid, user.displayName, user.refreshToken, 3600)
-        // })
-        .catch((error) => this.mapError(error))
-    );
+    return this.fbAuth
+      .createUserWithEmailAndPassword(email, password)
+      .then((res) => {
+        const user = res.user;
+        user.updateProfile({ displayName: name });
+        return user;
+      })
+      .catch((error) => this.mapError(error));
   }
 
-  autoLogin(user?) {
-    // if (this.fbAuth.user) {
-    //   console.log('there is a user: ', this.fbAuth.user);
-
-    //   this.fbAuth.authState.subscribe((user) => {
-    //     console.log('autologin user: ', user);
-    //     // user ? this.handleAuth(user.email, user.uid, user.displayName, user.refuserhToken) : this.user.next(null);
-    //     if (user) {
-    // const user = new User(
-    //   user.email,
-    //   user.uid,
-    //   user.displayName,
-    //   user.refreshToken
-    //   // new Date(userData._tokenExpirationDate)
-    // );
-
+  autoLogin(user) {
     this.handleAuth(user.email, user.uid, user.displayName, user.refreshToken)
       .pipe(
         map((res) => {
@@ -141,51 +80,11 @@ export class AuthService {
         map(() => this.recipeService.fetchRecipes())
       )
       .subscribe();
-    // this.user.next(user);
-    //     } else {
-    //       this.user.next(null);
-    //     }
-    //   });
-    // } else {
-    //   this.user.next(null);
-    // }
-    // console.log('this.fbAuth.currentUser ', this.fbAuth.currentUser);
-    // const testy = JSON.parse(localStorage.getItem('userData'));
-    // console.log('testy: ', testy);
-    // // this.logout();
-    // const userData: {
-    //   email: string;
-    //   id: string;
-    //   name: string;
-    //   _token: string;
-    //   _tokenExpirationDate: string;
-    // } = JSON.parse(localStorage.getItem('userData'));
-    // console.log('autologin user data: ', userData);
-    // if (!userData) {
-    //   console.log('no data!!! ');
-    //   return;
-    // }
-    // // const curr = firebase.auth();
-    // // console.log('curr: ', curr);
-    // // const test = JSON.parse(JSON.stringify(this.fbAuth.currentUser)).stsTokenManager.accessToken;
-    // // console.log('test: ', test);
-    // const loadedUser = new User(
-    //   userData.email,
-    //   userData.id,
-    //   userData.name,
-    //   userData._token,
-    //   new Date(userData._tokenExpirationDate)
-    // );
-    // console.log('loadedUser!!! ', loadedUser);
-    // if (loadedUser.token) {
-    //   console.log('has token!!! ');
-    //   this.user.next(loadedUser);
-    //   const expires = new Date(userData._tokenExpirationDate).getTime() - new Date().getTime();
-    //   this.autoLogout(expires);
-    // }
   }
 
   logout() {
+    this.settingsService.favs$.next(null);
+
     this.user.next(null);
     this.fbAuth.signOut().then((res) => {
       console.log('logout res: ', res);
@@ -204,47 +103,10 @@ export class AuthService {
     }, expDuration);
   }
 
-  //   signUpIn(email: string, password: string, action: string) {
-  //     const urlSegment = action === 'login' ? 'signInWithPassword' : 'signUp';
-  //     return this.http
-  //       .post<AuthResponseData>(`https://identitytoolkit.googleapis.com/v1/accounts:${urlSegment}?key=${this.key}`, {
-  //         email: email,
-  //         password: password,
-  //         returnSecureToken: true,
-  //       })
-  //       .pipe(
-  //         catchError(this.mapError),
-  //         tap((resData) => {
-  //           this.handleAuth(resData.email, resData.localId, resData.idToken, +resData.expiresIn);
-  //         })
-  //       );
-  //   }
-
   handleAuth(email: string, id: string, name: string, token: string): Observable<any> {
     const user = new User(email, id, name, token);
     this.user.next(user);
     return of(user);
-    // this.recipeService
-    //   .fetchRecipes()
-    //   .pipe(
-    //     switchMap((res) => {
-    //       console.log('switch res: ', res);
-    //       return res;
-    //     })
-    //   )
-    //   .subscribe((res) => {
-    //     console.log('res: ', res);
-    //     this.user.next(user);
-    //   });
-    // this.initializer.init();
-    // this.user.next(user);
-    // this.fbAuth.authState.subscribe((res) => {
-    //   console.log('auth state res: ', res);
-    //   this.user.next(user);
-    // });
-    // this.user.next(this.fbAuth.authState.value);
-    // this.autoLogout(expires * 1000);
-    // localStorage.setItem('userData', JSON.stringify(user));
   }
 
   private mapError(error: HttpErrorResponse) {
@@ -267,21 +129,7 @@ export class AuthService {
         errorMsg = 'THis account has been disabled';
         break;
     }
+    console.log('error: ', errorMsg);
     return throwError(errorMsg);
   }
-
-  // doRegister(value) {
-  //   return new Promise<any>((resolve, reject) => {
-  //     // firebase.auth().createUserWithEmailAndPassword(value.email, value.password)
-  //     firebase
-  //       .auth()
-  //       .createUserWithEmailAndPassword(value.email, value.password)
-  //       .then(
-  //         (res) => {
-  //           resolve(res);
-  //         },
-  //         (err) => reject(err)
-  //       );
-  //   });
-  // }
 }

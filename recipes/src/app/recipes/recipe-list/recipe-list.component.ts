@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, OnDestroy, Input } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, OnDestroy, Input, HostListener } from '@angular/core';
 import { Recipe } from '../recipe.model';
 import { RecipeService } from '../recipe.service';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
@@ -24,9 +24,21 @@ export class RecipeListComponent implements OnInit, OnDestroy {
   searchTerm: string;
   favouritesArr: any[];
   selectedRecipe: Recipe;
-  searchOn = false;
+  searchOn = true;
   isShowFavourites: boolean;
   favsSub: Subscription;
+  maxScroll: boolean;
+
+  @HostListener('window:scroll', ['$event'])
+  checkScroll() {
+    if (window.pageYOffset > 128) {
+      this.searchOn = this.searchTerm ? true : false;
+      this.maxScroll = true;
+    } else {
+      this.searchOn = true;
+      this.maxScroll = false;
+    }
+  }
 
   constructor(
     public fbAuth: AngularFireAuth,
@@ -77,5 +89,14 @@ export class RecipeListComponent implements OnInit, OnDestroy {
 
   scroll(el?) {
     el.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  searchBlur() {
+    if (!this.maxScroll) {
+      // do nothing
+      return;
+    } else if (!this.searchTerm) {
+      this.searchOn = false;
+    }
   }
 }

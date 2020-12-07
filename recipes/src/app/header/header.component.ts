@@ -27,6 +27,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
   width: number = window.innerWidth;
   // height: number = window.innerHeight;
   mobileWidth = 760;
+  collapse = false;
+
+  navItems = [
+    { text: 'Recipes', link: '/recipes' },
+    { text: '+New Recipe', link: '/recipes/new' },
+    { text: 'My Favourites', link: '/recipes/favourites' },
+    // {text: 'Account',  link: '/settings'}
+  ];
 
   private userSub: Subscription;
   // @Output() featureSelected = new EventEmitter<string>();
@@ -35,6 +43,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
   onResize(event) {
     this.width = event.target.innerWidth;
     this.isMobile = this.width < this.mobileWidth;
+  }
+
+  @HostListener('window:scroll', ['$event'])
+  checkScroll() {
+    console.log('offset: ', window.pageYOffset);
+    if (window.pageYOffset >= 40) {
+      this.collapse = true;
+    } else {
+      this.collapse = false;
+    }
   }
 
   ngOnInit(): void {

@@ -12,6 +12,7 @@ export class Recipe {
   public tags: Tag[] = [];
   public key: string;
   public created: number; // utc
+  public isFavourite: boolean;
   // public selected = false;
 
   // constructor(name: string, desc: string, imagePath: string, ingredients: Ingredient[], addedBy: string) {

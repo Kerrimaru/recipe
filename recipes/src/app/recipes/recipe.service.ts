@@ -85,7 +85,7 @@ export class RecipeService {
     this.recipes$ = this.recipeList.snapshotChanges().pipe(
       map((changes) =>
         changes.map((c) => {
-          // console.log('c: ', c);
+          console.log('recipe changed: ', c);
           return { key: c.payload.key, ...c.payload.val() };
         })
       ),

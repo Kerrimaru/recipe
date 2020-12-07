@@ -1,4 +1,7 @@
 <div class="recipe-item" style="cursor: pointer" (swipe)="swipe($event.type)" [ngClass]="{ flipped: flipped }">
+  <div class="favourite" *ngIf="showFavouriteIcon">
+    <span class="material-icons" [ngClass]="{ 'is-favourite': isFavourite }">favorite</span>
+  </div>
   <div class="rec-inner">
     <!-- <div class="rec-front" [routerLink]="[index]" routerLinkActive="active" (click)="scroll()"> -->
     <div class="rec-front" [routerLink]="recipe.key" routerLinkActive="active" (click)="scroll()">

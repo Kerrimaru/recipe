@@ -6,14 +6,14 @@ import { Directive, ElementRef, HostListener, Input } from '@angular/core';
 export class ShowOnScrollDirective {
   constructor(private el: ElementRef) {}
   //   @Input() scrollClass: string;
-  @Input() appShowOnScroll: string;
-  @Input() offset: number;
+  @Input() appShowOnScroll: string; // class to add
+  @Input() offset = 0; // position when to add it
 
   @HostListener('window:scroll', ['$event'])
   checkScroll() {
     const options = {
       // root: null,
-      rootMargin: '0px',
+      rootMargin: this.offset + 'px',
       threshold: 1.0,
     };
 

@@ -11,6 +11,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { RecipeFilterPipe } from './pipes/recipe-filter.pipe';
 import { ArrayIncludesPipe } from './pipes/array-includes.pipe';
 import { ShowOnScrollDirective } from './directives/show-on-scroll.directive';
+import { FavouritesPipe } from './pipes/favourites.pipe';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { ShowOnScrollDirective } from './directives/show-on-scroll.directive';
     RecipeFilterPipe,
     ArrayIncludesPipe,
     ShowOnScrollDirective,
+    FavouritesPipe,
   ],
   imports: [
     CommonModule,
@@ -29,7 +31,6 @@ import { ShowOnScrollDirective } from './directives/show-on-scroll.directive';
     MatTabsModule,
     MatFormFieldModule,
     MatSelectModule,
-    // TitlePipe,
   ],
   exports: [
     LoadingComponent,
@@ -45,13 +46,14 @@ import { ShowOnScrollDirective } from './directives/show-on-scroll.directive';
     RecipeFilterPipe,
     ArrayIncludesPipe,
     ShowOnScrollDirective,
+    FavouritesPipe,
   ],
 })
 export class SharedModule {
   static forRoot(): ModuleWithProviders {
     return {
       ngModule: SharedModule,
-      providers: [TitlePipe, RecipeFilterPipe, ArrayIncludesPipe],
+      providers: [TitlePipe, RecipeFilterPipe, ArrayIncludesPipe, FavouritesPipe],
     };
   }
 }

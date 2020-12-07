@@ -32,13 +32,16 @@
     </div>
 
     <div class="column column-right">
-      <app-loading
+      <div class="favourite" (click)="favourite()">
+        <span class="material-icons" [ngClass]="{ 'is-favourite': isFavourite }">favorite</span>
+      </div>
+      <!-- <app-loading
         class="favourite"
         [color]="isFavourite ? '#ea2222' : '#e6e6e6'"
         [animate]="false"
         [size]="48"
         (click)="favourite()"
-      ></app-loading>
+      ></app-loading> -->
       <img [src]="recipe.imagePath" alt="{{ recipe.name }}" class="recipe-img" />
     </div>
   </div>

@@ -1,22 +1,9 @@
-<!-- <h1 class="montserrat">INGREDIENTS</h1> -->
-<!-- <h1 class="candice">Recipe</h1> -->
-<!-- <h1 class="ralewayItalic">INGREDIENTS</h1> -->
-<!-- <h1 class="raleway">INGREDIENTS</h1> -->
-<!-- <h1 class="">Welcome!</h1>
-<h1 class="">Welcome!</h1> -->
-
 <div class="auth-container">
   <div *ngIf="loading" class="loading">
     <app-loading></app-loading>
   </div>
 
-  <!-- <div class="image-left"><img src="/assets/images/kitchen.jpeg" /></div> -->
-  <!-- <div class="image-left"><img src="/assets/images/table.jpeg" /></div> -->
-  <!-- <div class="image-left"><img src="/assets/images/cube_parquet.jpg" /></div> -->
-
   <div *ngIf="!loading" class="form-container">
-    <!-- <div class="image-left"><img src="/assets/images/rec-card.png" /></div> -->
-    <!-- <div class="image-left"><img src="/assets/images/recipe-card-kitchen.jpg" /></div> -->
     <img class="recipe-card" src="/assets/images/recipe-card-kitchen-blank.png" />
 
     <form #authForm="ngForm" (ngSubmit)="onSubmit(authForm)">

@@ -8,15 +8,47 @@
 //   width: 80px;
 // }
 
+.recipe-list-container {
+  position: relative;
+}
+
 .search {
   display: flex;
   justify-content: flex-end;
-  padding: 0 50px;
-  position: sticky;
+  position: absolute;
   top: 20px;
   z-index: 50;
   height: 37px;
   align-items: center;
+  transition: 1s width ease-in-out;
+  border-radius: 20px;
+  border: 1px solid #ababab;
+  right: 55px;
+  .material-icons {
+    width: 29px;
+    opacity: 1;
+    transition: opacity 0.5s ease-in;
+  }
+  &.sticky {
+    width: 37px;
+    position: fixed;
+    right: 106px;
+    animation-direction: reverse;
+    animation-duration: 0.5s;
+  }
+  &.expanded {
+    width: 175px;
+    .material-icons {
+      width: 0px;
+      opacity: 0;
+      transition: opacity 0s;
+    }
+  }
+  input {
+    border: none;
+    padding: 0 15px;
+    width: 100%;
+  }
 }
 
 .recipe-list {
@@ -24,7 +56,7 @@
   max-width: 1500px;
   margin: auto;
   // line-height: 32px;
-  padding: 30px 50px;
+  padding: 83px 50px;
   -webkit-column-count: 4;
   // -webkit-column-gap: 0px;
   -moz-column-count: 4;

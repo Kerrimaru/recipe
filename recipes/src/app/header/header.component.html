@@ -1,4 +1,4 @@
-<nav class="app-nav">
+<nav class="app-nav" [ngClass]="{ collapse: collapse }">
   <!-- <img class="logo" src="/assets/images/jlogo.png" routerLink="/" /> -->
   <div class="app-header">
     <h1><a routerLink="/">Judith's Kitchen</a></h1>
@@ -12,7 +12,7 @@
           <h4 routerLinkActive="active"><a routerLink="/recipes">Recipes</a></h4>
           <h4 routerLinkActive="active"><a routerLink="/recipes/favourites">Favourites</a></h4>
         </ng-container>
-        <h4 routerLinkActive="active"><a routerLink="/settings">Settings</a></h4>
+        <!-- <h4 routerLinkActive="active"><a routerLink="/settings">Settings</a></h4> -->
         <h4 (click)="logout()"><a>Logout</a></h4>
       </div>
     </div>
@@ -29,21 +29,16 @@
     </ng-container> -->
 
     <ng-container *ngIf="isAuth">
-      <div routerLinkActive="active" class="menu-tab" [routerLinkActiveOptions]="{ exact: true }">
-        <h4><a routerLink="/recipes">Recipes</a></h4>
+      <div
+        *ngFor="let item of navItems"
+        class="menu-tab {{ item.class }}"
+        routerLinkActive="active"
+        [routerLink]="item.link"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        <h4>{{ item.text }}</h4>
         <div class="grow"></div>
       </div>
-      <div routerLinkActive="active" class="menu-tab hide-mobile" [routerLinkActiveOptions]="{ exact: true }">
-        <h4><a routerLink="/recipes/new">+New Recipe</a></h4>
-        <div class="grow"></div>
-      </div>
-      <div routerLinkActive="active" class="menu-tab" [routerLinkActiveOptions]="{ exact: true }">
-        <h4><a routerLink="/recipes/favourites">My Favourites</a></h4>
-        <div class="grow"></div>
-      </div>
-      <!-- <div routerLinkActive="active" class="menu-tab" [routerLinkActiveOptions]="{ exact: true }">
-          <h4><a routerLink="/settings">Account</a></h4>
-        </div> -->
     </ng-container>
   </div>
 </nav>

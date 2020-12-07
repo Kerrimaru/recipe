@@ -51,8 +51,10 @@ export class UserSettingsService {
   // }
 
   fetchUserSettings(userId) {
+    console.log('fecth user setting');
     this.userSettingsRef = this.fb.database.ref(`userSettings/${userId}`);
     this.userSettingsRef.once('value').then((snapshot) => {
+      console.log('fecth user setting');
       this.userSettings = snapshot.val();
       // this.getFavourites(userId);
       this.fetchFavsList(userId);
@@ -60,12 +62,19 @@ export class UserSettingsService {
   }
 
   fetchFavsList(userId) {
+    console.log('fecth fav list');
     this.favsRef = this.fb.database.ref(`userSettings/${userId}/favourites`);
     this.favouritesList = this.fb.list(`userSettings/${userId}/favourites`);
     return this.favouritesList
       .snapshotChanges()
-      .pipe(map((changes) => changes.map((c) => c.payload.key)))
+      .pipe(
+        map((changes) => {
+          console.log('fecth fav list');
+          return changes.map((c) => c.payload.key);
+        })
+      )
       .subscribe((res) => {
+        console.log('fecth fav list');
         this.favourites = res;
         this.favs$.next(res);
       });

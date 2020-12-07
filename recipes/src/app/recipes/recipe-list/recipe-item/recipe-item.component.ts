@@ -11,7 +11,9 @@ export class RecipeItemComponent implements OnInit {
   constructor() {}
 
   @Input() recipe: Recipe;
-  @Input() index: number;
+  @Input() index: number; // not being used
+  @Input() isFavourite: boolean;
+  @Input() showFavouriteIcon = true;
 
   flipped = false;
   expanded = false;
