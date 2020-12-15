@@ -8,21 +8,43 @@
   margin: 0 5px 12px 5px;
 }
 
+// favourite heart
 .favourite {
+  cursor: pointer;
   position: absolute;
   top: 7px;
   right: 7px;
   z-index: 1;
-  .material-icons {
-    color: white;
-    opacity: 0.6;
-    &.is-favourite {
-      color: red;
-      transform: scale(1.2);
-      opacity: 0.9;
-    }
+  transition: all 0.3s ease-in-out;
+  &:hover {
+    transform: scale(1.1);
   }
 }
+
+.favourite .material-icons {
+  transition: all 0.3s ease-in-out;
+  color: white;
+  opacity: 0.6;
+  &:hover {
+    color: #5f5454;
+  }
+  &:active {
+    color: white;
+  }
+}
+
+.favourite .material-icons.is-favourite {
+  color: #f54d4d;
+  transform: scale(1.3);
+  opacity: 0.9;
+  &:hover {
+    color: #b70909;
+  }
+  &:active {
+    color: #f54d4d;
+  }
+}
+/////////////////
 
 .title-cont {
   height: 100%;

@@ -1,5 +1,5 @@
 <div class="recipe-item" style="cursor: pointer" (swipe)="swipe($event.type)" [ngClass]="{ flipped: flipped }">
-  <div class="favourite" *ngIf="showFavouriteIcon">
+  <div class="favourite" *ngIf="showFavouriteIcon" (click)="favourite()">
     <span class="material-icons" [ngClass]="{ 'is-favourite': isFavourite }">favorite</span>
   </div>
   <div class="rec-inner">

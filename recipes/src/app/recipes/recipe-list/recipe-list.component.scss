@@ -10,6 +10,10 @@
 
 .recipe-list-container {
   position: relative;
+  display: flex;
+  justify-content: center;
+  height: 60vh;
+  align-items: center;
 }
 
 .search {
@@ -49,6 +53,19 @@
     padding: 0 15px;
     width: 100%;
   }
+}
+
+.empty {
+  text-align: center;
+}
+
+.empty img {
+  width: 60px;
+}
+
+.empty button {
+  width: 175px;
+  margin: 20px;
 }
 
 .recipe-list {
@@ -156,3 +173,19 @@
 //   overflow: hidden;
 //   // animation-direction: reverse;
 // }
+
+.scroll-top {
+  transition: 0.3s all ease-in-out;
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  border: 1px solid;
+  border-radius: 100%;
+  display: flex;
+  color: #ababab;
+  cursor: pointer;
+  span {
+    font-size: 40px;
+    color: #ababab;
+  }
+}

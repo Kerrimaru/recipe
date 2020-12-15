@@ -13,6 +13,7 @@ import { UserSettingsService } from 'src/app/settings/user-settings.service';
 })
 export class RecipeDetailComponent implements OnInit, AfterViewInit {
   @Input() recipeInput: Recipe;
+
   recipe: Recipe;
   recipeKey: any;
   loading = false;
