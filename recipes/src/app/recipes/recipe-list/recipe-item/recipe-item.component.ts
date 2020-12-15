@@ -1,4 +1,4 @@
-import { HostListener } from '@angular/core';
+import { EventEmitter, HostListener, Output } from '@angular/core';
 import { Component, OnInit, Input } from '@angular/core';
 import { Recipe } from '../../recipe.model';
 
@@ -14,6 +14,8 @@ export class RecipeItemComponent implements OnInit {
   @Input() index: number; // not being used
   @Input() isFavourite: boolean;
   @Input() showFavouriteIcon = true;
+
+  @Output() favouriteEmitter = new EventEmitter<string>();
 
   flipped = false;
   expanded = false;
@@ -45,5 +47,12 @@ export class RecipeItemComponent implements OnInit {
 
   expand() {
     this.expanded = true;
+  }
+
+  favourite() {
+    console.log('click in recipe item ');
+    this.isFavourite = !this.isFavourite;
+    this.favouriteEmitter.emit();
+    // this.settingsService.toggleFavourite(this.recipe.key);
   }
 }

@@ -9,25 +9,16 @@
       <div class="account-nav">
         <ng-container *ngIf="isMobile">
           <span class="material-icons" (click)="toggleMenu()">menu</span>
-          <h4 routerLinkActive="active"><a routerLink="/recipes">Recipes</a></h4>
-          <h4 routerLinkActive="active"><a routerLink="/recipes/favourites">Favourites</a></h4>
+          <h4 *ngFor="let item of navItems" routerLinkActive="active">
+            <a [routerLink]="item.link">{{ item.text }}</a>
+          </h4>
         </ng-container>
-        <!-- <h4 routerLinkActive="active"><a routerLink="/settings">Settings</a></h4> -->
         <h4 (click)="logout()"><a>Logout</a></h4>
       </div>
     </div>
   </div>
 
   <div class="nav-list" *ngIf="isAuth && !isMobile">
-    <!-- <ng-container *ngIf="!isAuth">
-      <div routerLinkActive="active" class="menu-tab" [routerLinkActiveOptions]="{ exact: true }">
-        <h4><a routerLink="/recipes">Recipes</a></h4>
-      </div>
-      <div routerLinkActive="active" class="menu-tab" [routerLinkActiveOptions]="{ exact: true }">
-        <h4><a routerLink="/recipes/new">Login</a></h4>
-      </div>
-    </ng-container> -->
-
     <ng-container *ngIf="isAuth">
       <div
         *ngFor="let item of navItems"

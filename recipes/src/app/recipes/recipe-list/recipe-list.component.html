@@ -1,5 +1,9 @@
 <div class="recipe-list-container">
-  <div class="search" [ngClass]="{ expanded: searchOn, sticky: maxScroll }">
+  <div
+    class="search"
+    *ngIf="isShowFavourites ? favouritesArr.length : recipes.length"
+    [ngClass]="{ expanded: searchOn, sticky: maxScroll }"
+  >
     <input
       *ngIf="searchOn"
       [ngModelOptions]="{ standalone: true }"
@@ -11,7 +15,7 @@
     <span class="material-icons" (click)="searchOn = true">search</span>
   </div>
 
-  <div class="recipe-list">
+  <div class="recipe-list" *ngIf="(isShowFavourites ? favouritesArr.length : recipes.length) && !loading">
     <ng-container *ngFor="let recipe of recipes | recipeFilter: searchTerm; index as index">
       <div class="rec-container">
         <app-recipe-item
@@ -21,6 +25,7 @@
           [index]="index"
           [showFavouriteIcon]="!isShowFavourites"
           [isFavourite]="!isShowFavourites ? (recipe.key | favourite: favouritesArr) : null"
+          (favouriteEmitter)="favourite(recipe)"
           #elRef
         ></app-recipe-item>
         <!-- disabled -->
@@ -36,6 +41,17 @@
       </div> -->
       </div>
     </ng-container>
+  </div>
+
+  <div class="scroll-top" [ngStyle]="{ opacity: maxScroll ? 1 : 0 }">
+    <span *ngIf="maxScroll" (click)="scroll()" class="material-icons">keyboard_arrow_up</span>
+  </div>
+
+  <div class="empty" *ngIf="(isShowFavourites ? !favouritesArr.length : !recipes.length) && !loading">
+    <img src="assets/images/icons/bubbling-pot.png" />
+    <h4>There's nothing here yet!</h4>
+    <h4>Why not try something new, you might find a favourite?</h4>
+    <button *ngIf="isShowFavourites && recipes.length" (click)="randomRecipe()">Get inspired</button>
   </div>
 
   <!--   

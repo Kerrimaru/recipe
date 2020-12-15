@@ -19,6 +19,7 @@
   flex-grow: 1;
   height: 50px;
   margin-top: 25px;
+  transition: 0.5s all ease-in-out;
 }
 
 h4,
@@ -28,13 +29,17 @@ h1 {
 
 h1 {
   padding: 20px;
-  font-size: 32px;
+  font-size: 30px;
   position: fixed;
   background-color: white;
   z-index: 1;
   width: 100vw;
   text-align: center;
   margin: 0;
+}
+
+h1 a:hover {
+  // color: blue;
 }
 
 .menu-tab {
@@ -198,9 +203,13 @@ a {
   .nav-list {
     z-index: 2;
     position: fixed;
-    top: 14px;
-    left: 30px;
-    margin-top: 0;
+    // translate: ;
+    top: 0px;
+    // left: 30px;
+    width: 100%;
+    transform: translateX(-34%);
+    // margin-top: 0;
+    font-size: 14px;
     .menu-tab {
       border: none;
       padding: 0;
@@ -209,6 +218,7 @@ a {
       }
       &.active {
         transform: none;
+        display: none;
       }
     }
   }

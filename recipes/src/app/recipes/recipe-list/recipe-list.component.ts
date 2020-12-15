@@ -28,6 +28,7 @@ export class RecipeListComponent implements OnInit, OnDestroy {
   isShowFavourites: boolean;
   favsSub: Subscription;
   maxScroll: boolean;
+  loading = true;
 
   @HostListener('window:scroll', ['$event'])
   checkScroll() {
@@ -59,16 +60,24 @@ export class RecipeListComponent implements OnInit, OnDestroy {
     this.isShowFavourites = this.router.url.valueOf() === '/recipes/favourites' ? true : false;
     this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((e: NavigationEnd) => {
       this.isShowFavourites = e.url === '/recipes/favourites' ? true : false;
+      this.loading = false;
     });
 
     this.recipesSub = this.recipeService.recipes$.subscribe((recipes) => {
       this.recipes = recipes;
+      this.loading = false;
     });
   }
 
   ngOnDestroy() {
     this.recipesSub.unsubscribe();
     this.favsSub.unsubscribe();
+  }
+
+  favourite(recipe: Recipe) {
+    console.log('favourite in list ', recipe);
+    // this.isFavourite = !this.isFavourite;
+    this.settingsService.toggleFavourite(recipe.key);
   }
 
   toggleRecipe(recipe: any, ref?) {
@@ -88,7 +97,11 @@ export class RecipeListComponent implements OnInit, OnDestroy {
   }
 
   scroll(el?) {
-    el.scrollIntoView({ behavior: 'smooth' });
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      window.scroll({ top: 0, behavior: 'smooth' });
+    }
   }
 
   searchBlur() {
@@ -98,5 +111,11 @@ export class RecipeListComponent implements OnInit, OnDestroy {
     } else if (!this.searchTerm) {
       this.searchOn = false;
     }
+  }
+
+  randomRecipe() {
+    const rec = this.recipes[Math.floor(Math.random() * this.recipes.length)];
+    console.log('rec: ', rec);
+    this.router.navigate(['recipes', rec.key]);
   }
 }

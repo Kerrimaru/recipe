@@ -79,4 +79,6 @@ export class UserSettingsService {
         this.favs$.next(res);
       });
   }
+
+  // to do: organise structure to include user<->recipe settings, could include favourites, as well as date last made, personal annotations, what else???
 }
