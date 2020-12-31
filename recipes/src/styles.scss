@@ -1,0 +1,9 @@
+/* You can add global styles to this file, and also import other style files */
+// "node_modules/bootstrap/dist/css/bootstrap.min.css" add this line back to styles in angular.json  (~line 27) if you want to add bootstrap again
+@import 'styles/reset';
+@import 'styles/fonts';
+@import 'styles/variables';
+@import 'styles/global';
+@import 'styles/components';
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
+@import 'styles/animations';

@@ -1,0 +1,60 @@
+<div class="auth-container">
+  <div *ngIf="loading" class="loading">
+    <app-loading></app-loading>
+  </div>
+
+  <div *ngIf="!loading" class="form-container">
+    <img class="recipe-card" src="/assets/images/recipe-card-kitchen-blank.png" />
+
+    <form #authForm="ngForm" (ngSubmit)="onSubmit(authForm)">
+      <div class="form-group">
+        <input
+          type="email"
+          class="form-control"
+          id="email"
+          ngModel
+          name="email"
+          required
+          email
+          placeholder="What's your email?"
+        />
+      </div>
+      <div class="form-group">
+        <input
+          type="password"
+          class="form-control"
+          id="password"
+          ngModel
+          name="password"
+          required
+          minlength="6"
+          [placeholder]="isLogin ? 'Password' : 'Choose a password'"
+        />
+      </div>
+
+      <div [style.opacity]="isLogin ? 0 : 1" class="form-group">
+        <input
+          type="name"
+          class="form-control"
+          id="name"
+          ngModel
+          name="name"
+          placeholder="What's your name?"
+          [required]="!isLogin"
+        />
+      </div>
+
+      <div class="actions">
+        <button type="button" class="btn-left" (click)="toggleLogin()">
+          Go to {{ !isLogin ? 'login' : 'sign up' }}
+        </button>
+        <button type="submit" class="btn-right" [disabled]="!authForm.valid">
+          {{ isLogin ? 'Login' : 'Sign up' }}
+        </button>
+      </div>
+    </form>
+    <div class="alert alert-danger" *ngIf="error">
+      <p>{{ error }}</p>
+    </div>
+  </div>
+</div>

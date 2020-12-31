@@ -1,0 +1,130 @@
+<div *ngIf="recipe" class="recipe-details" #recipeRef>
+  <div class="rec-header">
+    <div class="rec-title">
+      <h1>{{ recipe.name | title }}</h1>
+
+      <div *ngIf="recipe.addedBy" class="added-cont">
+        <p>Added by {{ recipe.addedBy }}</p>
+        <ng-container *ngIf="recipe.created">
+          <p [style.font-style]="'italic'">
+            <img src="assets/images/svg/fancy-tilda.svg" class="tilda" />
+            on
+            <img src="assets/images/svg/fancy-tilda.svg" class="tilda" />
+          </p>
+          <p>{{ recipe.created | date }}</p>
+        </ng-container>
+      </div>
+    </div>
+    <hr />
+  </div>
+
+  <div class="section">
+    <div class="column column-left">
+      <div id="ingredient-list">
+        <h2 id="ingredients-title">Ingredients</h2>
+        <ul class="list-group" *ngIf="recipe.ingredients?.length">
+          <li *ngFor="let ing of recipe.ingredients" class="list-group-item">
+            <div><img src="assets/images/svg/fancy-tilda.svg" class="tilda" /></div>
+            {{ ing }}
+          </li>
+        </ul>
+      </div>
+      <div id="method">
+        <h2>Method</h2>
+        <div [innerHtml]="recipe.description" class="desc"></div>
+      </div>
+      <div class="notes">
+        <h2 class="cutom-note" (click)="showNotes()">
+          Notes
+          <span class="material-icons expand-notes" [ngClass]="{ close: !notesSectionHidden }">expand_more</span>
+        </h2>
+        <div [ngClass]="{ 'hide-notes': notesSectionHidden }" class="notes-section">
+          <div class="add-note">
+            <span class="material-icons custom-note" matTooltip="add a note" matTooltipShowDelay="500">note_add</span>
+            <input
+              placeholder="add a note"
+              class="notes-input"
+              (blur)="saveNote($event)"
+              [(ngModel)]="noteInput"
+              (ngModelChange)="onNoteChange($event)"
+            />
+            <!-- <span
+                *ngIf="!notesInputExpanded"
+                (click)="addNote()"
+                class="material-icons custom-note"
+                matTooltip="add a note"
+                matTooltipShowDelay="500"
+              >
+                note_add
+              </span>
+              <textarea
+                class="notes-container"
+                *ngIf="notesInputExpanded"
+                (blur)="saveNote($event)"
+                [(ngModel)]="noteInput"
+                (ngModelChange)="onNoteChange($event)"
+              ></textarea> -->
+          </div>
+          <p
+            *ngFor="let note of notes"
+            class="user-note"
+            matTooltip="added by  {{ note.user }} on {{ note.date | date }}"
+            matTooltipShowDelay="250"
+          >
+            * {{ note.note }}
+          </p>
+          <hr />
+          <h4 class="title">{{ datesMade.length ? 'You made this recipe on' : 'Have you made this recipe?' }}</h4>
+          <p>
+            <input
+              id="dateMade"
+              placeholder="+ add a date"
+              [matDatepicker]="picker"
+              (click)="picker.open()"
+              readonly
+              [(ngModel)]="dateInput"
+              (ngModelChange)="onDateChange($event)"
+            />
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </p>
+          <ng-container *ngIf="datesMade.length">
+            <p class="date-item" *ngFor="let d of datesMade">
+              {{ d | date }}
+              <!-- <span class="material-icons remove" matTooltip="remove date" matTooltipShowDelay="500">clear</span> -->
+            </p>
+          </ng-container>
+
+          <!-- </mat-form-field> -->
+          <!-- <a class="dateMade()">Date made</a> -->
+        </div>
+      </div>
+    </div>
+
+    <div class="column column-right">
+      <div class="favourite">
+        <!-- <span class="material-icons" [ngClass]="{ 'is-favourite': isFavourite }">favorite</span> -->
+        <div
+          class="fav-lottie"
+          [appLottie]="'heart-like'"
+          [autoplay]="false"
+          [startFrame]="isFavourite ? 110 : null"
+          [play]="isFavourite ? [60, 110] : [140, 150]"
+        ></div>
+      </div>
+      <div class="heart-click-anchor" (click)="favourite()"></div>
+
+      <img [src]="recipe.imagePath" alt="{{ recipe.name }}" class="recipe-img" />
+    </div>
+  </div>
+
+  <!-- <div class="method">
+    <h2>Method</h2>
+    <div [innerHtml]="recipe.description" class="desc"></div>
+  </div> -->
+</div>
+
+<div class="actions" *ngIf="showActions">
+  <button type="button" (click)="editRecipe()" class="btn btn-secondary">Edit</button>
+  <button type="button" (click)="deleteRecipe()" class="btn btn-secondary">Delete</button>
+</div>

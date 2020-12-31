@@ -1,0 +1,188 @@
+<div class="edit-container">
+  <div>
+    <form [formGroup]="recipeForm" (ngSubmit)="onSubmit()" (keydown.enter)="$event.preventDefault()">
+      <div class="recipe-header">
+        <input
+          type="text"
+          id="recipe-name"
+          class="app-form-control"
+          formControlName="name"
+          placeholder="Recipe title"
+          (blur)="formatTitle()"
+        />
+      </div>
+      <hr />
+
+      <!-- <div><app-tag-selector></app-tag-selector></div> -->
+      <div class="ing-img-cont">
+        <div class="column column-left">
+          <h2>Ingredients</h2>
+          <small><i>copy and paste a list, or add one by one</i></small>
+
+          <div formArrayName="ingredients" cdkDropList (cdkDropListDropped)="drop($event)" class="ingredients-list">
+            <div
+              cdkDrag
+              class="ingredient"
+              [formGroupName]="i"
+              *ngFor="let ingredientCtrl of ingredientControls; let i = index"
+              (blur)="checkIfLast(i)"
+              (focus)="focus(i)"
+            >
+              <!-- drag handle -->
+              <div class="ingredient-handle" cdkDragHandle matTooltip="Drag to reorder" matTooltipShowDelay="500">
+                <svg width="24px" fill="currentColor" viewBox="0 0 24 24">
+                  <path
+                    d="M10 9h4V6h3l-5-5-5 5h3v3zm-1 1H6V7l-5 5 5 5v-3h3v-4zm14 2l-5-5v3h-3v4h3v3l5-5zm-9 3h-4v3H7l5 5 5-5h-3v-3z"
+                  ></path>
+                  <path d="M0 0h24v24H0z" fill="none"></path>
+                </svg>
+              </div>
+
+              <input
+                type="text"
+                class="form-control"
+                formControlName="name"
+                (blur)="checkIfLast(i)"
+                (focus)="focus(i)"
+                (paste)="onPaste($event, i)"
+              />
+
+              <!-- <button type="button" class="btn btn-secondary" (click)="onRemoveIngredient(i)">Delete</button> -->
+              <img
+                src="/assets/images/icons/delete-icon-3.png"
+                class="delete-icon"
+                (click)="onRemoveIngredient(i)"
+                matTooltip="Delete ingredient"
+                matTooltipShowDelay="500"
+              />
+
+              <!-- <div *ngIf="i === controls.length" class=" add-ingredient">
+              <input type="text" class="form-control" formControlName="name" />
+            </div> -->
+            </div>
+            <!-- <div *ngIf="controls.length === 0" class=" add-ingredient">
+            <input type="text" class="form-control" formControlName="name" />
+          </div> -->
+          </div>
+          <!-- <div class=" add-ingredient">
+          <input type="text" class="form-control" formControlName="name" />
+        </div> -->
+          <!-- <div class="">
+          <div >
+            <button type="button" class="btn btn-primary" (click)="onAddIngredient()">Add ingredient</button>
+          </div>
+        </div> -->
+        </div>
+
+        <div class="column column-right image-upload">
+          <!-- hidden upload input -->
+          <div>
+            <input
+              #imgfile
+              type="file"
+              accept="image/*"
+              (change)="preview(imgfile.files)"
+              #imagePath
+              id="imagePath"
+              style="display: none"
+            />
+            <!-- <input
+              #imgfile
+              type="file"
+              accept="image/*"
+              (change)="process($event)"
+              #imagePath
+              id="imagePath"
+              style="display: none"
+            /> -->
+          </div>
+
+          <div class="aspect-ratio-box" *ngIf="!imgURL && !previewImagePath">
+            <div
+              class="aspect-ratio-box-inside"
+              (click)="imgfile.click()"
+              matTooltip="Click to upload an image"
+              matTooltipShowDelay="700"
+            >
+              <div class="flexbox-centering">
+                <div class="viewport-sizing">
+                  <!-- <img src="assets/images/icons/icons8-camera-100-2.png" class="empty-icon" />
+                  <span class="material-icons">insert_photo</span> -->
+                  <span class="material-icons">add_a_photo</span>
+                  <!-- <p>
+                    Browse or
+                    <br />
+                    drop image here
+                  </p> -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <img class="preview" [src]="imgURL ? imgURL : previewImagePath" (click)="imgfile.click()" />
+
+          <!-- <div class="col-xs-12 preview-cont">
+            <div
+              class="empty-image-cont"
+              *ngIf="!imgURL && !previewImagePath"
+              (click)="imgfile.click()"
+              matTooltip="Click to upload an image"
+              matTooltipShowDelay="700"
+            >
+              <div class="inner-bg">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  enable-background="new 0 0 24 24"
+                  height="48"
+                  viewBox="0 0 24 24"
+                  width="48"
+                >
+                  <rect fill="none" height="48" width="48" />
+                  <path
+                    d="M3,4V1h2v3h3v2H5v3H3V6H0V4H3z M6,10V7h3V4h7l1.83,2H21c1.1,0,2,0.9,2,2v12c0,1.1-0.9,2-2,2H5c-1.1,0-2-0.9-2-2V10H6z M13,19c2.76,0,5-2.24,5-5s-2.24-5-5-5s-5,2.24-5,5S10.24,19,13,19z M9.8,14c0,1.77,1.43,3.2,3.2,3.2s3.2-1.43,3.2-3.2 s-1.43-3.2-3.2-3.2S9.8,12.23,9.8,14z"
+                  />
+                </svg>
+                <img class="empty-icon" src="assets/images/icons/icons8-camera-100.png" />
+                <div class="icons-cont">
+                  <img class="empty-icon" src="assets/images/icons/icons8-camera-100-2.png" />
+
+                  <svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 0 24 24" width="18" class="cutlery">
+                    <path d="M0 0h24v24H0z" fill="none" />
+                    <path
+                      d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z"
+                    />
+                  </svg>
+                  <svg class="plus-svg" xmlns="http://www.w3.org/2000/svg" height="36" viewBox="0 0 24 24" width="36">
+                    <path d="M0 0h24v24H0z" fill="none" />
+                    <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+            <img class="preview" [src]="imgURL ? imgURL : previewImagePath" />
+          </div> -->
+        </div>
+      </div>
+
+      <div class="form-group">
+        <h2>Method</h2>
+        <div class="editor">
+          <ckeditor [editor]="Editor" [config]="{ height: '300px' }" formControlName="description"></ckeditor>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="actions">
+    <button type="button" class="btn btn-secondary show" (click)="onCancel()">Cancel</button>
+    <button
+      [ngClass]="{ hide: !recipeForm.dirty }"
+      [disabled]="!recipeForm.valid"
+      type="submit"
+      class="btn btn-primary"
+      (click)="onSubmit()"
+    >
+      Save
+    </button>
+  </div>
+</div>

@@ -1,0 +1,64 @@
+html {
+  box-sizing: border-box;
+}
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+button,
+input,
+optgroup,
+select,
+textarea,
+html input[type='button'],
+input[type='reset'],
+input[type='submit'],
+button[disabled],
+html input[disabled],
+button::-moz-focus-inner,
+input::-moz-focus-inner,
+input[type='checkbox'],
+input[type='radio'],
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button,
+input[type='search'],
+input[type='search']::-webkit-search-cancel-button,
+input[type='search']::-webkit-search-decoration {
+  border: none;
+  background-image: none;
+  background-color: transparent;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
+
+input {
+  &::-webkit-input-placeholder {
+    /* Edge */
+    color: rgb(192, 192, 192);
+    // font-style: italic;
+  }
+  &:-ms-input-placeholder {
+    /* Internet Explorer 10-11 */
+    color: rgb(192, 192, 192);
+    // font-style: italic;
+  }
+}
+
+textarea,
+select,
+input,
+button {
+  outline: none;
+}
+
+/* hide chrome blue background on autofill */
+.auth-container input:-webkit-autofill,
+.auth-container input:-webkit-autofill:hover,
+.auth-container input:-webkit-autofill:focus,
+.auth-container input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px #fdfff9 inset !important;
+  box-shadow: 0 0 0 30px #fdfff9 inset !important;
+}

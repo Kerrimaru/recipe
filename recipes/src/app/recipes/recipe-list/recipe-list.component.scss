@@ -1,0 +1,237 @@
+// .recipe-list {
+//   display: flex;
+//   flex-wrap: wrap;
+// }
+
+// .recipe-item {
+//   flex: 0 1 auto;
+//   width: 80px;
+// }
+
+.recipe-list-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  height: 60vh;
+  align-items: center;
+}
+
+.search {
+  display: flex;
+  justify-content: flex-end;
+  position: absolute;
+  top: 20px;
+  z-index: 50;
+  height: 37px;
+  align-items: center;
+  transition: 1s width ease-in-out;
+  border-radius: 20px;
+  border: 1px solid #ababab;
+  right: 55px;
+  .material-icons {
+    width: 29px;
+    opacity: 1;
+    transition: opacity 0.5s ease-in;
+  }
+  &.sticky {
+    width: 37px;
+    position: fixed;
+    right: 106px;
+    animation-direction: reverse;
+    animation-duration: 0.5s;
+  }
+  &.expanded {
+    width: 175px;
+    .material-icons {
+      width: 0px;
+      opacity: 0;
+      transition: opacity 0s;
+    }
+  }
+  input {
+    border: none;
+    padding: 0 15px;
+    width: 100%;
+  }
+}
+
+.empty {
+  text-align: center;
+}
+
+.empty img {
+  width: 60px;
+}
+
+.empty button {
+  width: 175px;
+  margin: 20px;
+}
+
+.recipe-list {
+  max-width: 1500px;
+  margin: auto;
+  padding: 83px 50px;
+
+  line-height: 0;
+  -webkit-column-count: 4;
+  -webkit-column-gap: 0px;
+  -moz-column-count: 4;
+  -moz-column-gap: 0px;
+  column-count: 4;
+  column-gap: 0px;
+
+  // -webkit-column-count: 4;
+  // // -webkit-column-gap: 0px;
+  // -moz-column-count: 4;
+  // // -moz-column-gap: 0px;
+  // column-count: 4;
+  // // column-gap: 16px;
+  // column-gap: 10px;
+}
+
+.rec-container {
+  position: relative;
+  border: 1px solid greenyellow;
+  // width: 100% !important;
+  // height: auto !important;
+}
+
+.recipe-item {
+  // flex-grow: 1;
+  // flex-shrink: 1;
+  width: 100% !important;
+  height: auto !important;
+  border: 1px solid blue;
+  // margin: 10px;
+  &.selected {
+    position: static;
+    // opacity: 0;
+    // position: absolute;
+    // top: 0;
+    // left: 0;
+  }
+}
+
+@media (max-width: 1200px) {
+  .recipe-list {
+    -moz-column-count: 4;
+    -webkit-column-count: 4;
+    column-count: 4;
+  }
+}
+@media (max-width: 1000px) {
+  .search {
+    justify-content: center;
+    input {
+      text-align: center;
+    }
+  }
+  .recipe-list {
+    -moz-column-count: 3;
+    -webkit-column-count: 3;
+    column-count: 3;
+  }
+}
+@media (max-width: 800px) {
+  .search {
+    padding: 0;
+    input {
+      width: 100%;
+    }
+  }
+
+  .recipe-list {
+    -moz-column-count: 2;
+    -webkit-column-count: 2;
+    column-count: 2;
+  }
+}
+@media (max-width: 600px) {
+  .recipe-list {
+    padding: 30px 0px;
+    display: flex;
+    flex-direction: column;
+    .recipe-item {
+      margin: 10px auto;
+    }
+  }
+}
+
+.recipe-detail-cont {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  column-span: all;
+  // &.grow {
+  //   column-span: all;
+  // }
+  span {
+    font-size: 46px;
+    cursor: pointer;
+  }
+}
+
+// .grow {
+//   animation-duration: 2s;
+//   animation-name: grow;
+//   margin: 30px 0;
+//   // overflow: hidden;
+// }
+
+// .shrink {
+//   animation-duration: 2s;
+//   animation-name: shrink;
+//   overflow: hidden;
+//   // animation-direction: reverse;
+// }
+
+.scroll-top {
+  transition: 0.3s all ease-in-out;
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  border: 1px solid;
+  border-radius: 100%;
+  display: flex;
+  color: #ababab;
+  cursor: pointer;
+  span {
+    font-size: 40px;
+    color: #ababab;
+  }
+}
+
+.fav-lottie {
+  border: 1px solid red;
+  // width: 300px !important;
+  // height: 300px;
+  // position: absolute;
+  // right: -120px;
+  // top: -83px;
+  overflow: visible;
+  min-width: 300px;
+}
+
+.heart-click-anchor {
+  border: 1px solid orchid;
+  width: 42px;
+  height: 38px;
+  position: absolute;
+  width: 100% !important;
+  height: auto !important;
+  // top: 48px;
+  // right: 44px;
+  top: 7px;
+  right: 7px;
+  // border: 1px solid greenyellow;
+  cursor: pointer;
+  overflow: visible;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+
+img {
+  position: relative;
+}

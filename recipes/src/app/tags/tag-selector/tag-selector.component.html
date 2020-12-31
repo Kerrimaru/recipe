@@ -1,0 +1,9 @@
+<h4>hello i am the tag selector</h4>
+
+<div>
+  <input [(ngModel)]="userTag" />
+  <button type="button" (click)="createTag()">Add tag</button>
+</div>
+<div>
+  <h3 *ngFor="let tag of tags">{{ tag.name }}</h3>
+</div>
