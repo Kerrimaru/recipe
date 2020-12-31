@@ -10,13 +10,17 @@ textarea.ng-invalid.ng-touched {
 }
 
 h2 {
-  font-family: 'BodoniItal';
-  font-style: italic;
+  // font-family: 'BodoniItal';
+  font-family: 'Rosario';
+  // font-style: italic;
   font-weight: bold;
+  margin-bottom: 0;
 }
 
-.title {
-  font-family: BodoniBold;
+small {
+  font-size: 14px;
+  font-family: 'Rosario';
+  color: #ccc;
 }
 
 .recipe-header {
@@ -38,24 +42,28 @@ img.preview {
 .actions {
   position: fixed;
   bottom: 0;
-  width: 100%;
   right: 0px;
-  display: flex;
-
   height: 70px;
-  // justify-content: center;
-  justify-content: flex-end;
-  align-items: center;
   z-index: 1;
   // &:hover {
   //   background-color: #ffffff;
   //   border-top: 1px solid #333333;
   // }
   button {
+    transition: 1s all;
     margin: 13px;
     width: 162px;
   }
+  button.hide {
+    opacity: 0;
+    width: 0;
+    margin: 0;
+    padding: 0;
+    opacity: 0;
+  }
 }
+
+// [style.width.px]="recipeForm.dirty ? '162' : '0'"
 
 // .btn-danger {
 //   background-color: red;
@@ -80,6 +88,10 @@ img.preview {
   height: 500px;
 }
 
+.editor {
+  margin-top: 20px;
+}
+
 // test
 .ingredients-list {
   width: 500px;
@@ -89,6 +101,7 @@ img.preview {
   display: block;
   background: white;
   border-radius: 4px;
+  margin-top: 20px;
   // overflow: hidden;
   &:active {
     cursor: grabbing;
@@ -120,6 +133,7 @@ img.preview {
   padding: 4px 10px;
   input {
     width: 85%;
+    font-family: 'Rosario';
   }
 }
 

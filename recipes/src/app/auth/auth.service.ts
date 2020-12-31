@@ -74,7 +74,7 @@ export class AuthService {
     this.handleAuth(user.email, user.uid, user.displayName, user.refreshToken)
       .pipe(
         map((res) => {
-          console.log('login res: ', res);
+          // console.log('login res: ', res);
           this.settingsService.fetchUserSettings(res.id);
         }),
         map(() => this.recipeService.fetchRecipes())
@@ -87,7 +87,7 @@ export class AuthService {
 
     this.user.next(null);
     this.fbAuth.signOut().then((res) => {
-      console.log('logout res: ', res);
+      // console.log('logout res: ', res);
       this.router.navigate(['/login']);
       localStorage.removeItem('userData');
       if (this.tokenExpirationCountdown) {

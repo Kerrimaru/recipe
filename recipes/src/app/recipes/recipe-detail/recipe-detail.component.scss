@@ -9,11 +9,16 @@ h2 {
   font-family: 'BodoniItal';
   font-style: italic;
   font-weight: bold;
+  margin: 40px 0 20px 0;
+}
+
+h2:first {
+  margin-top: 0;
 }
 
 .rec-header {
   position: sticky;
-  top: 79px;
+  top: 76px;
   padding-bottom: 15px;
   background-color: white;
   z-index: 1;
@@ -33,10 +38,7 @@ h2 {
   }
 }
 
-.ingredient-list {
-  h2 {
-    margin-bottom: 30px;
-  }
+#ingredient-list {
   ul {
     padding-left: 10px;
   }
@@ -49,13 +51,10 @@ h2 {
 }
 
 .section {
+  position: relative;
   padding: 20px;
   display: flex;
   // margin: 20px auto;
-}
-
-h2 {
-  margin: 0;
 }
 
 .actions a {
@@ -89,31 +88,44 @@ h2 {
   // position: relative;
   // height: 100%;
   position: sticky;
-  top: 70px;
+  top: 155px;
   align-self: flex-start;
+  text-align: right;
   .favourite {
-    cursor: pointer;
     position: absolute;
-    right: 50px;
-    top: 50px;
-    color: #e6e6e6;
-    &:hover {
-      transform: scale(1.2);
-    }
-    span {
-      font-size: 50px;
-    }
-    .is-favourite {
-      color: #ea2222;
-    }
+    right: -85px;
+    top: -45px;
+    // color: #e6e6e6;
+    // &:hover {
+    //   transform: scale(1.2);
+    // }
+    // span {
+    //   font-size: 50px;
+    // }
+    // .is-favourite {
+    //   color: #ea2222;
+    // }
   }
   .recipe-img {
-    width: 100% !important;
-    height: auto !important;
+    // width: 100% !important;
+    // height: auto !important;
     // margin-top: 28px;
-    // max-height: 600px;
+    max-height: 600px;
     // max-height: 60vh;
   }
+}
+
+.heart-click-anchor {
+  width: 42px;
+  height: 38px;
+  position: absolute;
+  top: 48px;
+  right: 44px;
+  cursor: pointer;
+}
+
+.fav-lottie {
+  width: 300px;
 }
 
 .added-cont {
@@ -176,4 +188,67 @@ h2 {
 
 .anchor {
   height: 100px;
+}
+
+.notes {
+  // position: absolute;
+  bottom: 20px;
+}
+
+.notes-container {
+  border: 1px solid black;
+  width: 200px;
+  height: 200px;
+}
+
+#dateMade {
+  cursor: pointer;
+  width: 110px;
+  border: none;
+  font-size: 15px;
+  font-weight: 100;
+  padding: 0;
+}
+
+.custom-note {
+  cursor: pointer;
+}
+
+.date-item {
+}
+
+.date-item:hover {
+  .remove {
+    display: inline;
+  }
+}
+
+.remove {
+  display: none;
+  font-size: 18px;
+  margin-left: 3px;
+}
+
+.hide-notes {
+  height: 0px;
+  overflow: hidden;
+}
+
+.user-note {
+  font-style: italic;
+}
+
+.expand-notes.close {
+  transform: rotate(180deg);
+}
+
+.notes-input {
+  width: 80%;
+  border: none;
+  border-bottom: 1px solid grey;
+  border-radius: 0;
+}
+
+#ingredients-title {
+  margin-top: 0;
 }

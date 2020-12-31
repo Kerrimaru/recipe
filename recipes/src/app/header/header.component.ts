@@ -47,7 +47,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   @HostListener('window:scroll', ['$event'])
   checkScroll() {
-    console.log('offset: ', window.pageYOffset);
+    // console.log('offset: ', window.pageYOffset);
     if (window.pageYOffset >= 40) {
       this.collapse = true;
     } else {

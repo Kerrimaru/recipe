@@ -1,15 +1,8 @@
-<div class="recipe-item" style="cursor: pointer" (swipe)="swipe($event.type)" [ngClass]="{ flipped: flipped }">
-  <div class="favourite" *ngIf="showFavouriteIcon" (click)="favourite()">
-    <span class="material-icons" [ngClass]="{ 'is-favourite': isFavourite }">favorite</span>
-  </div>
+<div class="recipe-item" (swipe)="swipe($event.type)" [ngClass]="{ flipped: flipped }" [routerLink]="recipe.key">
+  <img [src]="recipe.imagePath" alt="{{ recipe.name }}" class="recipe-img" />
   <div class="rec-inner">
-    <!-- <div class="rec-front" [routerLink]="[index]" routerLinkActive="active" (click)="scroll()"> -->
-    <div class="rec-front" [routerLink]="recipe.key" routerLinkActive="active" (click)="scroll()">
-      <!-- <div class="rec-front" routerLinkActive="active" (click)="expand()"> -->
-      <img [src]="recipe.imagePath" alt="{{ recipe.name }}" class="recipe-img" />
-      <div class="title-cont">
-        <h4 class="title">{{ recipe.name | title }}</h4>
-      </div>
+    <div class="rec-front" routerLinkActive="active" (click)="scroll()">
+      <h4 class="title">{{ recipe.name | title }}</h4>
     </div>
     <div class="recipe-back" *ngIf="isMobile">
       <div *ngFor="let ing of recipe.ingredients" class="ingredient">
@@ -20,4 +13,35 @@
       </div>
     </div>
   </div>
+
+  <!-- <div class="heart-click-anchor" (click)="favourite()">
+    <span class="material-icons" [ngClass]="{ 'is-favourite': isFavourite }">favorite</span>
+    <div class="favourite" *ngIf="showFavouriteIcon" [routerLink]="recipe.key">
+      <span class="material-icons" [ngClass]="{ 'is-favourite': isFavourite }">favorite</span>
+      <div
+        class="fav-lottie"
+        [appLottie]="'heart-like'"
+        [autoplay]="false"
+        [startFrame]="isFavourite ? 110 : null"
+        [play]="isFavourite ? [60, 110] : [140, 150]"
+      ></div>
+    </div>
+  </div> -->
+  <div class="favourite-container">
+    <div
+      *ngIf="showFavouriteIcon"
+      class="fav-lottie"
+      [appLottie]="'heart-like'"
+      [autoplay]="false"
+      [startFrame]="isFavourite ? 105 : 150"
+      [play]="isFavourite ? [60, 110] : [140, 150]"
+      [viewbox]="'150 200 400 200'"
+    ></div>
+
+    <div class="fav-anchor" (click)="favourite($event)">
+      <span class="material-icons" [ngClass]="{ 'is-favourite': isFavourite }">favorite</span>
+    </div>
+  </div>
 </div>
+
+<!-- viewbox: -380 220 800 600 -->

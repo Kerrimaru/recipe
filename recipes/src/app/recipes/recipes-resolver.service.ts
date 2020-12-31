@@ -18,7 +18,6 @@ export class RecipesResolverService implements Resolve<Recipe[]> {
       return this.recipeService.fetchRecipes().pipe(
         first(),
         map((res) => {
-          console.log('res in resolver: ', res);
           return res;
         })
       );

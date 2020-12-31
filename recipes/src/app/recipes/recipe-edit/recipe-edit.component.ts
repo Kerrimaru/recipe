@@ -226,7 +226,7 @@ export class RecipeEditComponent implements OnInit {
           elem.height = img.height * scaleFactor;
           const ctx = <CanvasRenderingContext2D>elem.getContext('2d');
           ctx.drawImage(img, 0, 0, width, img.height * scaleFactor);
-          const dataurl = elem.toDataURL('image/jpeg', 0.3);
+          const dataurl = elem.toDataURL('image/jpeg', 0.5);
           observer.next(dataurl);
         }),
           (reader.onerror = (error) => observer.error(error));

@@ -17,6 +17,8 @@
       <div class="ing-img-cont">
         <div class="column column-left">
           <h2>Ingredients</h2>
+          <small><i>copy and paste a list, or add one by one</i></small>
+
           <div formArrayName="ingredients" cdkDropList (cdkDropListDropped)="drop($event)" class="ingredients-list">
             <div
               cdkDrag
@@ -163,15 +165,18 @@
       </div>
 
       <div class="form-group">
-        <h4>Method</h4>
-        <ckeditor [editor]="Editor" [config]="{ height: '300px' }" formControlName="description"></ckeditor>
+        <h2>Method</h2>
+        <div class="editor">
+          <ckeditor [editor]="Editor" [config]="{ height: '300px' }" formControlName="description"></ckeditor>
+        </div>
       </div>
     </form>
   </div>
 
   <div class="actions">
+    <button type="button" class="btn btn-secondary show" (click)="onCancel()">Cancel</button>
     <button
-      [style.opacity]="recipeForm.dirty ? 1 : 0"
+      [ngClass]="{ hide: !recipeForm.dirty }"
       [disabled]="!recipeForm.valid"
       type="submit"
       class="btn btn-primary"
@@ -179,6 +184,5 @@
     >
       Save
     </button>
-    <button type="button" class="btn btn-secondary" (click)="onCancel()">Cancel</button>
   </div>
 </div>

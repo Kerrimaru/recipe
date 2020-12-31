@@ -49,8 +49,8 @@ export class RecipeItemComponent implements OnInit {
     this.expanded = true;
   }
 
-  favourite() {
-    console.log('click in recipe item ');
+  favourite(e: MouseEvent) {
+    e.stopPropagation();
     this.isFavourite = !this.isFavourite;
     this.favouriteEmitter.emit();
     // this.settingsService.toggleFavourite(this.recipe.key);

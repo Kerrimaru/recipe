@@ -12,6 +12,10 @@ import { RecipeFilterPipe } from './pipes/recipe-filter.pipe';
 import { ArrayIncludesPipe } from './pipes/array-includes.pipe';
 import { ShowOnScrollDirective } from './directives/show-on-scroll.directive';
 import { FavouritesPipe } from './pipes/favourites.pipe';
+import { MatNativeDateModule, MatRippleModule } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatInputModule } from '@angular/material/input';
+import { LottieDirective } from './directives/lottie.directive';
 
 @NgModule({
   declarations: [
@@ -22,6 +26,7 @@ import { FavouritesPipe } from './pipes/favourites.pipe';
     ArrayIncludesPipe,
     ShowOnScrollDirective,
     FavouritesPipe,
+    LottieDirective,
   ],
   imports: [
     CommonModule,
@@ -47,6 +52,11 @@ import { FavouritesPipe } from './pipes/favourites.pipe';
     ArrayIncludesPipe,
     ShowOnScrollDirective,
     FavouritesPipe,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatRippleModule,
+    MatInputModule,
+    LottieDirective,
   ],
 })
 export class SharedModule {

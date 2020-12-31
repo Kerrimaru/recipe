@@ -12,9 +12,11 @@ export class RecipeService {
 
   private recipes: any[] = [];
   recipeList: AngularFireList<Recipe>;
-
   recipes$: Observable<Recipe[]>;
   recipeBehaveSubj = new BehaviorSubject<Recipe[]>([]);
+
+  recipeNotes: AngularFireList<any[]>;
+  recipeNotes$: Observable<any>;
   // recipesChanged = new Subject<Recipe[]>();
 
   // setRecipes(recipes: Recipe[]) {
@@ -34,7 +36,7 @@ export class RecipeService {
   }
 
   getRecipeByKey(key: string): Recipe {
-    console.log('key: ', key);
+    // console.log('key: ', key);
     if (this.recipes) {
       const rec = this.recipes.find((r) => r.key === key);
       return rec;
@@ -67,7 +69,7 @@ export class RecipeService {
   }
 
   updateRecipe(recipe: Recipe, key: string) {
-    console.log('recip: ', recipe, ' key: ', key);
+    // console.log('recip: ', recipe, ' key: ', key);
     this.recipeList.update(key, { ...recipe });
   }
 
@@ -85,18 +87,77 @@ export class RecipeService {
     this.recipes$ = this.recipeList.snapshotChanges().pipe(
       map((changes) =>
         changes.map((c) => {
-          console.log('recipe changed: ', c);
+          // console.log('recipe changed: ', c);
           return { key: c.payload.key, ...c.payload.val() };
         })
       ),
       tap((recipes: Recipe[]) => {
-        console.log('%c recipes! ', 'background: #222; color: #bada55', recipes);
+        // console.log('%c recipes! ', 'background: #222; color: #bada55', recipes);
         // this.setRecipes(rec);
         this.recipes = recipes;
         this.recipeBehaveSubj.next(recipes);
       })
     );
     return this.recipes$;
+  }
+
+  setNote(recipeId: string, note: any, userName: string) {
+    console.log('set note: ', recipeId, userName);
+    const recipeNote = { note: note, user: userName, date: Date.now() };
+    const exists = this.fb.database.ref('recipeNotes').child(recipeId);
+    console.log('exists:? ', exists, recipeNote);
+    if (exists) {
+      console.log('exists! ');
+      exists.push(recipeNote);
+    } else {
+      this.fb.database.ref('recipeNotes').push({ recipeId: { recipeNote } });
+    }
+  }
+
+  fetchRecipeNotes(recipeId: string) {
+    return this.fb.database.ref('recipeNotes').child(recipeId).once('value');
+    // this.recipeNotes = this.fb.list('recipes');
+    // this.recipes$ = this.recipeNotes.snapshotChanges().pipe(
+    //   map((changes) =>
+    //     changes.map((c) => {
+    //       // console.log('recipe changed: ', c);
+    //       return { key: c.payload.key, ...c.payload.val() };
+    //     })
+    //   ),
+    //   tap((recipes: Recipe[]) => {
+    //     // console.log('%c recipes! ', 'background: #222; color: #bada55', recipes);
+    //     // this.setRecipes(rec);
+    //     this.recipes = recipes;
+    //     this.recipeBehaveSubj.next(recipes);
+    //   })
+    // );
+    // return this.recipes$;
+  }
+
+  getNotesSub(key: string) {
+    return this.recipes$.pipe(map((recipes) => recipes.find((r) => r.key === key)));
+  }
+
+  getNotesList(key: string) {
+    return this.fb.list(`recipeNotes/${key}`);
+  }
+
+  getUserDates(userId: string, recipeKey: string) {
+    console.log('userif ', userId, ' recid: ', recipeKey);
+    return this.fb.list(`userDateMade/${userId}/${recipeKey}`);
+  }
+
+  setUserDateMade(userId: string, recipeId: string, date: string) {
+    console.log('set date: ', recipeId, userId, date);
+    this.fb.database.ref('userDateMade').child(userId).child(recipeId).push(date);
+    // console.log('exists:? ', exists, recipeNote);
+    // if (exists) {
+    //   console.log('exists! ');
+    //   // exists.push(recipeNote);
+    // } else {
+    //   console.log('NOPE! ');
+    //   // this.fb.database.ref('userDateMade').push({ recipeId: { recipeNote } });
+    // }
   }
 
   // to do: move ingredients to separate key

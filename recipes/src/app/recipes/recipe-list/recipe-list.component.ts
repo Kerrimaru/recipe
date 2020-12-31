@@ -75,7 +75,6 @@ export class RecipeListComponent implements OnInit, OnDestroy {
   }
 
   favourite(recipe: Recipe) {
-    console.log('favourite in list ', recipe);
     // this.isFavourite = !this.isFavourite;
     this.settingsService.toggleFavourite(recipe.key);
   }
@@ -115,7 +114,6 @@ export class RecipeListComponent implements OnInit, OnDestroy {
 
   randomRecipe() {
     const rec = this.recipes[Math.floor(Math.random() * this.recipes.length)];
-    console.log('rec: ', rec);
     this.router.navigate(['recipes', rec.key]);
   }
 }
