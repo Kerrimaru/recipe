@@ -4,7 +4,7 @@ import { EventEmitter, Injectable } from '@angular/core';
 import { Subject, Observable, of, BehaviorSubject } from 'rxjs';
 // import { DataStorageService } from '../shared/data-storage.service';
 import { AngularFireDatabase, AngularFireList } from '@angular/fire/database';
-import { map, tap, switchMap } from 'rxjs/operators';
+import { map, tap, switchMap, filter } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class RecipeService {
@@ -17,15 +17,15 @@ export class RecipeService {
 
   recipeNotes: AngularFireList<any[]>;
   recipeNotes$: Observable<any>;
-  // recipesChanged = new Subject<Recipe[]>();
+  recipesChanged = new Subject<Recipe[]>();
 
-  // setRecipes(recipes: Recipe[]) {
-  //   this.recipes = recipes;
-  //   if (!this.recipes) {
-  //     this.recipes = [];
-  //   }
-  //   this.recipesChanged.next(this.recipes.slice());
-  // }
+  setRecipes(recipes: Recipe[]) {
+    this.recipes = recipes;
+    if (!this.recipes) {
+      this.recipes = [];
+    }
+    this.recipesChanged.next(this.recipes.slice());
+  }
 
   getRecipes() {
     return this.recipes.slice();
@@ -91,9 +91,23 @@ export class RecipeService {
           return { key: c.payload.key, ...c.payload.val() };
         })
       ),
+      // tap((recipes: Recipe[]) => {})
+      // switchMap((recipes: Recipe[]) => {
+      //   recipes.filter(r => {})
+      //   console.log('recipe: ', recipe);
+      //   // console.log('%c recipes! ', 'background: #222; color: #bada55', recipes);
+      //   // this.setRecipes(rec);
+      //   // this.recipes = recipes;
+      //   // this.recipeBehaveSubj.next(recipes);
+      //   // return recipe;
+      //   return recipe.addedBy === 'kerri';
+      // }),
       tap((recipes: Recipe[]) => {
         // console.log('%c recipes! ', 'background: #222; color: #bada55', recipes);
-        // this.setRecipes(rec);
+        // const _recipes = recipes.filter((r) => r.addedBy === 'Kerri');
+
+        // this.setRecipes(_recipes);
+        // console.log('orig arr: ', recipes);
         this.recipes = recipes;
         this.recipeBehaveSubj.next(recipes);
       })
@@ -143,21 +157,11 @@ export class RecipeService {
   }
 
   getUserDates(userId: string, recipeKey: string) {
-    console.log('userif ', userId, ' recid: ', recipeKey);
     return this.fb.list(`userDateMade/${userId}/${recipeKey}`);
   }
 
   setUserDateMade(userId: string, recipeId: string, date: string) {
-    console.log('set date: ', recipeId, userId, date);
     this.fb.database.ref('userDateMade').child(userId).child(recipeId).push(date);
-    // console.log('exists:? ', exists, recipeNote);
-    // if (exists) {
-    //   console.log('exists! ');
-    //   // exists.push(recipeNote);
-    // } else {
-    //   console.log('NOPE! ');
-    //   // this.fb.database.ref('userDateMade').push({ recipeId: { recipeNote } });
-    // }
   }
 
   // to do: move ingredients to separate key

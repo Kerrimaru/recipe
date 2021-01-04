@@ -11,6 +11,10 @@ import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { AuthService } from 'src/app/auth/auth.service';
 import { Observable } from 'rxjs';
 
+interface Tag {
+  name: string;
+  selected: boolean;
+}
 @Component({
   selector: 'app-recipe-edit',
   templateUrl: './recipe-edit.component.html',
@@ -24,13 +28,23 @@ export class RecipeEditComponent implements OnInit {
   recipe: Recipe;
 
   test: any;
-  tags: any[];
+  tags: Tag[] = [
+    { name: 'Vegan', selected: false },
+    { name: 'Main', selected: false },
+    { name: 'Dessert', selected: false },
+    { name: 'Gousto', selected: false },
+  ];
+
+  // tags = ['Vegan', 'Main', 'Dessert', 'Gousto'];
+
+  selectedTags: string[] = [];
 
   public previewImagePath;
   imgURL: any;
   public message: string;
   public Editor = ClassicEditor;
   ingredientsArrayRef: FormArray;
+  tagsArrayRef: FormArray;
 
   constructor(
     private route: ActivatedRoute,
@@ -47,6 +61,12 @@ export class RecipeEditComponent implements OnInit {
     return this.ingredientsArrayRef.controls;
   }
 
+  get tagControls() {
+    // (<FormArray>this.recipeForm.get('ingredients')).controls;
+    // return (this.recipeForm.get('ingredients') as FormArray).controls;
+    return this.tagsArrayRef.controls;
+  }
+
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
       this.selectedRecipeId = params['id'];
@@ -61,11 +81,23 @@ export class RecipeEditComponent implements OnInit {
 
   private initForm() {
     this.ingredientsArrayRef = new FormArray([]);
+    // this.tagsArrayRef = new FormArray([]);
 
     if (this.editMode) {
       // this.recipe = this.recipeService.getRecipe(this.selectedRecipeId);
       this.recipe = this.recipeService.getRecipeByKey(this.selectedRecipeId);
+      if (this.recipe.tags) {
+        this.recipe.tags.forEach((t) => {
+          console.log('t: ', t);
+          const tag = this.tags.find((tag) => tag.name === t);
+          if (tag) {
+            tag.selected = true;
+          }
+        });
+      }
+
       this.previewImagePath = this.recipe.imagePath;
+
       if (this.recipe.ingredients && this.recipe.ingredients.length) {
         for (const ing of this.recipe.ingredients) {
           if (!!ing) {
@@ -84,40 +116,63 @@ export class RecipeEditComponent implements OnInit {
       imagePath: new FormControl(this.recipe.imagePath, Validators.required),
       description: new FormControl(this.recipe.description, Validators.required),
       ingredients: this.ingredientsArrayRef,
+      // tags: this.tagsArrayRef,
     });
 
     this.onAddIngredient();
   }
 
+  toggleTag(tag: Tag) {
+    if (!this.recipeForm.dirty) {
+      this.recipeForm.markAsDirty();
+    }
+    tag.selected = !tag.selected;
+    console.log('tag: ', tag);
+    console.log('selectedtags: ', this.selectedTags);
+    // let tages;
+    // if (this.selectedTags.includes(tag)) {
+    //   console.log('includes ', this.selectedTags.includes(tag));
+    //   this.selectedTags = this.selectedTags.filter((t) => t !== tag);
+    // } else {
+    //   this.selectedTags.push(tag);
+    // }
+    // const tages = this.selectedTags.includes(tag)
+    //   ? this.selectedTags.filter((t) => t !== tag)
+    //   : this.selectedTags.push(tag);
+    // console.log('wtf?: ', tages);
+    // // this.selectedTags = tages;
+    // console.log('selectedtags: ', this.selectedTags);
+  }
+
   // there is really no need, just use a pipe?
-  formatTitle() {
-    const nameRef = this.recipeForm.get('name');
-    const array = nameRef.value.split(' ');
-    for (let i = 0; i < array.length; i++) {
-      const word = array[i];
-      if (this.isJoiningWord(word) && i !== 0) {
-        array[i] = word.toLowerCase();
-      } else {
-        array[i] = word[0].toUpperCase() + word.substr(1).toLowerCase();
-      }
-    }
-    nameRef.setValue(array.join(' '));
-  }
+  // formatTitle() {
+  //   const nameRef = this.recipeForm.get('name');
+  //   const array = nameRef.value.split(' ');
+  //   for (let i = 0; i < array.length; i++) {
+  //     const word = array[i];
+  //     if (this.isJoiningWord(word) && i !== 0) {
+  //       array[i] = word.toLowerCase();
+  //     } else {
+  //       array[i] = word[0].toUpperCase() + word.substr(1).toLowerCase();
+  //     }
+  //   }
+  //   nameRef.setValue(array.join(' '));
+  // }
 
-  createTag(word: string) {
-    const _tag = word.toUpperCase();
-    if (!this.tags.includes(_tag)) {
-      this.tags.push(_tag);
-    }
-  }
+  // createTag(word: string) {
+  //   const _tag = word.toUpperCase();
+  //   if (!this.tags.includes(_tag)) {
+  //     this.tags.push(_tag);
+  //   }
+  // }
 
-  isJoiningWord(word: string): boolean {
-    if (word.length <= 2) {
-      return true;
-    }
-    const words = ['the', 'and'];
-    return words.includes(word.toLowerCase());
-  }
+  // isJoiningWord(word: string): boolean {
+  //   if (word.length <= 2) {
+  //     return true;
+  //   }
+  //   const words = ['the', 'and'];
+  //   return words.includes(word.toLowerCase());
+  // }
 
   drop(event: CdkDragDrop<string[]>) {
     console.log(this.ingredientControls);
@@ -132,11 +187,15 @@ export class RecipeEditComponent implements OnInit {
 
     // remove empty ingredients and flatten obj
     const ingArr = this.ingredientsArrayRef.value.filter((i) => !!i.name).map((_i) => _i.name);
+    // const tagsList = this.tags.map((t) => (t.selected ? t.name : null)).map((t) => !!t);
+    const tagsList = this.tags.filter((t) => t.selected).map((t) => t.name);
+    // const tagsList = this.selectedTags;
+    console.log('tagslist: ', tagsList);
 
     const _recipe = Object.assign(this.recipe, {
       ...this.recipeForm.value,
       ingredients: ingArr,
-      tags: this.tags || null,
+      tags: tagsList,
     });
     console.log('_recipe: ', _recipe);
     if (this.editMode) {

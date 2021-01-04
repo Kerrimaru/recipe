@@ -2,7 +2,7 @@ import { Reference } from '@angular/compiler/src/render3/r3_ast';
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFireDatabase, AngularFireList } from '@angular/fire/database';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/internal/operators/map';
 import { tap } from 'rxjs/internal/operators/tap';
 import { UserSettings } from '../auth/user.model';
@@ -16,6 +16,9 @@ export class UserSettingsService {
   favourites: string[];
   favouritesList: AngularFireList<string>;
   favs$ = new BehaviorSubject<string[]>([]);
+
+  filters: string[] = [];
+  filtersChanged = new Subject<string[]>();
 
   userSettingsRef: firebase.database.Reference;
   favsRef: firebase.database.Reference;
@@ -78,6 +81,17 @@ export class UserSettingsService {
         this.favourites = res;
         this.favs$.next(res);
       });
+  }
+
+  setFilters(filter: string) {
+    this.filters.push(filter);
+    this.filtersChanged.next(this.filters.slice());
+  }
+
+  fetchFilters() {}
+
+  getFilters() {
+    return this.filters.slice();
   }
 
   // to do: organise structure to include user<->recipe settings, could include favourites, as well as date last made, personal annotations, what else???

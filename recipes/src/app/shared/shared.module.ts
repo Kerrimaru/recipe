@@ -1,21 +1,26 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { LoadingComponent } from './loading/loading.component';
-import { DropdownDirective } from './dropdown.directive';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatTabsModule } from '@angular/material/tabs';
-import { TitlePipe } from './pipes/title.pipe';
+
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
-import { RecipeFilterPipe } from './pipes/recipe-filter.pipe';
-import { ArrayIncludesPipe } from './pipes/array-includes.pipe';
-import { ShowOnScrollDirective } from './directives/show-on-scroll.directive';
-import { FavouritesPipe } from './pipes/favourites.pipe';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatNativeDateModule, MatRippleModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatExpansionModule } from '@angular/material/expansion';
+
+import { RecipeFilterPipe } from './pipes/recipe-filter.pipe';
+import { ArrayIncludesPipe } from './pipes/array-includes.pipe';
+import { FavouritesPipe } from './pipes/favourites.pipe';
+import { TitlePipe } from './pipes/title.pipe';
+
+import { ShowOnScrollDirective } from './directives/show-on-scroll.directive';
 import { LottieDirective } from './directives/lottie.directive';
+import { DropdownDirective } from './dropdown.directive';
 
 @NgModule({
   declarations: [
@@ -36,6 +41,8 @@ import { LottieDirective } from './directives/lottie.directive';
     MatTabsModule,
     MatFormFieldModule,
     MatSelectModule,
+    MatSlideToggleModule,
+    MatExpansionModule,
   ],
   exports: [
     LoadingComponent,
@@ -57,6 +64,8 @@ import { LottieDirective } from './directives/lottie.directive';
     MatRippleModule,
     MatInputModule,
     LottieDirective,
+    MatSlideToggleModule,
+    MatExpansionModule,
   ],
 })
 export class SharedModule {

@@ -9,7 +9,8 @@ export class Recipe {
   public ingredients: string[] = [];
   public addedBy: string; // user display name
   public userId: string; // added by id
-  public tags: Tag[] = [];
+  // public tags: Tag[] = [];
+  public tags: string[] = [];
   public key: string;
   public created: number; // utc
   public isFavourite: boolean;

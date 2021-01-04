@@ -18,6 +18,10 @@
     <hr />
   </div>
 
+  <div class="tags-list">
+    <div *ngFor="let tag of recipe.tags" class="tag">{{ tag }}</div>
+  </div>
+
   <div class="section">
     <div class="column column-left">
       <div id="ingredient-list">
@@ -33,8 +37,9 @@
         <h2>Method</h2>
         <div [innerHtml]="recipe.description" class="desc"></div>
       </div>
-      <div class="notes">
-        <h2 class="cutom-note" (click)="showNotes()">
+
+      <!-- <div class="notes">
+        <h2 class="custom-note" (click)="showNotes()">
           Notes
           <span class="material-icons expand-notes" [ngClass]="{ close: !notesSectionHidden }">expand_more</span>
         </h2>
@@ -48,22 +53,6 @@
               [(ngModel)]="noteInput"
               (ngModelChange)="onNoteChange($event)"
             />
-            <!-- <span
-                *ngIf="!notesInputExpanded"
-                (click)="addNote()"
-                class="material-icons custom-note"
-                matTooltip="add a note"
-                matTooltipShowDelay="500"
-              >
-                note_add
-              </span>
-              <textarea
-                class="notes-container"
-                *ngIf="notesInputExpanded"
-                (blur)="saveNote($event)"
-                [(ngModel)]="noteInput"
-                (ngModelChange)="onNoteChange($event)"
-              ></textarea> -->
           </div>
           <p
             *ngFor="let note of notes"
@@ -91,13 +80,78 @@
           <ng-container *ngIf="datesMade.length">
             <p class="date-item" *ngFor="let d of datesMade">
               {{ d | date }}
-              <!-- <span class="material-icons remove" matTooltip="remove date" matTooltipShowDelay="500">clear</span> -->
+              <span class="material-icons remove" matTooltip="remove date" matTooltipShowDelay="500">clear</span>
             </p>
           </ng-container>
-
-          <!-- </mat-form-field> -->
-          <!-- <a class="dateMade()">Date made</a> -->
         </div>
+      </div> -->
+
+      <div class="notes">
+        <mat-accordion class="example-headers-align" multi>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>Notes</mat-panel-title>
+              <mat-panel-description>
+                <span class="material-icons">comment_bank</span>
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <div class="input-cont">
+              <label for="note-input">
+                <span class="material-icons custom-note" matTooltip="add a note" matTooltipShowDelay="500">
+                  note_add
+                </span>
+              </label>
+              <input
+                id="note-input"
+                placeholder="add a note"
+                (blur)="saveNote($event)"
+                [(ngModel)]="noteInput"
+                (ngModelChange)="onNoteChange($event)"
+              />
+            </div>
+
+            <div *ngFor="let note of notes" class="user-note">
+              <span
+                matTooltip="added by  {{ note.user }} on {{ note.date | date }}"
+                matTooltipShowDelay="250"
+                matTooltipPosition="after"
+              >
+                * {{ note.note }}
+              </span>
+            </div>
+          </mat-expansion-panel>
+
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>Dates</mat-panel-title>
+              <mat-panel-description>
+                <span class="material-icons">event</span>
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            {{ datesMade.length ? 'You made this recipe...' : 'Have you made this recipe?' }}
+
+            <p>
+              <input
+                id="dateMade"
+                placeholder="+ add a date"
+                [matDatepicker]="picker"
+                (click)="picker.open()"
+                readonly
+                [(ngModel)]="dateInput"
+                (ngModelChange)="onDateChange($event)"
+              />
+              <!-- <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle> -->
+              <mat-datepicker #picker></mat-datepicker>
+            </p>
+
+            <ng-container *ngIf="datesMade.length">
+              <p class="date-item" *ngFor="let d of datesMade">
+                {{ d | date }}
+                <span class="material-icons remove" matTooltip="remove date" matTooltipShowDelay="500">clear</span>
+              </p>
+            </ng-container>
+          </mat-expansion-panel>
+        </mat-accordion>
       </div>
     </div>
 

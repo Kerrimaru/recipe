@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { User } from '../auth/user.model';
 import { HostBinding } from '@angular/core';
 import { HostListener } from '@angular/core';
+import { UserSettingsService } from '../settings/user-settings.service';
 
 @Component({
   selector: 'app-header',
@@ -16,7 +17,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   constructor(
     private dataStorageService: DataStorageService,
     private route: ActivatedRoute,
-    private authService: AuthService
+    private authService: AuthService,
+    private settingsService: UserSettingsService
   ) {}
 
   login = true;
@@ -95,5 +97,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
     console.log('click');
     this.headerExpanded = !this.headerExpanded;
+  }
+
+  toggleFilter(filter: string, enabled: boolean) {
+    console.log('toggle : ', filter, enabled);
+    if (enabled) {
+      this.settingsService.setFilters(filter);
+    } else {
+      console.log('remove this filter pleae');
+      this.settingsService.filters = [];
+    }
   }
 }

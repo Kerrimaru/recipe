@@ -8,10 +8,17 @@
           class="app-form-control"
           formControlName="name"
           placeholder="Recipe title"
-          (blur)="formatTitle()"
         />
       </div>
+      <!-- (blur)="formatTitle()" -->
       <hr />
+      <!-- <h2>Tags</h2> -->
+      <small><i>click to select tags</i></small>
+      <div class="tags">
+        <div *ngFor="let tag of tags" class="tag" [class.selected]="tag.selected" (click)="toggleTag(tag)">
+          {{ tag.name }}
+        </div>
+      </div>
 
       <!-- <div><app-tag-selector></app-tag-selector></div> -->
       <div class="ing-img-cont">

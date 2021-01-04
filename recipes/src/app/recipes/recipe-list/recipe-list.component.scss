@@ -20,7 +20,6 @@
   display: flex;
   justify-content: flex-end;
   position: absolute;
-  top: 20px;
   z-index: 50;
   height: 37px;
   align-items: center;
@@ -28,6 +27,7 @@
   border-radius: 20px;
   border: 1px solid #ababab;
   right: 55px;
+  top: 0;
   .material-icons {
     width: 29px;
     opacity: 1;
@@ -37,6 +37,7 @@
     width: 37px;
     position: fixed;
     right: 106px;
+    top: 20px;
     animation-direction: reverse;
     animation-duration: 0.5s;
   }
@@ -71,7 +72,7 @@
 .recipe-list {
   max-width: 1500px;
   margin: auto;
-  padding: 83px 50px;
+  padding: 55px 50px;
 
   line-height: 0;
   -webkit-column-count: 4;
