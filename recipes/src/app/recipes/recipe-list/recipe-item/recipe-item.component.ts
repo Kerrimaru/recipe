@@ -19,6 +19,7 @@ export class RecipeItemComponent implements OnInit {
 
   flipped = false;
   expanded = false;
+  isNew = false; // set to true if added date within 1 week
   isMobile: boolean;
   width: number = window.innerWidth;
   mobileWidth = 760;
@@ -31,6 +32,10 @@ export class RecipeItemComponent implements OnInit {
 
   ngOnInit(): void {
     this.isMobile = this.width < this.mobileWidth;
+    // console.log('recipe: ', this.recipe);
+
+    const oneWeek = 1000 * 60 * 60 * 24 * 7; // milliseconds * seconds * minutes * hours * days
+    this.isNew = this.recipe.created > Date.now() - oneWeek;
   }
 
   scroll() {

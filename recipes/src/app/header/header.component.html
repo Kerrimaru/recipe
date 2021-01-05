@@ -3,7 +3,7 @@
   <div class="app-header">
     <h1><a routerLink="/">Judith's Kitchen</a></h1>
     <div class="account-actions" *ngIf="isAuth" [ngClass]="{ expanded: headerExpanded, mobile: isMobile }">
-      <!-- <h4>{{ user.name }}</h4> -->
+      <!-- <h4>Hi, {{ user.name }}</h4> -->
       <!-- <span class="material-icons">account_circle</span> -->
       <span class="material-icons" (click)="toggleMenu()">menu</span>
       <div class="account-nav">
@@ -13,6 +13,19 @@
             <a [routerLink]="item.link">{{ item.text }}</a>
           </h4>
         </ng-container>
+        <!-- <h4>Hi, {{ user.name }}</h4> -->
+
+        <!-- <h3>Filters</h3>
+        <hr />
+        <p>
+          <mat-slide-toggle ngModel (ngModelChange)="toggleFilter('myRecipes', $event)"></mat-slide-toggle>
+          Added by me
+        </p>
+        <p>
+          <mat-slide-toggle ngModel (ngModelChange)="toggleFilter('vegan', $event)"></mat-slide-toggle>
+          Vegan
+        </p> -->
+        <hr />
         <h4 (click)="logout()"><a>Logout</a></h4>
       </div>
     </div>

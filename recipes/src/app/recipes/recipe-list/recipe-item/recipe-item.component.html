@@ -1,5 +1,12 @@
 <div class="recipe-item" (swipe)="swipe($event.type)" [ngClass]="{ flipped: flipped }" [routerLink]="recipe.key">
   <img [src]="recipe.imagePath" alt="{{ recipe.name }}" class="recipe-img" />
+  <div *ngIf="isNew" class="new-recipe-cont">
+    <!-- <div class="ribbon ribbon-top-left"><span>ribbon</span></div> -->
+
+    <img src="assets/images/icons/new-plate.png" alt="'new recipe added'" class="new-icon" />
+    <p>new!</p>
+  </div>
+
   <div class="rec-inner">
     <div class="rec-front" routerLinkActive="active" (click)="scroll()">
       <h4 class="title">{{ recipe.name | title }}</h4>

@@ -19,8 +19,9 @@ import { UserSettingsService } from 'src/app/settings/user-settings.service';
 })
 export class RecipeListComponent implements OnInit, OnDestroy {
   recipes: Recipe[] = [];
+  allRecipes: Recipe[] = [];
   recipesSub: Subscription;
-  recipeList: Observable<any[]>;
+  // recipeList: Observable<any[]>;
   searchTerm: string;
   favouritesArr: any[];
   selectedRecipe: Recipe;
@@ -29,6 +30,9 @@ export class RecipeListComponent implements OnInit, OnDestroy {
   favsSub: Subscription;
   maxScroll: boolean;
   loading = true;
+  filters: string[] = [];
+
+  filtersSub: Subscription;
 
   @HostListener('window:scroll', ['$event'])
   checkScroll() {
@@ -57,6 +61,12 @@ export class RecipeListComponent implements OnInit, OnDestroy {
       this.favouritesArr = res;
     });
 
+    this.filtersSub = this.settingsService.filtersChanged.subscribe((res) => {
+      console.log('filter changed res: ', res);
+      this.filters = res;
+      this.recipes = this.applyFilters(this.recipes.slice(), res);
+    });
+
     this.isShowFavourites = this.router.url.valueOf() === '/recipes/favourites' ? true : false;
     this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((e: NavigationEnd) => {
       this.isShowFavourites = e.url === '/recipes/favourites' ? true : false;
@@ -64,8 +74,25 @@ export class RecipeListComponent implements OnInit, OnDestroy {
     });
 
     this.recipesSub = this.recipeService.recipes$.subscribe((recipes) => {
-      this.recipes = recipes;
+      if (this.isShowFavourites) {
+        this.filters.push('favourites');
+      }
+      this.allRecipes = recipes;
+      if (this.filters.length) {
+        this.recipes = this.applyFilters(recipes, this.filters).reverse();
+      } else {
+        this.recipes = recipes.reverse();
+      }
+
       this.loading = false;
+    });
+  }
+
+  // this is fake, do it for real at some point :(
+  applyFilters(recipeList: Recipe[], filter: string[]) {
+    return recipeList.filter((r) => {
+      return this.favouritesArr.includes(r.key);
+      return r.addedBy === 'Kerri';
     });
   }
 
@@ -75,7 +102,6 @@ export class RecipeListComponent implements OnInit, OnDestroy {
   }
 
   favourite(recipe: Recipe) {
-    // this.isFavourite = !this.isFavourite;
     this.settingsService.toggleFavourite(recipe.key);
   }
 

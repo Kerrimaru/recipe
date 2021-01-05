@@ -6,9 +6,12 @@
 }
 
 h2 {
-  font-family: 'BodoniItal';
-  font-style: italic;
-  font-weight: bold;
+  // font-family: 'BodoniItal';
+  // font-style: italic;
+  // font-weight: bold;
+  // font-family: 'BodoniBold';
+  font-family: 'Rosario';
+  letter-spacing: 1.2px;
   margin: 40px 0 20px 0;
 }
 
@@ -34,8 +37,30 @@ h2:first {
   align-items: center;
   justify-content: space-between;
   h1 {
-    font-family: 'BodoniBold';
+    // font-family: 'BodoniBold';
+    font-family: 'BodoniItal';
+    letter-spacing: 2.5px;
+    font-size: 38px;
   }
+}
+
+.tags-list {
+  // text-align: center;
+  padding: 0 30px;
+}
+
+.tag {
+  margin: 5px;
+  border: 1px solid lightblue;
+  background-color: lightblue;
+  padding: 4px 12px;
+  display: inline-block;
+  border-radius: 20px;
+  font-size: 14px;
+}
+
+#ingredients-title {
+  margin-top: 0;
 }
 
 #ingredient-list {
@@ -52,20 +77,9 @@ h2:first {
 
 .section {
   position: relative;
-  padding: 20px;
+  padding: 0 20px 20px;
   display: flex;
   // margin: 20px auto;
-}
-
-.actions a {
-  cursor: pointer;
-  margin-left: 10px;
-}
-.actions {
-  justify-content: flex-end;
-  button {
-    margin-right: 10px;
-  }
 }
 
 .method {
@@ -73,14 +87,14 @@ h2:first {
   .desc {
     padding: 20px;
     p {
-      margin: 3px;
+      // margin: 3px;
     }
   }
 }
 
 .column {
   width: 50%;
-  padding: 30px;
+  padding: 15px;
   display: inline-block;
 }
 
@@ -107,10 +121,10 @@ h2:first {
     // }
   }
   .recipe-img {
-    // width: 100% !important;
+    width: 100% !important;
     // height: auto !important;
     // margin-top: 28px;
-    max-height: 600px;
+    // max-height: 600px;
     // max-height: 60vh;
   }
 }
@@ -132,7 +146,8 @@ h2:first {
   text-align: right;
   p {
     margin: 3px;
-    font-family: 'BodoniBold';
+    // font-family: 'BodoniBold';
+    font-family: 'Rosario';
     letter-spacing: 1.2px;
     font-size: 14px;
     display: flex;
@@ -191,14 +206,30 @@ h2:first {
 }
 
 .notes {
-  // position: absolute;
-  bottom: 20px;
+  margin: 50px 0 5px 0;
 }
 
-.notes-container {
-  border: 1px solid black;
-  width: 200px;
-  height: 200px;
+.user-note {
+  font-style: italic;
+  margin: 5px;
+}
+
+#note-input {
+  width: 80%;
+  border: none;
+  border-bottom: 1px solid grey;
+  border-radius: 0;
+}
+
+.input-cont {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  span {
+    cursor: pointer;
+    color: #0000008a;
+    padding: 5px 0;
+  }
 }
 
 #dateMade {
@@ -208,10 +239,6 @@ h2:first {
   font-size: 15px;
   font-weight: 100;
   padding: 0;
-}
-
-.custom-note {
-  cursor: pointer;
 }
 
 .date-item {
@@ -229,26 +256,27 @@ h2:first {
   margin-left: 3px;
 }
 
-.hide-notes {
-  height: 0px;
-  overflow: hidden;
+.example-headers-align .mat-expansion-panel-header-description {
+  justify-content: flex-end;
+  // align-items: center;
 }
 
-.user-note {
-  font-style: italic;
+.mat-expansion-panel-header-title {
+  font-size: 18px;
+  // font-family: 'BodoniBold';
+  font-family: 'Rosario';
+  letter-spacing: 1.2px;
 }
 
-.expand-notes.close {
-  transform: rotate(180deg);
+mat-accordion .mat-expansion-panel:not(.mat-expanded),
+.mat-accordion .mat-expansion-panel:not(.mat-expansion-panel-spacing) {
+  margin-top: 10px;
 }
 
-.notes-input {
-  width: 80%;
-  border: none;
-  border-bottom: 1px solid grey;
-  border-radius: 0;
-}
-
-#ingredients-title {
-  margin-top: 0;
+.actions {
+  justify-content: flex-end;
+  button {
+    width: 162px;
+    margin: 13px;
+  }
 }

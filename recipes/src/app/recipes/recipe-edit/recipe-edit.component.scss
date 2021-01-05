@@ -338,3 +338,29 @@ img.preview {
 .material-icons {
   font-size: 50px;
 }
+
+.tags {
+  // text-align: center;
+  margin-top: 5px;
+}
+
+.tag {
+  margin: 5px;
+  border: 1px solid #e0e0e0;
+  background-color: #e0e0e0;
+  padding: 4px 12px;
+  cursor: pointer;
+  // text-transform: uppercase;
+  display: inline-block;
+  border-radius: 20px;
+  font-size: 14px;
+  transition: 0.3s all;
+  &:hover {
+    background-color: #c6c6c6;
+    border-color: #c6c6c6;
+  }
+  &.selected {
+    background-color: lightblue;
+    border-color: lightblue;
+  }
+}

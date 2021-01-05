@@ -20,13 +20,11 @@
       <!-- <div class="rec-container"> -->
       <!-- <img [src]="recipe.imagePath" alt="{{ recipe.name }}" class="recipe-item" /> -->
       <app-recipe-item
-        *ngIf="isShowFavourites ? (recipe | arrayIncludes: favouritesArr:'key') : recipe"
         [recipe]="recipe"
         [index]="index"
         [showFavouriteIcon]="!isShowFavourites"
         [isFavourite]="!isShowFavourites ? (recipe.key | favourite: favouritesArr) : null"
         (favouriteEmitter)="favourite(recipe)"
-        #elRef
       ></app-recipe-item>
       <!-- disabled -->
       <!-- [ngClass]="{

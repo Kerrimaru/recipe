@@ -12,12 +12,14 @@ export class RecipesResolverService implements Resolve<Recipe[]> {
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     let recipes = this.recipeService.getRecipes();
+    console.log('rec in resolver: ', recipes);
     const id = route.params.id;
 
     if (!recipes.length) {
       return this.recipeService.fetchRecipes().pipe(
         first(),
         map((res) => {
+          console.log('res in resolver after fetch: ', res);
           return res;
         })
       );

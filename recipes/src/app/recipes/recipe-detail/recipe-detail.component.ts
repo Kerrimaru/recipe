@@ -6,6 +6,7 @@ import { AuthService } from 'src/app/auth/auth.service';
 import { environment } from '../../../environments/environment';
 import { UserSettingsService } from 'src/app/settings/user-settings.service';
 import { map } from 'rxjs/operators';
+import { MatAccordion } from '@angular/material/expansion';
 
 @Component({
   selector: 'app-recipe-detail',
@@ -51,48 +52,45 @@ export class RecipeDetailComponent implements OnInit, AfterViewInit {
     } else {
       this.route.params.subscribe((params) => {
         this.recipeKey = params['id'];
-        this.recSub = this.recipeService.getRecipeSub(this.recipeKey).subscribe((r) => {
-          if (!r) {
-            this.loading = true;
-          }
-          this.recipe = r;
-          const notes2 = this.recipeService
-            .getNotesList(r.key)
-            .snapshotChanges()
-            .pipe(
-              map((res) => {
-                console.log('res: ', res);
-                this.notes = res
-                  .map((r) => {
-                    // console.log('r: ', r, r.payload.val());
-                    return r.payload.val();
-                  })
-                  .reverse();
-                console.log('notes after: ', this.notes);
-              })
-            )
-            .subscribe();
+        this.recSub = this.recipeService
+          .getRecipeSub(this.recipeKey)
+          .pipe()
+          .subscribe((r) => {
+            if (!r) {
+              this.loading = true;
+            }
+            this.recipe = r;
+            console.log('reecipe: ', r);
+            const notes2 = this.recipeService
+              .getNotesList(r.key)
+              .snapshotChanges()
+              .pipe(
+                map((res) => {
+                  this.notes = res.map((r) => r.payload.val()).reverse();
+                })
+              )
+              .subscribe();
 
-          const dates = this.recipeService
-            .getUserDates(this.user.id, r.key)
-            .snapshotChanges()
-            .pipe(
-              map((r) => {
-                console.log('dates r: ', r);
-                this.datesMade = r
-                  .map((date) => date.payload.val())
-                  .sort()
-                  .reverse();
-                console.log('dates: , ', this.datesMade);
-              })
-            )
-            .subscribe();
+            const dates = this.recipeService
+              .getUserDates(this.user.id, r.key)
+              .snapshotChanges()
+              .pipe(
+                map((r) => {
+                  // console.log('dates r: ', r);
+                  this.datesMade = r
+                    .map((date) => date.payload.val())
+                    .sort()
+                    .reverse();
+                  // console.log('dates: , ', this.datesMade);
+                })
+              )
+              .subscribe();
 
-          // .subscribe((res) => (this.notes = res));
-          this.isFavourite = this.settingsService.favourites.includes(this.recipeKey);
-          this.showActions = !environment.production || this.recipe.userId === this.user.userId;
-          // console.log('recipe: ', r);
-        });
+            // .subscribe((res) => (this.notes = res));
+            this.isFavourite = this.settingsService.favourites.includes(this.recipeKey);
+            this.showActions = !environment.production || this.recipe.userId === this.user.userId;
+            // console.log('recipe: ', r);
+          });
       });
     }
   }
