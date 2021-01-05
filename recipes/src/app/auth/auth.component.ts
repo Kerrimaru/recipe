@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { RecipeService } from '../recipes/recipe.service';
 import { switchMap, map } from 'rxjs/operators';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-auth',
@@ -12,11 +13,16 @@ import { switchMap, map } from 'rxjs/operators';
   styleUrls: ['./auth.component.scss'],
 })
 export class AuthComponent implements OnInit {
-  constructor(private authService: AuthService, private router: Router, private recipeService: RecipeService) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private recipeService: RecipeService,
+    private _snackBar: MatSnackBar
+  ) {}
 
   isLogin = true;
   loading = false;
-  error: string = null;
+  // error: string = null;
 
   ngOnInit() {}
 
@@ -26,6 +32,9 @@ export class AuthComponent implements OnInit {
 
   onSubmit(form: NgForm) {
     if (!form.valid) {
+      console.log('form not valid');
+      // this.error = 'email not valid';
+      this.openSnackBar('Check your details');
       return;
     }
     let authPromise: Promise<any>;
@@ -40,39 +49,28 @@ export class AuthComponent implements OnInit {
       authPromise = this.authService.fbSignup(email, password, name);
     }
 
-    authPromise.then(
-      (res) => {
-        console.log('res: ', res);
-        const user = res;
-        this.authService
-          .handleAuth(user.email, user.uid, user.displayName, user.refreshToken)
-          .pipe(map((userRes) => this.recipeService.fetchRecipes()))
-          .subscribe((r) => {
-            this.router.navigate(['/recipes']);
-          });
-      },
-      (errorMsg) => {
-        console.log('error: ', errorMsg);
-        this.error = errorMsg;
+    authPromise.then((res) => {
+      if (typeof res === 'string') {
+        this.openSnackBar(res);
+        // this.error = res;
         this.loading = false;
+        return;
       }
-    );
+
+      const user = res;
+      this.authService
+        .handleAuth(user.email, user.uid, user.displayName, user.refreshToken)
+        .pipe(map((userRes) => this.recipeService.fetchRecipes()))
+        .subscribe((r) => {
+          this.router.navigate(['/recipes']);
+        });
+    });
     form.reset();
   }
 
-  // onSubmit(form: NgForm) {
-  //   if (!form.valid) {
-  //         return;
-  //       }
-  //   this.authService.doRegister(form.value)
-  // .then(res => {
-  //   console.log(res);
-  //   // this.errorMessage = "";
-  //   // this.successMessage = "Your account has been created";
-  // }, err => {
-  //   console.log(err);
-  //   // this.errorMessage = err.message;
-  //   // this.successMessage = "";
-  // });
-  // }
+  openSnackBar(message: string, action?: string) {
+    this._snackBar.open(message, action, {
+      duration: 3000,
+    });
+  }
 }

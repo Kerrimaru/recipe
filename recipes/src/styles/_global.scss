@@ -120,3 +120,11 @@ div:focus {
 .desc p {
   // margin: 4px 0;
 }
+
+.hidden {
+  opacity: 0;
+}
+
+.show {
+  opacity: 1;
+}
