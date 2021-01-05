@@ -75,13 +75,11 @@ export class RecipeDetailComponent implements OnInit, AfterViewInit {
               .getUserDates(this.user.id, r.key)
               .snapshotChanges()
               .pipe(
-                map((r) => {
-                  // console.log('dates r: ', r);
-                  this.datesMade = r
+                map((res) => {
+                  this.datesMade = res
                     .map((date) => date.payload.val())
                     .sort()
                     .reverse();
-                  // console.log('dates: , ', this.datesMade);
                 })
               )
               .subscribe();
@@ -119,7 +117,8 @@ export class RecipeDetailComponent implements OnInit, AfterViewInit {
   }
 
   deleteRecipe() {
-    this.recipeService.deleteRecipeByKey(this.recipeKey);
+    window.alert('you fool! ive disabled delete for now until you implement a proper alert');
+    // this.recipeService.deleteRecipeByKey(this.recipeKey);
     this.router.navigate(['/']);
   }
 
@@ -127,35 +126,22 @@ export class RecipeDetailComponent implements OnInit, AfterViewInit {
     this.notesSectionHidden = !this.notesSectionHidden;
   }
 
-  saveNote(e) {
-    // console.log('save note; ', e, this.user);
-    const note = this.noteInput;
-    if (!note) {
-      return;
-      // (this.notesInputExpanded = false);
-    }
-    // console.log('note: ', note);
-    this.recipeService.setNote(this.recipe.key, note, this.user.name);
-    // this.notes.unshift(this.noteInput);
-    this.noteInput = null;
-    // this.notesInputExpanded = false;
-  }
-
   onNoteChange(e) {
     // console.log('note change: ', e);
   }
 
-  addNote() {
-    this.notesInputExpanded = !this.notesInputExpanded;
+  saveNote(e) {
+    const note = this.noteInput;
+    if (!note) {
+      return;
+    }
+    this.recipeService.setNote(this.recipe.key, note, this.user.name);
+    this.noteInput = null;
   }
 
-  addDate() {}
-
   onDateChange(event) {
-    // console.log('ev: ', event);
     const timestamp = event.getTime();
     this.dateInput = null;
-    // console.log('datearr: ', this.datesMade, ' input: ', this.dateInput, ' user: ', this.user);
     this.recipeService.setUserDateMade(this.user.id, this.recipe.key, timestamp);
   }
 }

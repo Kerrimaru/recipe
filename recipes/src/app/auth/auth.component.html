@@ -1,12 +1,11 @@
 <div class="auth-container">
-  <div *ngIf="loading" class="loading">
-    <app-loading></app-loading>
-  </div>
-
-  <div *ngIf="!loading" class="form-container">
+  <div class="form-container">
+    <div class="loading" [ngClass]="{ show: loading }">
+      <app-loading></app-loading>
+    </div>
     <img class="recipe-card" src="/assets/images/recipe-card-kitchen-blank.png" />
 
-    <form #authForm="ngForm" (ngSubmit)="onSubmit(authForm)">
+    <form #authForm="ngForm" (ngSubmit)="onSubmit(authForm)" [ngClass]="{ hidden: loading }">
       <div class="form-group">
         <input
           type="email"
@@ -44,17 +43,18 @@
         />
       </div>
 
+      <!-- <div class="error" *ngIf="error">
+        <p>{{ error }}</p>
+      </div> -->
+
       <div class="actions">
         <button type="button" class="btn-left" (click)="toggleLogin()">
           Go to {{ !isLogin ? 'login' : 'sign up' }}
         </button>
-        <button type="submit" class="btn-right" [disabled]="!authForm.valid">
+        <button type="submit" class="btn-right">
           {{ isLogin ? 'Login' : 'Sign up' }}
         </button>
       </div>
     </form>
-    <div class="alert alert-danger" *ngIf="error">
-      <p>{{ error }}</p>
-    </div>
   </div>
 </div>

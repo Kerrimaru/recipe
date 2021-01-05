@@ -12,6 +12,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { RecipeFilterPipe } from './pipes/recipe-filter.pipe';
 import { ArrayIncludesPipe } from './pipes/array-includes.pipe';
@@ -43,6 +44,7 @@ import { DropdownDirective } from './dropdown.directive';
     MatSelectModule,
     MatSlideToggleModule,
     MatExpansionModule,
+    MatSnackBarModule,
   ],
   exports: [
     LoadingComponent,
@@ -66,6 +68,7 @@ import { DropdownDirective } from './dropdown.directive';
     LottieDirective,
     MatSlideToggleModule,
     MatExpansionModule,
+    MatSnackBarModule,
   ],
 })
 export class SharedModule {

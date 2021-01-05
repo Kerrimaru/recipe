@@ -36,25 +36,6 @@ export class AuthService {
   user = new BehaviorSubject<User>(null);
   private tokenExpirationCountdown: any;
 
-  // signup(email: string, password: string, name: string) {
-  //   return this.http
-  //     .post<AuthResponseData>(
-  //       `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${environment.firebase.apiKey}`,
-  //       {
-  //         email: email,
-  //         password: password,
-  //         displayName: name,
-  //         returnSecureToken: true,
-  //       }
-  //     )
-  //     .pipe(
-  //       catchError(this.mapError),
-  //       tap((resData) => {
-  //         this.handleAuth(resData.email, resData.localId, resData.displayName, resData.idToken);
-  //       })
-  //     );
-  // }
-
   login(email: string, password: string) {
     return this.fbAuth.signInWithEmailAndPassword(email, password).catch((error) => this.mapError(error));
   }
@@ -87,7 +68,6 @@ export class AuthService {
 
     this.user.next(null);
     this.fbAuth.signOut().then((res) => {
-      // console.log('logout res: ', res);
       this.router.navigate(['/login']);
       localStorage.removeItem('userData');
       if (this.tokenExpirationCountdown) {
@@ -109,27 +89,31 @@ export class AuthService {
     return of(user);
   }
 
-  private mapError(error: HttpErrorResponse) {
+  private mapError(error): string {
     let errorMsg = 'An unkown error occurred';
-    if (!error.error || !error.error.error) {
-      return error.message ? throwError(error.message) : throwError(errorMsg);
+    if (!error.code) {
+      // (!error.error || !error.error.error) {
+      return errorMsg;
+      // return error.message ? throwError(error.message) : throwError(errorMsg);
     }
 
-    switch (error.error.error.message) {
-      case 'EMAIL_EXISTS':
-        errorMsg = 'There is already an account associated with this email';
+    switch (
+      error.code // (error.error.error.message) {
+    ) {
+      case 'auth/email-already-in-use': // 'EMAIL_EXISTS':
+        errorMsg = 'Account already exists! Please sign in';
         break;
-      case 'EMAIL_NOT_FOUND':
-        errorMsg = 'There no account associated with this email';
+      case 'auth/user-not-found': // 'EMAIL_NOT_FOUND':
+        errorMsg = 'Email not found! Please go to sign up';
         break;
-      case 'INVALID_PASSWORD':
+      case 'auth/wrong-password': // 'INVALID_PASSWORD':
         errorMsg = 'Wrong password';
         break;
-      case 'USER_DISABLED':
-        errorMsg = 'THis account has been disabled';
+      case 'auth/too-many-requests': // 'USER_DISABLED':
+        errorMsg = 'Too many login attempts! This account has been temporarily disabled';
         break;
     }
-    console.log('error: ', errorMsg);
-    return throwError(errorMsg);
+    return errorMsg;
+    // return throwError(errorMsg);
   }
 }

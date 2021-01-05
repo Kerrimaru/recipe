@@ -3,10 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
 import { RecipeService } from '../recipe.service';
 import { Recipe } from '../recipe.model';
-// import { DataStorageService } from 'src/app/shared/data-storage.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-// import { TagService } from 'src/app/tags/tags.service';
-// import { Tag } from 'src/app/tags/tag.model';
 import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { AuthService } from 'src/app/auth/auth.service';
 import { Observable } from 'rxjs';
@@ -35,10 +32,6 @@ export class RecipeEditComponent implements OnInit {
     { name: 'Gousto', selected: false },
   ];
 
-  // tags = ['Vegan', 'Main', 'Dessert', 'Gousto'];
-
-  selectedTags: string[] = [];
-
   public previewImagePath;
   imgURL: any;
   public message: string;
@@ -50,21 +43,11 @@ export class RecipeEditComponent implements OnInit {
     private route: ActivatedRoute,
     private recipeService: RecipeService,
     private router: Router,
-    // private dataService: DataStorageService,
-    // private tagService: TagService
     private auth: AuthService
   ) {}
 
   get ingredientControls() {
-    // (<FormArray>this.recipeForm.get('ingredients')).controls;
-    // return (this.recipeForm.get('ingredients') as FormArray).controls;
     return this.ingredientsArrayRef.controls;
-  }
-
-  get tagControls() {
-    // (<FormArray>this.recipeForm.get('ingredients')).controls;
-    // return (this.recipeForm.get('ingredients') as FormArray).controls;
-    return this.tagsArrayRef.controls;
   }
 
   ngOnInit(): void {
@@ -72,16 +55,11 @@ export class RecipeEditComponent implements OnInit {
       this.selectedRecipeId = params['id'];
       this.editMode = !!params['id'];
       this.initForm();
-      // this.tagService.fetchTags().subscribe((tags) => {
-      //   this.tags = tags;
-      //   console.log('tags: ', tags, this.tags);
-      // });
     });
   }
 
   private initForm() {
     this.ingredientsArrayRef = new FormArray([]);
-    // this.tagsArrayRef = new FormArray([]);
 
     if (this.editMode) {
       // this.recipe = this.recipeService.getRecipe(this.selectedRecipeId);
@@ -116,7 +94,6 @@ export class RecipeEditComponent implements OnInit {
       imagePath: new FormControl(this.recipe.imagePath, Validators.required),
       description: new FormControl(this.recipe.description, Validators.required),
       ingredients: this.ingredientsArrayRef,
-      // tags: this.tagsArrayRef,
     });
 
     this.onAddIngredient();
@@ -127,52 +104,7 @@ export class RecipeEditComponent implements OnInit {
       this.recipeForm.markAsDirty();
     }
     tag.selected = !tag.selected;
-    console.log('tag: ', tag);
-    console.log('selectedtags: ', this.selectedTags);
-    // let tages;
-    // if (this.selectedTags.includes(tag)) {
-    //   console.log('includes ', this.selectedTags.includes(tag));
-    //   this.selectedTags = this.selectedTags.filter((t) => t !== tag);
-    // } else {
-    //   this.selectedTags.push(tag);
-    // }
-    // const tages = this.selectedTags.includes(tag)
-    //   ? this.selectedTags.filter((t) => t !== tag)
-    //   : this.selectedTags.push(tag);
-    // console.log('wtf?: ', tages);
-    // // this.selectedTags = tages;
-    // console.log('selectedtags: ', this.selectedTags);
   }
-
-  // there is really no need, just use a pipe?
-  // formatTitle() {
-  //   const nameRef = this.recipeForm.get('name');
-  //   const array = nameRef.value.split(' ');
-  //   for (let i = 0; i < array.length; i++) {
-  //     const word = array[i];
-  //     if (this.isJoiningWord(word) && i !== 0) {
-  //       array[i] = word.toLowerCase();
-  //     } else {
-  //       array[i] = word[0].toUpperCase() + word.substr(1).toLowerCase();
-  //     }
-  //   }
-  //   nameRef.setValue(array.join(' '));
-  // }
-
-  // createTag(word: string) {
-  //   const _tag = word.toUpperCase();
-  //   if (!this.tags.includes(_tag)) {
-  //     this.tags.push(_tag);
-  //   }
-  // }
-
-  // isJoiningWord(word: string): boolean {
-  //   if (word.length <= 2) {
-  //     return true;
-  //   }
-  //   const words = ['the', 'and'];
-  //   return words.includes(word.toLowerCase());
-  // }
 
   drop(event: CdkDragDrop<string[]>) {
     console.log(this.ingredientControls);
@@ -187,20 +119,16 @@ export class RecipeEditComponent implements OnInit {
 
     // remove empty ingredients and flatten obj
     const ingArr = this.ingredientsArrayRef.value.filter((i) => !!i.name).map((_i) => _i.name);
-    // const tagsList = this.tags.map((t) => (t.selected ? t.name : null)).map((t) => !!t);
     const tagsList = this.tags.filter((t) => t.selected).map((t) => t.name);
-    // const tagsList = this.selectedTags;
-    console.log('tagslist: ', tagsList);
 
     const _recipe = Object.assign(this.recipe, {
       ...this.recipeForm.value,
       ingredients: ingArr,
       tags: tagsList,
     });
+
     console.log('_recipe: ', _recipe);
     if (this.editMode) {
-      // const key = this.recipeService.getRecipe(this.selectedRecipeId);
-      // this.dataService.editRecipe(recipe.id, _recipe);
       this.recipeService.updateRecipe(_recipe, this.recipe.key);
       this.onCancel();
     } else {
@@ -228,7 +156,6 @@ export class RecipeEditComponent implements OnInit {
 
   handleFileInput(event: any) {
     this.fileToUpload = event.target.files[0];
-    console.log('file: ', event);
   }
 
   checkIfLast(index: number) {
@@ -285,7 +212,7 @@ export class RecipeEditComponent implements OnInit {
           elem.height = img.height * scaleFactor;
           const ctx = <CanvasRenderingContext2D>elem.getContext('2d');
           ctx.drawImage(img, 0, 0, width, img.height * scaleFactor);
-          const dataurl = elem.toDataURL('image/jpeg', 0.5);
+          const dataurl = elem.toDataURL('image/jpeg', 0.7);
           observer.next(dataurl);
         }),
           (reader.onerror = (error) => observer.error(error));
