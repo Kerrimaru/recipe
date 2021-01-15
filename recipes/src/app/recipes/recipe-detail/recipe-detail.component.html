@@ -47,29 +47,60 @@
                 <span class="material-icons">comment_bank</span>
               </mat-panel-description>
             </mat-expansion-panel-header>
-            <div class="input-cont">
+            <div class="new-note-cont">
               <label for="note-input">
                 <span class="material-icons custom-note" matTooltip="add a note" matTooltipShowDelay="500">
                   note_add
                 </span>
               </label>
-              <input
+              <div
+                tabindex="1"
+                (keydown.enter)="saveNote($event.target)"
+                contenteditable
                 id="note-input"
                 placeholder="add a note"
-                (blur)="saveNote($event)"
+                (blur)="saveNote($event.target)"
+                [innerHTML]="noteInput"
+              ></div>
+
+              <!-- <input
+                id="note-input"
+                placeholder="add a note"
+                (blur)="saveNote()"
                 [(ngModel)]="noteInput"
                 (ngModelChange)="onNoteChange($event)"
-              />
+              /> -->
             </div>
 
-            <div *ngFor="let note of notes" class="user-note">
-              <span
-                matTooltip="added by  {{ note.user }} on {{ note.date | date }}"
+            <div *ngFor="let note of notes; index as i" class="user-note" [class.active]="editNoteIndex === i">
+              <span class="note-star">*</span>
+              <div
+                class="note-edit-input"
+                tabindex="1"
+                (keydown.enter)="saveNote($event.target, note)"
+                [contentEditable]="editNoteIndex === i"
+                (blur)="saveNote($event.target, note)"
+                [innerHTML]="note.note"
+                [matTooltip]="
+                  (note.userId === user.id ? 'you commented' : 'added by ' + note.user) + ' on ' + (note.date | date)
+                "
                 matTooltipShowDelay="250"
-                matTooltipPosition="after"
-              >
-                * {{ note.note }}
-              </span>
+                matTooltipPosition="left"
+                matTooltipClass="notes-tooltip-short"
+                (click)="note.userId === user.id ? editNote(i) : null"
+              ></div>
+              <div class="note-actions" *ngIf="note.userId === user.id && editNoteIndex !== i">
+                <span class="material-icons edit fake-cta">create</span>
+                <span
+                  (click)="deleteNote(note.id)"
+                  class="material-icons remove"
+                  matTooltip="delete note"
+                  matTooltipClass="tooltip-red"
+                  matTooltipShowDelay="500"
+                >
+                  clear
+                </span>
+              </div>
             </div>
           </mat-expansion-panel>
 
@@ -98,8 +129,16 @@
 
             <ng-container *ngIf="datesMade.length">
               <p class="date-item" *ngFor="let d of datesMade">
-                {{ d | date }}
-                <span class="material-icons remove" matTooltip="remove date" matTooltipShowDelay="500">clear</span>
+                <span>{{ d | date }}</span>
+                <!-- not implemented yet -->
+                <!-- <span
+                  (click)="deleteDate(d)"
+                  class="material-icons remove"
+                  matTooltip="remove this date"
+                  matTooltipShowDelay="500"
+                >
+                  clear
+                </span> -->
               </p>
             </ng-container>
           </mat-expansion-panel>

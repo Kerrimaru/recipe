@@ -33,7 +33,6 @@ export class AuthComponent implements OnInit {
   onSubmit(form: NgForm) {
     if (!form.valid) {
       console.log('form not valid');
-      // this.error = 'email not valid';
       this.openSnackBar('Check your details');
       return;
     }

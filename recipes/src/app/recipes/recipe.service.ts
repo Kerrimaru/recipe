@@ -115,17 +115,10 @@ export class RecipeService {
     return this.recipes$;
   }
 
-  setNote(recipeId: string, note: any, userName: string) {
-    console.log('set note: ', recipeId, userName);
-    const recipeNote = { note: note, user: userName, date: Date.now() };
-    const exists = this.fb.database.ref('recipeNotes').child(recipeId);
-    console.log('exists:? ', exists, recipeNote);
-    if (exists) {
-      console.log('exists! ');
-      exists.push(recipeNote);
-    } else {
-      this.fb.database.ref('recipeNotes').push({ recipeId: { recipeNote } });
-    }
+  setNote(recipeId: string, note: any, userName: string, userId: string) {
+    // console.log('set note: ', recipeId, userName);
+    const recipeNote = { note: note, user: userName, userId: userId, date: Date.now() };
+    const notesRef = this.fb.database.ref('recipeNotes').child(recipeId).push(recipeNote);
   }
 
   fetchRecipeNotes(recipeId: string) {
@@ -162,6 +155,16 @@ export class RecipeService {
 
   setUserDateMade(userId: string, recipeId: string, date: string) {
     this.fb.database.ref('userDateMade').child(userId).child(recipeId).push(date);
+  }
+
+  deleteNote(noteId: string, recipeId: string) {
+    this.fb.database.ref(`recipeNotes/${recipeId}`).child(noteId).remove();
+  }
+
+  updateNote(text: string, noteId: string, recipeId: string) {
+    // console.log('update: ');
+    this.fb.database.ref(`recipeNotes/${recipeId}`).child(noteId).update({ note: text });
+    // this.fb.database.ref(`recipeNotes/${recipeId}`).child(noteId)
   }
 
   // to do: move ingredients to separate key

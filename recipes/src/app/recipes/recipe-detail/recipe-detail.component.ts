@@ -8,6 +8,14 @@ import { UserSettingsService } from 'src/app/settings/user-settings.service';
 import { map } from 'rxjs/operators';
 import { MatAccordion } from '@angular/material/expansion';
 
+interface Note {
+  id: string;
+  note: string;
+  userId: string;
+  user: string;
+  date: number;
+}
+
 @Component({
   selector: 'app-recipe-detail',
   templateUrl: './recipe-detail.component.html',
@@ -25,12 +33,13 @@ export class RecipeDetailComponent implements OnInit, AfterViewInit {
   userSub: any;
   showActions = false;
   isFavourite: boolean;
+
   datesMade: any[] = [];
   dateInput: any;
-  notes = [];
-  noteInput: any;
-  notesSectionHidden = true;
-  notesInputExpanded = false;
+
+  notes: Note[] = [];
+  noteInput: string;
+  editNoteIndex: number;
 
   @ViewChild('recipeRef', { static: false }) recipeElRef: ElementRef;
 
@@ -44,6 +53,7 @@ export class RecipeDetailComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.user = this.authService.user.getValue();
+    // console.log('user: ', this.user);
     // window.scrollTo({ top: 0, behavior: 'smooth' });
     // this is disabled for now
     if (this.recipeInput) {
@@ -60,17 +70,29 @@ export class RecipeDetailComponent implements OnInit, AfterViewInit {
               this.loading = true;
             }
             this.recipe = r;
-            console.log('reecipe: ', r);
+            // console.log('reecipe: ', r);
+
+            // to do: subscribe properly
             const notes2 = this.recipeService
               .getNotesList(r.key)
               .snapshotChanges()
               .pipe(
                 map((res) => {
-                  this.notes = res.map((r) => r.payload.val()).reverse();
+                  // console.log('notes res: ', res);
+                  this.notes = res
+                    .map(
+                      (note: any): Note => {
+                        // console.log('payload val: ', note.payload.val());
+                        return { id: note.payload.key, ...note.payload.val() };
+                      }
+                    )
+                    .reverse();
+                  // console.log('note list?: ', this.notes);
                 })
               )
               .subscribe();
 
+            // to do: subscribe properly
             const dates = this.recipeService
               .getUserDates(this.user.id, r.key)
               .snapshotChanges()
@@ -84,10 +106,8 @@ export class RecipeDetailComponent implements OnInit, AfterViewInit {
               )
               .subscribe();
 
-            // .subscribe((res) => (this.notes = res));
             this.isFavourite = this.settingsService.favourites.includes(this.recipeKey);
             this.showActions = !environment.production || this.recipe.userId === this.user.userId;
-            // console.log('recipe: ', r);
           });
       });
     }
@@ -122,21 +142,49 @@ export class RecipeDetailComponent implements OnInit, AfterViewInit {
     this.router.navigate(['/']);
   }
 
-  showNotes() {
-    this.notesSectionHidden = !this.notesSectionHidden;
-  }
-
   onNoteChange(e) {
     // console.log('note change: ', e);
   }
 
-  saveNote(e) {
-    const note = this.noteInput;
-    if (!note) {
+  editNote(index: number, ref?: HTMLElement) {
+    // console.log('ref: ', ref);
+    if (ref) {
+      ref.focus();
+      document.execCommand('selectAll', false, null);
+      document.getSelection().collapseToEnd();
+    }
+
+    // console.log('edit note ,', index);
+    this.editNoteIndex = index;
+  }
+  noclickpls() {
+    console.log('doh!!!!!');
+  }
+
+  deleteNote(noteId: string) {
+    this.recipeService.deleteNote(noteId, this.recipe.key);
+  }
+
+  deleteDate(e) {
+    console.log('delte Date, ', e);
+  }
+
+  saveNote(e: HTMLElement, note?: Note) {
+    e.blur();
+    this.editNoteIndex = null;
+    const newNote = e.innerHTML;
+    if (!newNote || (!!note && newNote === note.note)) {
       return;
     }
-    this.recipeService.setNote(this.recipe.key, note, this.user.name);
-    this.noteInput = null;
+    if (note) {
+      this.recipeService.updateNote(newNote, note.id, this.recipe.key);
+
+      return;
+    } else {
+      this.recipeService.setNote(this.recipe.key, newNote, this.user.name, this.user.id);
+      this.noteInput = null;
+      e.innerHTML = '';
+    }
   }
 
   onDateChange(event) {

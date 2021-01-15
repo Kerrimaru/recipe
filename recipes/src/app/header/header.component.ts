@@ -31,6 +31,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
   mobileWidth = 760;
   collapse = false;
 
+  logos = [
+    'tools-logo',
+    // 'plate-logo',
+    'hole-logo',
+    // 'book-logo',
+    // '-logo',
+  ];
+
+  currentLogo = 0;
+
   navItems = [
     { text: 'Recipes', link: '/recipes' },
     { text: '+New Recipe', link: '/recipes/new' },
@@ -54,6 +64,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.collapse = true;
     } else {
       this.collapse = false;
+    }
+  }
+
+  advanceLogo() {
+    this.currentLogo++;
+    if (this.currentLogo >= this.logos.length) {
+      this.currentLogo = 0;
     }
   }
 
