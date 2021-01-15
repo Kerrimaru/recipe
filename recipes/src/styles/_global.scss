@@ -116,15 +116,19 @@ div:focus {
   outline: none !important;
 }
 
-// inner htnl of recipe detail description
-.desc p {
-  // margin: 4px 0;
-}
-
 .hidden {
   opacity: 0;
 }
 
 .show {
   opacity: 1;
+}
+
+.tooltip-red {
+  background: #b71c1c;
+  // color: red !important;
+}
+
+.notes-tooltip-short {
+  max-width: 90px !important;
 }

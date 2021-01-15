@@ -107,6 +107,11 @@ a {
   font-size: 35px;
 }
 
+.logo {
+  width: 30px;
+  margin-right: 7px;
+}
+
 .account-actions {
   z-index: 100;
   position: fixed;
@@ -169,10 +174,12 @@ a {
     font-size: 14px;
     cursor: pointer;
   }
-  .material-icons {
+  h5 {
+    margin: 7px;
     position: absolute;
     top: 0;
     right: 0;
+    font-size: 18px;
   }
   h4,
   h3,
@@ -199,6 +206,7 @@ a {
     right: 18px;
     .active {
       background-color: white;
+      transform: none;
     }
     h4 {
       font-size: 20px;
@@ -217,17 +225,22 @@ a {
     top: 0px;
     // left: 30px;
     width: 100%;
-    transform: translateX(-34%);
+    transform: translateX(-36%);
     // margin-top: 0;
     font-size: 14px;
     .menu-tab {
       border: none;
       padding: 0;
+      margin-right: 10px;
+      h4 {
+        letter-spacing: 0.5px;
+        // transition: 0.2s all ease-out;
+      }
       .grow {
         display: none;
       }
       &.active {
-        transform: none;
+        // transform: none;
         display: none;
       }
     }
