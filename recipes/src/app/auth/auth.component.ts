@@ -1,10 +1,7 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { AuthService, AuthResponseData } from './auth.service';
-import { Observable } from 'rxjs';
+import { AuthService } from './auth.service';
 import { Router } from '@angular/router';
-import { RecipeService } from '../recipes/recipe.service';
-import { switchMap, map } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
@@ -13,16 +10,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrls: ['./auth.component.scss'],
 })
 export class AuthComponent implements OnInit {
-  constructor(
-    private authService: AuthService,
-    private router: Router,
-    private recipeService: RecipeService,
-    private _snackBar: MatSnackBar
-  ) {}
+  constructor(private authService: AuthService, private router: Router, private snackBar: MatSnackBar) {}
 
   isLogin = true;
   loading = false;
-  // error: string = null;
 
   ngOnInit() {}
 
@@ -32,44 +23,45 @@ export class AuthComponent implements OnInit {
 
   onSubmit(form: NgForm) {
     if (!form.valid) {
-      console.log('form not valid');
-      this.openSnackBar('Check your details');
-      return;
+      return this.openSnackBar('Check your details');
     }
-    let authPromise: Promise<any>;
 
     this.loading = true;
     const email = form.value.email;
     const password = form.value.password;
     const name = form.value.name;
-    if (this.isLogin) {
-      authPromise = this.authService.login(email, password);
-    } else {
-      authPromise = this.authService.fbSignup(email, password, name);
-    }
+    const params = this.isLogin ? null : { notify: 'welcome' };
+    const data = this.isLogin ? null : { name: name };
+
+    const authPromise: Promise<any> = this.isLogin
+      ? this.authService.firebaseLogin(email, password)
+      : this.authService.firebaseSignup(email, password, name);
 
     authPromise.then((res) => {
+      this.loading = false;
       if (typeof res === 'string') {
-        this.openSnackBar(res);
-        // this.error = res;
-        this.loading = false;
-        return;
+        return this.openSnackBar(res);
       }
-
-      const user = res;
-      this.authService
-        .handleAuth(user.email, user.uid, user.displayName, user.refreshToken)
-        .pipe(map((userRes) => this.recipeService.fetchRecipes()))
-        .subscribe((r) => {
-          this.router.navigate(['/recipes']);
-        });
+      this.router.navigate(['/recipes'], { queryParams: params, state: { data: data } });
     });
-    form.reset();
+    // form.reset();
   }
 
   openSnackBar(message: string, action?: string) {
-    this._snackBar.open(message, action, {
+    this.snackBar.open(message, action, {
       duration: 3000,
+    });
+  }
+
+  signInGuest() {
+    this.loading = true;
+    this.authService.guestLogin().then((res) => {
+      this.loading = false;
+      if (res === 'success') {
+        this.router.navigate(['/recipes'], { queryParams: { notify: 'guest' } });
+      } else {
+        this.snackBar.open(res);
+      }
     });
   }
 }

@@ -163,7 +163,7 @@
   </div>
 </div>
 
-<div class="actions" *ngIf="showActions">
-  <button type="button" (click)="deleteRecipe()" class="btn btn-secondary">Delete</button>
+<div class="actions" *ngIf="showEdit && !readOnly">
+  <button *ngIf="showDelete" type="button" (click)="deleteRecipe()" class="btn btn-secondary">Delete</button>
   <button type="button" (click)="editRecipe()" class="btn btn-primary">Edit</button>
 </div>

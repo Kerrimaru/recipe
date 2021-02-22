@@ -12,7 +12,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     // to do: themes
-    document.documentElement.className = 'theme-vanilla';
+    // document.documentElement.className = 'theme-vanilla';
 
     this.fbAuth.authState.subscribe((user) => {
       if (user) {

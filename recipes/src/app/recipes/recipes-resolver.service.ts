@@ -5,18 +5,23 @@ import { DataStorageService } from '../shared/data-storage.service';
 import { RecipeService } from './recipe.service';
 import { map, take, first } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable({ providedIn: 'root' })
 export class RecipesResolverService implements Resolve<Recipe[]> {
-  constructor(private datStorageService: DataStorageService, private recipeService: RecipeService) {}
+  constructor(
+    private datStorageService: DataStorageService,
+    private recipeService: RecipeService,
+    private authService: AuthService
+  ) {}
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     let recipes = this.recipeService.getRecipes();
-    // console.log('rec in resolver: ', recipes);
+    const readOnly = this.authService.readOnly.getValue();
     const id = route.params.id;
 
     if (!recipes.length) {
-      return this.recipeService.fetchRecipes().pipe(
+      return this.recipeService.fetchRecipes(readOnly ? 30 : null).pipe(
         first(),
         map((res) => {
           // console.log('res in resolver after fetch: ', res);

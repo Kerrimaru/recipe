@@ -28,7 +28,6 @@ export class AuthGuard implements CanActivate {
     return this.fbAuth.authState.pipe(
       take(1),
       map((user) => {
-        console.log('res from auth guard: ', user);
         if (user) {
           // this.authService.autoLogin(user);
           // this.authService.autoLogin(user);

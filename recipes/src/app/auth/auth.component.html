@@ -43,10 +43,6 @@
         />
       </div>
 
-      <!-- <div class="error" *ngIf="error">
-        <p>{{ error }}</p>
-      </div> -->
-
       <div class="actions">
         <button type="button" class="btn-left" (click)="toggleLogin()">
           Go to {{ !isLogin ? 'login' : 'sign up' }}
@@ -57,4 +53,9 @@
       </div>
     </form>
   </div>
+</div>
+
+<div class="guest-sign-in">
+  <p>Just looking?</p>
+  <button type="button" (click)="signInGuest()">Sign in as a guest</button>
 </div>

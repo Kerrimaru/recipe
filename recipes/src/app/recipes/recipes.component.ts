@@ -21,8 +21,8 @@ export class RecipesComponent implements OnInit {
     // const dbRef = fbRef.database().ref().child('object');
     // console.log('FB ref: ', fbRef, ' db ref: ', dbRef);
     // dbRef.on('value', snap => console.log(snap.val()));
-    this.userSub = this.authService.user.subscribe((user) => {
-      this.user = user;
-    });
+    // this.userSub = this.authService.user.subscribe((user) => {
+    //   this.user = user;
+    // });
   }
 }

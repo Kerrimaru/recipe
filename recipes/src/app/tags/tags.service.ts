@@ -21,9 +21,7 @@ export class TagService {
   }
 
   createTag(tag: Tag) {
-    debugger;
     this.http.post('https://kerr-recipe.firebaseio.com/tags.json', tag).subscribe((res) => {
-      console.log('res: ', res);
       if (!this.tags) {
         this.tags = [];
       }
@@ -33,7 +31,6 @@ export class TagService {
   }
 
   fetchTags() {
-    debugger;
     return this.http.get('https://kerr-recipe.firebaseio.com/tags.json').pipe(
       takeWhile((tags) => !!tags),
       map((tags) => {
@@ -42,7 +39,6 @@ export class TagService {
         });
       }),
       tap((tags) => {
-        console.log('tags in service: ', tags);
         this.setTags(tags);
         return tags;
       })
