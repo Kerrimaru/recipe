@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { catchError, tap, switchMap, map } from 'rxjs/operators';
-import { throwError, Subject, BehaviorSubject, of, Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { map } from 'rxjs/operators';
+import { BehaviorSubject, of, Observable } from 'rxjs';
 import { User } from './user.model';
 import { Router } from '@angular/router';
-import { environment } from '../../environments/environment';
 import { AngularFireAuth } from '@angular/fire/auth';
-import * as firebase from 'firebase/app';
-import { AngularFireDatabase } from '@angular/fire/database';
+// import * as firebase from 'firebase/app';
+// import { AngularFireDatabase } from '@angular/fire/database';
 import { RecipeService } from '../recipes/recipe.service';
 import { UserSettingsService } from '../settings/user-settings.service';
 // import { auth } from 'firebase/app';
@@ -27,26 +26,36 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     private router: Router,
-    public fbAuth: AngularFireAuth,
-    private fb: AngularFireDatabase, // private initializer: InitializerService
+    public firebaseAuth: AngularFireAuth,
+    // private firebase: AngularFireDatabase,
+    // private initializer: InitializerService
     private recipeService: RecipeService,
     private settingsService: UserSettingsService
   ) {}
 
   user = new BehaviorSubject<User>(null);
+  readOnly = new BehaviorSubject<boolean>(null);
+  settingsRef: any;
+
   private tokenExpirationCountdown: any;
 
-  login(email: string, password: string) {
-    return this.fbAuth.signInWithEmailAndPassword(email, password).catch((error) => this.mapError(error));
+  firebaseLogin(email: string, password: string) {
+    return this.firebaseAuth.signInWithEmailAndPassword(email, password).catch((error) => this.mapError(error));
   }
 
-  fbSignup(email: string, password: string, name: string) {
-    return this.fbAuth
+  firebaseSignup(email: string, password: string, name: string) {
+    return this.firebaseAuth
       .createUserWithEmailAndPassword(email, password)
       .then((res) => {
+        // localStorage.setItem('userName', JSON.stringify(name));
         const user = res.user;
-        user.updateProfile({ displayName: name });
-        return user;
+        user.updateProfile({ displayName: name }).then((res) => {
+          this.handleAuth(email, user.uid, name, user.refreshToken);
+
+          // this.user.getValue().name = 'kerri';
+          return user;
+          //
+        });
       })
       .catch((error) => this.mapError(error));
   }
@@ -55,19 +64,45 @@ export class AuthService {
     this.handleAuth(user.email, user.uid, user.displayName, user.refreshToken)
       .pipe(
         map((res) => {
-          // console.log('login res: ', res);
-          this.settingsService.fetchUserSettings(res.id);
+          this.settingsRef = this.settingsService.fetchUserSettings(res.id);
         }),
-        map(() => this.recipeService.fetchRecipes())
+        map(() => {
+          const readOnly = this.readOnly.getValue();
+          return this.recipeService.fetchRecipes(readOnly ? 30 : null);
+        })
       )
       .subscribe();
   }
 
-  logout() {
-    this.settingsService.favs$.next(null);
+  updateUserName(user, name) {
+    return user.updateProfile({ displayName: name });
+  }
 
+  handleAuth(email: string, id: string, name: string, token: string): Observable<any> {
+    const user = new User(email, id, name, token);
+    this.readOnly.next(!email);
+    this.user.next(user);
+    return of(user);
+  }
+
+  guestLogin(): Promise<any> {
+    return this.firebaseAuth
+      .signInAnonymously()
+      .then((res) => {
+        this.readOnly.next(true);
+        return 'success';
+      })
+      .catch((error) => {
+        // var errorCode = error.code;
+        var errorMessage = error.message;
+        return errorMessage;
+      });
+  }
+
+  logout() {
+    this.readOnly.next(null);
     this.user.next(null);
-    this.fbAuth.signOut().then((res) => {
+    this.firebaseAuth.signOut().then((res) => {
       this.router.navigate(['/login']);
       localStorage.removeItem('userData');
       if (this.tokenExpirationCountdown) {
@@ -81,12 +116,6 @@ export class AuthService {
     this.tokenExpirationCountdown = setTimeout(() => {
       this.logout();
     }, expDuration);
-  }
-
-  handleAuth(email: string, id: string, name: string, token: string): Observable<any> {
-    const user = new User(email, id, name, token);
-    this.user.next(user);
-    return of(user);
   }
 
   private mapError(error): string {

@@ -1,0 +1,19 @@
+<div class="dialog dialog-simple" [ngClass]="css">
+  <div class="dialog-content">
+    <h2 *ngIf="title">{{ title }}</h2>
+    <p *ngFor="let line of lines" [innerHtml]="line"></p>
+  </div>
+  <div class="dialog-actions" *ngIf="actions.length">
+    <button
+      id="actionBtn"
+      class="btn"
+      *ngFor="let action of actions"
+      (click)="action.go(mdDialogRef)"
+      [ngClass]="{
+        'btn-primary': action.primary,
+        'btn-secondary': !action.primary
+      }"
+      [innerHtml]="action.text"
+    ></button>
+  </div>
+</div>

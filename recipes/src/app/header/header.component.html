@@ -1,4 +1,4 @@
-<nav class="app-nav" [ngClass]="{ collapse: collapse }">
+<nav class="app-nav" *ngIf="isAuth" [ngClass]="{ collapse: collapse }">
   <!-- <img class="logo" src="/assets/images/jlogo.png" routerLink="/" /> -->
   <div class="app-header">
     <h1 style="display: flex; justify-content: center; align-items: center">
@@ -10,11 +10,11 @@
       <!-- <img class='logo' src='assets/images/logos/.png'> -->
       <a routerLink="/">Judith's Kitchen</a>
     </h1>
-    <div class="account-actions" *ngIf="isAuth" [ngClass]="{ expanded: headerExpanded, mobile: isMobile }">
+    <div class="account-actions" [ngClass]="{ expanded: headerExpanded, mobile: isMobile }">
       <!-- <span class="material-icons">account_circle</span> -->
       <span class="material-icons" (click)="toggleMenu()">menu</span>
       <div class="account-nav">
-        <h5>Hi, {{ user.name }}</h5>
+        <h5>Hi, {{ user?.name || 'Guest' }}</h5>
         <ng-container *ngIf="isMobile">
           <h4 *ngFor="let item of navItems" routerLinkActive="active">
             <a [routerLink]="item.link">{{ item.text }}</a>
@@ -38,8 +38,8 @@
     </div>
   </div>
 
-  <div class="nav-list" *ngIf="isAuth && !isMobile">
-    <ng-container *ngIf="isAuth">
+  <div class="nav-list" *ngIf="!isMobile">
+    <ng-container>
       <div
         *ngFor="let item of navItems"
         class="menu-tab {{ item.class }}"

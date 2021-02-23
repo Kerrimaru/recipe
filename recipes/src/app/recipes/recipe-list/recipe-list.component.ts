@@ -10,6 +10,9 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { RecipesConst } from '../../../assets/seeds';
 import { filter } from 'rxjs/operators';
 import { UserSettingsService } from 'src/app/settings/user-settings.service';
+import { AuthService } from 'src/app/auth/auth.service';
+import { DialogService } from 'src/app/shared/dialog/dialog.service';
+import { User } from 'src/app/auth/user.model';
 // import { auth } from 'firebase/app';
 
 @Component({
@@ -31,6 +34,9 @@ export class RecipeListComponent implements OnInit, OnDestroy {
   maxScroll: boolean;
   loading = true;
   filters: string[] = [];
+  readOnly: boolean;
+  user: User;
+  userSub: Subscription;
 
   filtersSub: Subscription;
 
@@ -52,17 +58,51 @@ export class RecipeListComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private dataStorageService: DataStorageService,
     private fb: AngularFireDatabase,
-    // private fb: AngularFirestore
-    private settingsService: UserSettingsService
+    private settingsService: UserSettingsService,
+    private authService: AuthService,
+    private dialog: DialogService
   ) {}
 
   ngOnInit(): void {
+    this.userSub = this.authService.user.subscribe((user) => (this.user = user));
+    const notify = this.route.snapshot.queryParams['notify'];
+    if (notify) {
+      let title = 'Welcome';
+      let message: string[];
+      let actions: any = [{ text: 'view recipes', go: null, primary: true }];
+      if (notify === 'guest') {
+        title += ', Guest!';
+        message = [
+          'As a guest, you will be able to preview the site with limited functionality.',
+          'You can view up to 30 recipes, but cannot add new ones, favourite recipes, or add comments or dates made.',
+        ];
+      } else {
+        const testy = history.state.data;
+        console.log('histoyy data: ', testy);
+        // const user = this.authService.user.getValue();
+        console.log('user ', this.user);
+        // const name = localStorage.getItem('userName');
+        console.log('user: ', localStorage.getItem('userName'));
+        if (!!testy && !!testy.name) {
+          title += ', ' + testy.name;
+        }
+
+        // title += this.authService.user.getValue().name;
+        message = ['Thanks for signing up! Get started by', 'browsing recipes, or add your own straight away!'];
+        actions.push({ text: 'add new recipe', go: 'new', secondary: true });
+      }
+      this.dialog.simple({ title: title, lines: message, actions: actions }).subscribe((res) => {
+        if (res === 'new') {
+          this.router.navigate(['recipes', 'new']);
+        }
+      });
+    }
+    this.readOnly = this.authService.readOnly.getValue();
     this.favsSub = this.settingsService.favs$.subscribe((res) => {
       this.favouritesArr = res;
     });
 
     this.filtersSub = this.settingsService.filtersChanged.subscribe((res) => {
-      console.log('filter changed res: ', res);
       this.filters = res;
       this.recipes = this.applyFilters(this.recipes.slice(), res);
     });
@@ -99,9 +139,13 @@ export class RecipeListComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.recipesSub.unsubscribe();
     this.favsSub.unsubscribe();
+    this.userSub.unsubscribe();
   }
 
   favourite(recipe: Recipe) {
+    if (this.readOnly) {
+      return;
+    }
     this.settingsService.toggleFavourite(recipe.key);
   }
 

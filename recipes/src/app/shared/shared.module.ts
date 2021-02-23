@@ -22,6 +22,8 @@ import { TitlePipe } from './pipes/title.pipe';
 import { ShowOnScrollDirective } from './directives/show-on-scroll.directive';
 import { LottieDirective } from './directives/lottie.directive';
 import { DropdownDirective } from './dropdown.directive';
+import { AlertComponent } from './dialog/alert/alert.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
@@ -33,6 +35,7 @@ import { DropdownDirective } from './dropdown.directive';
     ShowOnScrollDirective,
     FavouritesPipe,
     LottieDirective,
+    AlertComponent,
   ],
   imports: [
     CommonModule,
@@ -45,6 +48,7 @@ import { DropdownDirective } from './dropdown.directive';
     MatSlideToggleModule,
     MatExpansionModule,
     MatSnackBarModule,
+    MatDialogModule,
   ],
   exports: [
     LoadingComponent,
@@ -69,6 +73,7 @@ import { DropdownDirective } from './dropdown.directive';
     MatSlideToggleModule,
     MatExpansionModule,
     MatSnackBarModule,
+    MatDialogModule,
   ],
 })
 export class SharedModule {

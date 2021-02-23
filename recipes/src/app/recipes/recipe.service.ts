@@ -36,17 +36,9 @@ export class RecipeService {
   }
 
   getRecipeByKey(key: string): Recipe {
-    // console.log('key: ', key);
     if (this.recipes) {
       const rec = this.recipes.find((r) => r.key === key);
       return rec;
-      // } else {
-      //   console.log('NONNE recipes:');
-      //   const recRef = this.fb.database.ref(`recipes/${key}`);
-      //   return recRef.once('value').then((snapshot) => {
-      //     console.log('snap: ', snapshot.val());
-      //     return snapshot.val();
-      //   });
     }
   }
 
@@ -69,45 +61,27 @@ export class RecipeService {
   }
 
   updateRecipe(recipe: Recipe, key: string) {
-    // console.log('recip: ', recipe, ' key: ', key);
     this.recipeList.update(key, { ...recipe });
   }
-
-  // deleteRecipe(index: number) {
-  //   this.recipes.splice(index, 1);
-  //   this.recipesChanged.next(this.recipes.slice());
-  // }
 
   deleteRecipeByKey(key: string) {
     this.fb.database.ref(`recipes`).child(key).remove();
   }
 
-  fetchRecipes() {
-    this.recipeList = this.fb.list('recipes');
+  fetchRecipes(limit?: number) {
+    this.recipeList = this.fb.list('recipes', (ref) => {
+      if (limit) {
+        return ref.limitToFirst(limit);
+      }
+      return ref;
+    });
     this.recipes$ = this.recipeList.snapshotChanges().pipe(
       map((changes) =>
         changes.map((c) => {
-          // console.log('recipe changed: ', c);
           return { key: c.payload.key, ...c.payload.val() };
         })
       ),
-      // tap((recipes: Recipe[]) => {})
-      // switchMap((recipes: Recipe[]) => {
-      //   recipes.filter(r => {})
-      //   console.log('recipe: ', recipe);
-      //   // console.log('%c recipes! ', 'background: #222; color: #bada55', recipes);
-      //   // this.setRecipes(rec);
-      //   // this.recipes = recipes;
-      //   // this.recipeBehaveSubj.next(recipes);
-      //   // return recipe;
-      //   return recipe.addedBy === 'kerri';
-      // }),
       tap((recipes: Recipe[]) => {
-        // console.log('%c recipes! ', 'background: #222; color: #bada55', recipes);
-        // const _recipes = recipes.filter((r) => r.addedBy === 'Kerri');
-
-        // this.setRecipes(_recipes);
-        // console.log('orig arr: ', recipes);
         this.recipes = recipes;
         this.recipeBehaveSubj.next(recipes);
       })
@@ -116,29 +90,12 @@ export class RecipeService {
   }
 
   setNote(recipeId: string, note: any, userName: string, userId: string) {
-    // console.log('set note: ', recipeId, userName);
     const recipeNote = { note: note, user: userName, userId: userId, date: Date.now() };
     const notesRef = this.fb.database.ref('recipeNotes').child(recipeId).push(recipeNote);
   }
 
   fetchRecipeNotes(recipeId: string) {
     return this.fb.database.ref('recipeNotes').child(recipeId).once('value');
-    // this.recipeNotes = this.fb.list('recipes');
-    // this.recipes$ = this.recipeNotes.snapshotChanges().pipe(
-    //   map((changes) =>
-    //     changes.map((c) => {
-    //       // console.log('recipe changed: ', c);
-    //       return { key: c.payload.key, ...c.payload.val() };
-    //     })
-    //   ),
-    //   tap((recipes: Recipe[]) => {
-    //     // console.log('%c recipes! ', 'background: #222; color: #bada55', recipes);
-    //     // this.setRecipes(rec);
-    //     this.recipes = recipes;
-    //     this.recipeBehaveSubj.next(recipes);
-    //   })
-    // );
-    // return this.recipes$;
   }
 
   getNotesSub(key: string) {
@@ -162,9 +119,7 @@ export class RecipeService {
   }
 
   updateNote(text: string, noteId: string, recipeId: string) {
-    // console.log('update: ');
     this.fb.database.ref(`recipeNotes/${recipeId}`).child(noteId).update({ note: text });
-    // this.fb.database.ref(`recipeNotes/${recipeId}`).child(noteId)
   }
 
   // to do: move ingredients to separate key

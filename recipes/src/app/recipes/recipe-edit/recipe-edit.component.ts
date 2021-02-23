@@ -23,6 +23,7 @@ export class RecipeEditComponent implements OnInit {
   recipeForm: FormGroup;
   fileToUpload: File = null;
   recipe: Recipe;
+  readOnly: boolean;
 
   test: any;
   tags: Tag[] = [
@@ -51,6 +52,7 @@ export class RecipeEditComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.readOnly = this.auth.readOnly.getValue();
     this.route.params.subscribe((params) => {
       this.selectedRecipeId = params['id'];
       this.editMode = !!params['id'];
@@ -85,8 +87,10 @@ export class RecipeEditComponent implements OnInit {
       }
     } else {
       this.recipe = new Recipe();
-      this.recipe.addedBy = this.auth.user.value.name;
-      this.recipe.userId = this.auth.user.value.id;
+      if (!this.readOnly) {
+        this.recipe.addedBy = this.auth.user.value.name;
+        this.recipe.userId = this.auth.user.value.id;
+      }
     }
 
     this.recipeForm = new FormGroup({
@@ -112,7 +116,7 @@ export class RecipeEditComponent implements OnInit {
   }
 
   onSubmit() {
-    if (!this.recipeForm.valid) {
+    if (!this.recipeForm.valid || this.readOnly) {
       console.log('form not valid ', this.recipeForm);
       return;
     }

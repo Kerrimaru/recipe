@@ -12,7 +12,10 @@ import { map } from 'rxjs/operators';
 // import { User } from '../auth/user.model';
 import { RecipeListComponent } from './recipe-list/recipe-list.component';
 
-const redirectLoggedInToRecipes = () => map((user) => (!user ? ['login'] : true));
+const redirectLoggedInToRecipes = () =>
+  map((user) => {
+    return !user ? ['recipes'] : true;
+  });
 
 const routes: Routes = [
   {

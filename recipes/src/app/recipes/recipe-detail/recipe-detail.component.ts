@@ -31,7 +31,8 @@ export class RecipeDetailComponent implements OnInit, AfterViewInit {
   recSub: any;
   user: any;
   userSub: any;
-  showActions = false;
+  showEdit = false;
+  showDelete = !environment.production;
   isFavourite: boolean;
 
   datesMade: any[] = [];
@@ -40,6 +41,7 @@ export class RecipeDetailComponent implements OnInit, AfterViewInit {
   notes: Note[] = [];
   noteInput: string;
   editNoteIndex: number;
+  readOnly: boolean;
 
   @ViewChild('recipeRef', { static: false }) recipeElRef: ElementRef;
 
@@ -53,12 +55,14 @@ export class RecipeDetailComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.user = this.authService.user.getValue();
+    this.readOnly = this.authService.readOnly.getValue();
+
     // console.log('user: ', this.user);
     // window.scrollTo({ top: 0, behavior: 'smooth' });
     // this is disabled for now
     if (this.recipeInput) {
       this.recipe = this.recipeInput;
-      this.showActions = !environment.production || this.recipe.userId === this.user.userId;
+      this.showEdit = !environment.production || this.recipe.userId === this.user.id;
     } else {
       this.route.params.subscribe((params) => {
         this.recipeKey = params['id'];
@@ -107,7 +111,7 @@ export class RecipeDetailComponent implements OnInit, AfterViewInit {
               .subscribe();
 
             this.isFavourite = this.settingsService.favourites.includes(this.recipeKey);
-            this.showActions = !environment.production || this.recipe.userId === this.user.userId;
+            this.showEdit = !environment.production || this.recipe.userId === this.user.id;
           });
       });
     }
@@ -129,6 +133,9 @@ export class RecipeDetailComponent implements OnInit, AfterViewInit {
 
   favourite() {
     this.isFavourite = !this.isFavourite;
+    if (this.readOnly) {
+      return;
+    }
     this.settingsService.toggleFavourite(this.recipeKey);
   }
 
@@ -137,6 +144,9 @@ export class RecipeDetailComponent implements OnInit, AfterViewInit {
   }
 
   deleteRecipe() {
+    if (this.readOnly) {
+      return;
+    }
     window.alert('you fool! ive disabled delete for now until you implement a proper alert');
     // this.recipeService.deleteRecipeByKey(this.recipeKey);
     this.router.navigate(['/']);
@@ -162,6 +172,9 @@ export class RecipeDetailComponent implements OnInit, AfterViewInit {
   }
 
   deleteNote(noteId: string) {
+    if (this.readOnly) {
+      return;
+    }
     this.recipeService.deleteNote(noteId, this.recipe.key);
   }
 
@@ -173,7 +186,7 @@ export class RecipeDetailComponent implements OnInit, AfterViewInit {
     e.blur();
     this.editNoteIndex = null;
     const newNote = e.innerHTML;
-    if (!newNote || (!!note && newNote === note.note)) {
+    if (!newNote || (!!note && newNote === note.note) || this.readOnly) {
       return;
     }
     if (note) {
@@ -188,6 +201,9 @@ export class RecipeDetailComponent implements OnInit, AfterViewInit {
   }
 
   onDateChange(event) {
+    if (this.readOnly) {
+      return;
+    }
     const timestamp = event.getTime();
     this.dateInput = null;
     this.recipeService.setUserDateMade(this.user.id, this.recipe.key, timestamp);
