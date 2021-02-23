@@ -1,12 +1,13 @@
 import { Component, OnInit, EventEmitter, Output, OnDestroy } from '@angular/core';
 import { DataStorageService } from '../shared/data-storage.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { AuthService } from '../auth/auth.service';
 import { Subscription } from 'rxjs';
 import { User } from '../auth/user.model';
 import { HostBinding } from '@angular/core';
 import { HostListener } from '@angular/core';
 import { UserSettingsService } from '../settings/user-settings.service';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-header',
@@ -18,7 +19,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private dataStorageService: DataStorageService,
     private route: ActivatedRoute,
     private authService: AuthService,
-    private settingsService: UserSettingsService
+    private settingsService: UserSettingsService,
+    private router: Router
   ) {}
 
   login = true;
@@ -30,6 +32,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   // height: number = window.innerHeight;
   mobileWidth = 760;
   collapse = false;
+  hideHeader: boolean;
 
   logos = [
     'tools-logo',
@@ -75,10 +78,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    // this.hideHeader = this.router.url.valueOf() === '/login' ? true : false;
+    // this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((e: NavigationEnd) => {
+    //   this.hideHeader = e.url === '/login' ? true : false;
+    //   // this.loading = false;
+    // });
+
     this.isMobile = this.width < this.mobileWidth;
     this.userSub = this.authService.user.subscribe((user) => {
+      console.log('header user change: ', user);
       this.user = user;
-      // console.log('user in header: ', user);
       this.isAuth = !!user;
     });
 
@@ -101,7 +110,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   onFetchData() {
-    this.dataStorageService.fetchRecipes().subscribe();
+    // this.dataStorageService.fetchRecipes().subscribe();
   }
 
   logout() {

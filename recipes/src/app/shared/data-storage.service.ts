@@ -23,7 +23,6 @@ export class DataStorageService {
   // }
 
   createRecipe(recipe: Recipe) {
-    debugger;
     return;
     recipe.addedBy = this.authService.user.value.name;
     // const recipes = this.recipeService.getRecipes();
@@ -33,36 +32,27 @@ export class DataStorageService {
   }
 
   editRecipe(recipeId: string, recipe: Recipe) {
-    debugger;
     return;
-    console.log('id; ', recipeId, ' recipe : ', recipe);
     this.http
       .put(`https://kerr-recipe.firebaseio.com/recipes/${recipeId}.json`, recipe)
       .subscribe((res) => console.log('res: ', res));
   }
 
   fetchRecipes() {
-    debugger;
     return;
-    return this.http.get('https://kerr-recipe.firebaseio.com/recipes.json').pipe(
-      takeWhile((recipes) => !!recipes),
-      map((recipes) => {
-        const recipeArray = Object.entries(recipes).map((e) => {
-          return Object.assign(e[1], { id: e[0] });
-        });
-        return recipeArray.map((recipe) => {
-          return { ...recipe, ingredients: recipe.ingredients ? recipe.ingredients : [] };
-        });
-      }),
-      tap((recipes) => {
-        // this.recipeService.setRecipes(recipes);
-      })
-    );
-
-    // .pipe(
-
+    // return this.http.get('https://kerr-recipe.firebaseio.com/recipes.json').pipe(
+    //   takeWhile((recipes) => !!recipes),
+    //   map((recipes) => {
+    //     const recipeArray = Object.entries(recipes).map((e) => {
+    //       return Object.assign(e[1], { id: e[0] });
+    //     });
+    //     return recipeArray.map((recipe) => {
+    //       return { ...recipe, ingredients: recipe.ingredients ? recipe.ingredients : [] };
+    //     });
+    //   }),
+    //   tap((recipes) => {
+    //     // this.recipeService.setRecipes(recipes);
+    //   })
     // );
-    // .subscribe((res) => {
-    // });
   }
 }

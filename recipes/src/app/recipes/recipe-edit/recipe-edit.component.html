@@ -114,10 +114,12 @@
     <button type="button" class="btn btn-secondary show" (click)="onCancel()">Cancel</button>
     <button
       [ngClass]="{ hide: !recipeForm.dirty }"
-      [disabled]="!recipeForm.valid"
       type="submit"
       class="btn btn-primary"
       (click)="onSubmit()"
+      [matTooltip]="
+        readOnly ? 'Please create an accout to add recipes' : !recipeForm.valid ? 'Please fill in all fields' : ''
+      "
     >
       Save
     </button>

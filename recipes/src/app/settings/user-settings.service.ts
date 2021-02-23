@@ -2,9 +2,10 @@ import { Reference } from '@angular/compiler/src/render3/r3_ast';
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFireDatabase, AngularFireList } from '@angular/fire/database';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs';
 import { map } from 'rxjs/internal/operators/map';
 import { tap } from 'rxjs/internal/operators/tap';
+import { take } from 'rxjs/operators';
 import { UserSettings } from '../auth/user.model';
 
 @Injectable({
@@ -60,11 +61,11 @@ export class UserSettingsService {
       // console.log('fecth user setting');
       this.userSettings = snapshot.val();
       // this.getFavourites(userId);
-      this.fetchFavsList(userId);
+      return this.fetchFavsList(userId);
     });
   }
 
-  fetchFavsList(userId) {
+  fetchFavsList(userId): Subscription {
     // console.log('fecth fav list');
     this.favsRef = this.fb.database.ref(`userSettings/${userId}/favourites`);
     this.favouritesList = this.fb.list(`userSettings/${userId}/favourites`);
@@ -72,13 +73,15 @@ export class UserSettingsService {
       .snapshotChanges()
       .pipe(
         map((changes) => {
-          // console.log('fecth fav list');
+          console.log('fecth fav list', changes);
           return changes.map((c) => c.payload.key);
-        })
+        }),
+        take(1)
       )
       .subscribe((res) => {
         // console.log('fecth fav list');
         this.favourites = res;
+        console.log('favs res: ', res);
         this.favs$.next(res);
       });
   }
