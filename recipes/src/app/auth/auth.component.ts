@@ -3,6 +3,7 @@ import { NgForm } from '@angular/forms';
 import { AuthService } from './auth.service';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { DialogService } from '../shared/dialog/dialog.service';
 
 @Component({
   selector: 'app-auth',
@@ -10,12 +11,23 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrls: ['./auth.component.scss'],
 })
 export class AuthComponent implements OnInit {
-  constructor(private authService: AuthService, private router: Router, private snackBar: MatSnackBar) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private snackBar: MatSnackBar,
+    private dialog: DialogService
+  ) {}
 
   isLogin = true;
   loading = false;
+  isSignup: boolean; // if only signup, no login offered
 
-  ngOnInit() {}
+  ngOnInit() {
+    if (this.dialog.dialogData) {
+      this.isSignup = this.dialog.dialogData.signup;
+      this.isLogin = false;
+    }
+  }
 
   toggleLogin() {
     this.isLogin = !this.isLogin;
@@ -42,6 +54,9 @@ export class AuthComponent implements OnInit {
       if (typeof res === 'string') {
         return this.openSnackBar(res);
       }
+      if (this.dialog.dialogData) {
+        this.dialog.close(name);
+      }
       this.router.navigate(['/recipes'], { queryParams: params, state: { data: data } });
     });
     // form.reset();
@@ -60,7 +75,7 @@ export class AuthComponent implements OnInit {
       if (res === 'success') {
         this.router.navigate(['/recipes'], { queryParams: { notify: 'guest' } });
       } else {
-        this.snackBar.open(res);
+        this.openSnackBar(res);
       }
     });
   }

@@ -76,11 +76,11 @@ export class RecipeService {
       return ref;
     });
     this.recipes$ = this.recipeList.snapshotChanges().pipe(
-      map((changes) =>
-        changes.map((c) => {
+      map((changes) => {
+        return changes.map((c) => {
           return { key: c.payload.key, ...c.payload.val() };
-        })
-      ),
+        });
+      }),
       tap((recipes: Recipe[]) => {
         this.recipes = recipes;
         this.recipeBehaveSubj.next(recipes);

@@ -10,7 +10,6 @@ export class DataStorageService {
   constructor(private http: HttpClient, private recipeService: RecipeService, private authService: AuthService) {}
   // this.userSub = this.authService.user.subscribe((user) => {
   //   this.user = user;
-  //   console.log('user in header: ', user);
   //   this.isAuth = !!user;
   // });
   userName: string;

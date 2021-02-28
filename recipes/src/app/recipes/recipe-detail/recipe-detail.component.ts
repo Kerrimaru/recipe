@@ -179,7 +179,7 @@ export class RecipeDetailComponent implements OnInit, AfterViewInit {
   }
 
   deleteDate(e) {
-    console.log('delte Date, ', e);
+    // console.log('delte Date, ', e);
   }
 
   saveNote(e: HTMLElement, note?: Note) {

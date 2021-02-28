@@ -21,7 +21,6 @@ export class AlertComponent implements OnInit {
   constructor(private dialog: DialogService, public mdDialogRef: MatDialogRef<AlertComponent>) {}
 
   ngOnInit(): void {
-    console.log('a;ertt data: ', this.data);
     this.imageUrl = this.data.image ? '/assets/images/' + this.data.image : null;
     if (typeof this.data.lines === 'string') {
       this.lines = [this.data.lines];

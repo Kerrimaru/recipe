@@ -15,14 +15,11 @@ export class TagSelectorComponent implements OnInit {
   ngOnInit() {
     this.tagService.fetchTags().subscribe((tags) => {
       this.tags = tags;
-      console.log('tags: ', tags, this.tags);
     });
   }
 
   createTag() {
-    console.log('user input: ', this.userTag);
     const tag = new Tag(this.userTag);
-    console.log('new tag: ', tag);
     this.tagService.createTag(tag);
   }
 }

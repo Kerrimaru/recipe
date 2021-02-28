@@ -16,21 +16,14 @@ export class RecipesResolverService implements Resolve<Recipe[]> {
   ) {}
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    let recipes = this.recipeService.getRecipes();
     const readOnly = this.authService.readOnly.getValue();
     const id = route.params.id;
 
-    if (!recipes.length) {
-      return this.recipeService.fetchRecipes(readOnly ? 30 : null).pipe(
-        first(),
-        map((res) => {
-          // console.log('res in resolver after fetch: ', res);
-          return res;
-        })
-      );
-    } else {
-      return recipes;
-    }
+    // if (!recipes.length) {
+    return this.recipeService.fetchRecipes(readOnly ? 30 : null).pipe(
+      first(),
+      map((res) => res)
+    );
   }
 }
 

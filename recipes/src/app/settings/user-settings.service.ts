@@ -50,7 +50,7 @@ export class UserSettingsService {
   //   this.favsRef = this.fb.database.ref(`userSettings/${userId}/favourites`);
   //   this.favsRef.on('value', (snapshot) => {
   //     this.favourites = snapshot.val() || [];
-  //     console.log('this.favourites: ', this.favourites, ' vel: ', snapshot.val());
+
   //   });
   // }
 
@@ -73,7 +73,6 @@ export class UserSettingsService {
       .snapshotChanges()
       .pipe(
         map((changes) => {
-          console.log('fecth fav list', changes);
           return changes.map((c) => c.payload.key);
         }),
         take(1)
@@ -81,7 +80,6 @@ export class UserSettingsService {
       .subscribe((res) => {
         // console.log('fecth fav list');
         this.favourites = res;
-        console.log('favs res: ', res);
         this.favs$.next(res);
       });
   }

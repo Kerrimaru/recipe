@@ -38,7 +38,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.userSub = this.authService.user.subscribe((user) => {
-      console.log('this user: ', this.user);
       if (user) {
         this.user = user;
 
@@ -61,7 +60,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
   }
 
   onChange(e) {
-    console.log('e: ', e);
     // this.isChecked = !this.isChecked;
     this.selectedDiet = e.target.name;
   }
