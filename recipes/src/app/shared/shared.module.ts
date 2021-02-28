@@ -24,6 +24,7 @@ import { LottieDirective } from './directives/lottie.directive';
 import { DropdownDirective } from './dropdown.directive';
 import { AlertComponent } from './dialog/alert/alert.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { AuthDialogComponent } from './dialog/auth-dialog/auth-dialog.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     FavouritesPipe,
     LottieDirective,
     AlertComponent,
+    AuthDialogComponent,
   ],
   imports: [
     CommonModule,

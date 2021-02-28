@@ -77,3 +77,8 @@
     [index]="index"
   ></app-recipe-item> 
 --></div>
+<div class="signup-text" *ngIf="readOnly">
+  <p>There's more to see!</p>
+  <button (click)="signup()">create an account</button>
+  <p>for full access</p>
+</div>

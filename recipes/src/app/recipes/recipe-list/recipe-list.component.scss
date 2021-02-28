@@ -250,3 +250,14 @@
 img {
   position: relative;
 }
+
+.signup-text {
+  position: relative;
+  text-align: center;
+  p {
+    margin: 12px;
+  }
+  button {
+    padding: 0 20px;
+  }
+}

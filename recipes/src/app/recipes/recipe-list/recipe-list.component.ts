@@ -13,6 +13,7 @@ import { UserSettingsService } from 'src/app/settings/user-settings.service';
 import { AuthService } from 'src/app/auth/auth.service';
 import { DialogService } from 'src/app/shared/dialog/dialog.service';
 import { User } from 'src/app/auth/user.model';
+import { AuthComponent } from 'src/app/auth/auth.component';
 // import { auth } from 'firebase/app';
 
 @Component({
@@ -34,7 +35,7 @@ export class RecipeListComponent implements OnInit, OnDestroy {
   maxScroll: boolean;
   loading = true;
   filters: string[] = [];
-  readOnly: boolean;
+  readOnly: boolean; // true is signed in as guest
   user: User;
   userSub: Subscription;
 
@@ -64,7 +65,10 @@ export class RecipeListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.userSub = this.authService.user.subscribe((user) => (this.user = user));
+    this.userSub = this.authService.user.subscribe((user) => {
+      this.readOnly = this.authService.readOnly.getValue();
+      this.user = user;
+    });
     const notify = this.route.snapshot.queryParams['notify'];
     if (notify) {
       let title = 'Welcome';
@@ -78,11 +82,9 @@ export class RecipeListComponent implements OnInit, OnDestroy {
         ];
       } else {
         const testy = history.state.data;
-        console.log('histoyy data: ', testy);
         // const user = this.authService.user.getValue();
-        console.log('user ', this.user);
         // const name = localStorage.getItem('userName');
-        console.log('user: ', localStorage.getItem('userName'));
+        // console.log('user: ', localStorage.getItem('userName'));
         if (!!testy && !!testy.name) {
           title += ', ' + testy.name;
         }
@@ -97,7 +99,7 @@ export class RecipeListComponent implements OnInit, OnDestroy {
         }
       });
     }
-    this.readOnly = this.authService.readOnly.getValue();
+
     this.favsSub = this.settingsService.favs$.subscribe((res) => {
       this.favouritesArr = res;
     });
@@ -117,11 +119,11 @@ export class RecipeListComponent implements OnInit, OnDestroy {
       if (this.isShowFavourites) {
         this.filters.push('favourites');
       }
-      this.allRecipes = recipes;
+      this.allRecipes = [...recipes];
       if (this.filters.length) {
-        this.recipes = this.applyFilters(recipes, this.filters).reverse();
+        this.recipes = this.applyFilters([...recipes], this.filters).reverse();
       } else {
-        this.recipes = recipes.reverse();
+        this.recipes = [...recipes].reverse();
       }
 
       this.loading = false;
@@ -185,5 +187,20 @@ export class RecipeListComponent implements OnInit, OnDestroy {
   randomRecipe() {
     const rec = this.recipes[Math.floor(Math.random() * this.recipes.length)];
     this.router.navigate(['recipes', rec.key]);
+  }
+
+  signup() {
+    const dialogRef = this.dialog.show(AuthComponent, { signup: true }, { panelClass: 'auth-dialog' });
+    const onClose = dialogRef.afterClosed();
+    onClose.subscribe((userName) => {
+      if (!!userName) {
+        this.recipeService.fetchRecipes().subscribe((res) => {
+          // shouldnt need to do this? investigate
+          this.allRecipes = res;
+          this.recipes = res.reverse();
+        });
+        // show welcome message
+      }
+    });
   }
 }

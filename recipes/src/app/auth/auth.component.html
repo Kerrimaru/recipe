@@ -1,5 +1,5 @@
-<div class="auth-container">
-  <div class="form-container">
+<div class="auth-container" [ngStyle]="{ 'margin-top': isSignup ? 0 : '20px' }">
+  <div class="form-container" [ngClass]="{ dialog: isSignup }">
     <div class="loading" [ngClass]="{ show: loading }">
       <app-loading></app-loading>
     </div>
@@ -44,7 +44,7 @@
       </div>
 
       <div class="actions">
-        <button type="button" class="btn-left" (click)="toggleLogin()">
+        <button type="button" class="btn-left" (click)="toggleLogin()" *ngIf="!isSignup">
           Go to {{ !isLogin ? 'login' : 'sign up' }}
         </button>
         <button type="submit" class="btn-right">
@@ -55,7 +55,7 @@
   </div>
 </div>
 
-<div class="guest-sign-in">
+<div class="guest-sign-in" *ngIf="!isSignup">
   <p>Just looking?</p>
   <button type="button" (click)="signInGuest()">Sign in as a guest</button>
 </div>

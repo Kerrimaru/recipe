@@ -68,7 +68,6 @@ export class RecipeEditComponent implements OnInit {
       this.recipe = this.recipeService.getRecipeByKey(this.selectedRecipeId);
       if (this.recipe.tags) {
         this.recipe.tags.forEach((t) => {
-          console.log('t: ', t);
           const tag = this.tags.find((tag) => tag.name === t);
           if (tag) {
             tag.selected = true;
@@ -111,13 +110,11 @@ export class RecipeEditComponent implements OnInit {
   }
 
   drop(event: CdkDragDrop<string[]>) {
-    console.log(this.ingredientControls);
     moveItemInArray(this.ingredientControls, event.previousIndex, event.currentIndex);
   }
 
   onSubmit() {
     if (!this.recipeForm.valid || this.readOnly) {
-      console.log('form not valid ', this.recipeForm);
       return;
     }
 
@@ -131,7 +128,6 @@ export class RecipeEditComponent implements OnInit {
       tags: tagsList,
     });
 
-    console.log('_recipe: ', _recipe);
     if (this.editMode) {
       this.recipeService.updateRecipe(_recipe, this.recipe.key);
       this.onCancel();

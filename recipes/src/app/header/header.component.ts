@@ -86,14 +86,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     this.isMobile = this.width < this.mobileWidth;
     this.userSub = this.authService.user.subscribe((user) => {
-      console.log('header user change: ', user);
       this.user = user;
       this.isAuth = !!user;
     });
 
     this.route.url.subscribe((params) => {
       this.login = params['login'];
-      console.log('params in header: ', params);
     });
   }
 
@@ -121,16 +119,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
     if (!this.isMobile) {
       return;
     }
-    console.log('click');
+
     this.headerExpanded = !this.headerExpanded;
   }
 
   toggleFilter(filter: string, enabled: boolean) {
-    console.log('toggle : ', filter, enabled);
     if (enabled) {
       this.settingsService.setFilters(filter);
     } else {
-      console.log('remove this filter pleae');
       this.settingsService.filters = [];
     }
   }

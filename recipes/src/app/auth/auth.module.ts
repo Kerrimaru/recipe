@@ -9,10 +9,8 @@ const redirectUnauthToLogin = () =>
   map((user) => {
     // console.log('user in routing: ', user);
     if (user) {
-      console.log('login');
       return [''];
     } else {
-      console.log('empty');
       return true;
     }
     // return !user ? ['login'] : [''];
