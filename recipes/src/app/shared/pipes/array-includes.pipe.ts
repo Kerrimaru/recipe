@@ -5,7 +5,6 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class ArrayIncludesPipe implements PipeTransform {
   transform(value: any, array: any[], key?: string): any {
-    console.log('val: ', value, ' arr: ', array, ' key: ', key);
     if (!value || !array || !array.length) {
       return;
     }

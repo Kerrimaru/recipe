@@ -20,21 +20,22 @@ export class DialogService {
     const dialogRef = this.mdDialog.open(component, config);
 
     this.current = dialogRef;
-    // this.dialogStack.push(dialogRef);
+    this.dialogStack.push(dialogRef);
 
-    // const ob = dialogRef.afterClosed();
+    const ob = dialogRef.afterClosed();
 
-    // // remove dialog from stack when closed
-    // ob.subscribe(() => {
-    //   if (this.dialogStack.length === 1) {
-    //     this.dialogStack = [];
-    //     this.current = null;
-    //   } else {
-    //     // const index = this.dialogStack.indexOf(dialogRef);
-    //     // _.remove(this.dialogStack, dialogRef);
-    //     // this.current = _.last(this.dialogStack);
-    //   }
-    // });
+    // remove dialog from stack when closed
+    ob.subscribe(() => {
+      if (this.dialogStack.length === 1) {
+        this.dialogStack = [];
+        this.current = null;
+        this.dialogData = null;
+      } else {
+        const index = this.dialogStack.indexOf(dialogRef);
+        this.dialogStack.splice(index, 1);
+        this.current = this.dialogStack[this.dialogStack.length - 1];
+      }
+    });
 
     return dialogRef;
   }
@@ -45,10 +46,10 @@ export class DialogService {
    */
   close(result?: any) {
     this.current.close(result);
+    this.dialogData = null;
   }
 
   simple(data?: { title?: string; lines?: string[] | string; actions?: any[]; css?: string[] }): Observable<any> {
-    console.log('data in service: ', data);
     const dialog = this.show(AlertComponent, data, {
       disableClose: true,
     });
