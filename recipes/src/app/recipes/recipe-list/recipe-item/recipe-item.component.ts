@@ -39,8 +39,7 @@ export class RecipeItemComponent implements OnInit {
   }
 
   scroll() {
-    // this.flipped = !this.flipped; // testing
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   swipe(e) {
