@@ -6,10 +6,6 @@
 }
 
 h2 {
-  // font-family: 'BodoniItal';
-  // font-style: italic;
-  // font-weight: bold;
-  // font-family: 'BodoniBold';
   font-family: 'Rosario';
   letter-spacing: 1.2px;
   margin: 40px 0 20px 0;
@@ -66,12 +62,14 @@ h2:first {
 #ingredient-list {
   ul {
     padding-left: 10px;
+    list-style-type: disc;
   }
   li {
     border: none;
     padding: 0;
-    margin: 8px;
-    display: flex;
+    margin: 10px;
+    // display: flex;
+    display: list-item;
   }
 }
 
@@ -353,9 +351,28 @@ mat-accordion .mat-expansion-panel:not(.mat-expanded),
   }
 }
 
-// mobile
+.tooltip-red {
+  background: #b71c1c;
+}
+
+.note-edit-input {
+  cursor: pointer;
+}
+
+// smaller screens
 @media (max-width: 800px) {
+  .recipe-details {
+    border: none;
+    box-shadow: none;
+  }
+  .rec-header {
+    position: unset;
+  }
+  .hide-sm {
+    display: none;
+  }
   .section {
+    padding: 0;
     flex-direction: column-reverse;
     .column {
       width: 100%;
@@ -368,12 +385,4 @@ mat-accordion .mat-expansion-panel:not(.mat-expanded),
   .actions {
     display: none;
   }
-}
-
-.tooltip-red {
-  background: #b71c1c;
-}
-
-.note-edit-input {
-  cursor: pointer;
 }

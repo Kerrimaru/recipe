@@ -11,13 +11,13 @@
     <div class="rec-front" routerLinkActive="active" (click)="scroll()">
       <h4 class="title">{{ recipe.name | title }}</h4>
     </div>
-    <div class="recipe-back" *ngIf="isMobile">
-      <div *ngFor="let ing of recipe.ingredients" class="ingredient">
-        <label>
+    <div class="recipe-back" *ngIf="isMobile && flipped">
+      <ul>
+        <li *ngFor="let ing of recipe.ingredients" class="ingredient">
           <input type="checkbox" />
           {{ ing }}
-        </label>
-      </div>
+        </li>
+      </ul>
     </div>
   </div>
 
