@@ -3,7 +3,7 @@
     <div class="rec-title">
       <h1>{{ recipe.name | title }}</h1>
 
-      <div *ngIf="recipe.addedBy" class="added-cont">
+      <div *ngIf="recipe.addedBy" class="added-cont hide-sm">
         <p>Added by {{ recipe.addedBy }}</p>
         <ng-container *ngIf="recipe.created">
           <p [style.font-style]="'italic'">
@@ -28,7 +28,7 @@
         <h2 id="ingredients-title">Ingredients</h2>
         <ul class="list-group" *ngIf="recipe.ingredients?.length">
           <li *ngFor="let ing of recipe.ingredients" class="list-group-item">
-            <div><img src="assets/images/svg/fancy-tilda.svg" class="tilda" /></div>
+            <!-- <div><img src="assets/images/svg/fancy-tilda.svg" class="tilda" /></div> -->
             {{ ing }}
           </li>
         </ul>

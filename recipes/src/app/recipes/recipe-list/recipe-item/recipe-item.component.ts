@@ -18,7 +18,7 @@ export class RecipeItemComponent implements OnInit {
   @Output() favouriteEmitter = new EventEmitter<string>();
 
   flipped = false;
-  expanded = false;
+  // expanded = false;
   isNew = false; // set to true if added date within 1 week
   isMobile: boolean;
   width: number = window.innerWidth;
@@ -47,11 +47,12 @@ export class RecipeItemComponent implements OnInit {
     if (!this.isMobile) {
       return;
     }
+    // console.log('swipe event: ', e);
     this.flipped = !this.flipped;
   }
 
   expand() {
-    this.expanded = true;
+    // this.expanded = true;
   }
 
   favourite(e: MouseEvent) {
