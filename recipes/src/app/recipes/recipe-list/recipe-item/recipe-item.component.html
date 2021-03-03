@@ -1,6 +1,11 @@
-<div class="recipe-item" (swipe)="swipe($event.type)" [ngClass]="{ flipped: flipped }" [routerLink]="recipe.key">
+<div
+  class="recipe-item"
+  (swipe)="swipe($event.type)"
+  [ngClass]="{ flipped: flipped }"
+  [routerLink]="flipped ? null : recipe.key"
+>
   <img [src]="recipe.imagePath" alt="{{ recipe.name }}" class="recipe-img" />
-  <div *ngIf="isNew" class="new-recipe-cont">
+  <div *ngIf="isNew && !flipped" class="new-recipe-cont">
     <!-- <div class="ribbon ribbon-top-left"><span>ribbon</span></div> -->
 
     <img src="assets/images/icons/new-plate.png" alt="'new recipe added'" class="new-icon" />
@@ -14,8 +19,10 @@
     <div class="recipe-back" *ngIf="isMobile && flipped">
       <ul>
         <li *ngFor="let ing of recipe.ingredients" class="ingredient">
-          <input type="checkbox" />
-          {{ ing }}
+          <label>
+            <input type="checkbox" />
+            {{ ing }}
+          </label>
         </li>
       </ul>
     </div>
@@ -36,7 +43,7 @@
   </div> -->
   <div class="favourite-container">
     <div
-      *ngIf="showFavouriteIcon"
+      *ngIf="showFavouriteIcon && !flipped"
       class="fav-lottie"
       [appLottie]="'heart-like'"
       [autoplay]="false"
