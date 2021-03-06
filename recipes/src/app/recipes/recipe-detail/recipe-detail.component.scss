@@ -8,11 +8,97 @@
 h2 {
   font-family: 'Rosario';
   letter-spacing: 1.2px;
-  margin: 40px 0 20px 0;
+  // margin: 40px 0 20px 0;
+  display: flex;
 }
 
 h2:first {
-  margin-top: 0;
+  // margin-top: 0;
+}
+.material-icons.show-less {
+  transform: rotate(-180deg);
+}
+
+.expand {
+  font-size: 36px;
+  margin-top: -3px;
+  color: rgba(0, 0, 0, 0.54);
+  cursor: pointer;
+}
+
+.list-group {
+  overflow: hidden;
+  // border: 1px solid blue;
+  display: flex;
+  flex-direction: column;
+}
+
+#ingredient-list {
+  overflow: hidden;
+  // border: 1px solid green;
+  display: flex;
+  flex-direction: column;
+}
+
+#ingredient-list.hide {
+  .list-group {
+    flex: 0;
+    transition: all 0.5s ease-out;
+    // max-height: 0px;
+    opacity: 1;
+    // animation: hide 1s;
+    // animation-fill-mode: forwards;
+    // opacity: 0;
+  }
+}
+
+#ingredient-list.show {
+  .list-group {
+    height: auto;
+    flex: 1;
+    transition: all 0.5s ease-in;
+    // max-height: 1000px;
+    // opacity: 1;
+    opacity: 1;
+    // animation: show 1s;
+    // animation-fill-mode: forwards;
+  }
+}
+
+.show {
+  // opacity: 1;
+  // animation: show 1s;
+  // animation-fill-mode: forwards;
+}
+
+.hide {
+  // opacity: 1;
+  // animation: hide 1s;
+  // animation-fill-mode: forwards;
+}
+
+@keyframes show {
+  from {
+    height: 0px;
+    width: 0px;
+    // width: 0px;
+  }
+  to {
+    height: 100%;
+    width: 100%;
+    // width: 100%;
+  }
+}
+
+@keyframes hide {
+  from {
+    height: auto;
+    // width: 100%;
+  }
+  to {
+    height: 0;
+    // width: 0px;
+  }
 }
 
 .rec-header {
@@ -59,24 +145,27 @@ h2:first {
   margin-top: 0;
 }
 
-#ingredient-list {
-  ul {
-    padding-left: 10px;
-    list-style-type: disc;
-  }
-  li {
-    border: none;
-    padding: 0;
-    margin: 10px;
-    // display: flex;
-    display: list-item;
-  }
+mat-expansion-panel.main-section-mep {
+  box-shadow: none;
+}
+
+ul#ingredient-list {
+  padding-left: 10px;
+  list-style-type: disc;
+}
+li {
+  border: none;
+  padding: 0;
+  margin: 5px;
+  // display: flex;
+  display: list-item;
 }
 
 .section {
   position: relative;
   padding: 0 20px 20px;
   display: flex;
+  // overflow: hidden;
   // margin: 20px auto;
 }
 
@@ -99,6 +188,7 @@ h2:first {
 .column-right {
   // position: relative;
   // height: 100%;
+  overflow: hidden;
   position: sticky;
   top: 155px;
   align-self: flex-start;
@@ -301,7 +391,7 @@ h2:first {
 
 mat-accordion .mat-expansion-panel:not(.mat-expanded),
 .mat-accordion .mat-expansion-panel:not(.mat-expansion-panel-spacing) {
-  margin-top: 10px;
+  // margin-top: 10px;
 }
 
 .note-actions {
@@ -361,6 +451,9 @@ mat-accordion .mat-expansion-panel:not(.mat-expanded),
 
 // smaller screens
 @media (max-width: 800px) {
+  .rec-title h1 {
+    font-size: 30px;
+  }
   .recipe-details {
     border: none;
     box-shadow: none;

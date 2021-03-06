@@ -34,6 +34,8 @@ export class RecipeDetailComponent implements OnInit, AfterViewInit {
   showEdit = false;
   showDelete = !environment.production;
   isFavourite: boolean;
+  ingExpanded = true;
+  methExpanded = true;
 
   datesMade: any[] = [];
   dateInput: any;
