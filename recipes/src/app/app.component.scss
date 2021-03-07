@@ -4,14 +4,15 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
-.main-content {
-  padding: 25px 50px;
-}
+// .main-content {
+//   padding: 25px 50px;
+// }
 
-@media (max-width: 800px) {
-  .main-content {
-    padding: 0px;
-  }
-}
+// @media (max-width: 800px) {
+//   .main-content {
+//     padding: 0px;
+//   }
+// }

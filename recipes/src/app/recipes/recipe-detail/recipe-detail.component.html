@@ -24,19 +24,62 @@
 
   <div class="section">
     <div class="column column-left">
-      <div id="ingredient-list">
-        <h2 id="ingredients-title">Ingredients</h2>
-        <ul class="list-group" *ngIf="recipe.ingredients?.length">
+      <mat-expansion-panel expanded="true" class="main-section-mep">
+        <mat-expansion-panel-header>
+          <mat-panel-title><h2 id="ingredients-title">Ingredients</h2></mat-panel-title>
+        </mat-expansion-panel-header>
+        <ul
+          class="list-group"
+          id="ingredient-list"
+          [ngClass]="ingExpanded ? 'show' : 'hide'"
+          *ngIf="recipe.ingredients?.length"
+        >
           <li *ngFor="let ing of recipe.ingredients" class="list-group-item">
-            <!-- <div><img src="assets/images/svg/fancy-tilda.svg" class="tilda" /></div> -->
             {{ ing }}
           </li>
         </ul>
-      </div>
-      <div id="method">
-        <h2>Method</h2>
+      </mat-expansion-panel>
+
+      <!-- test end -->
+
+      <!-- <div id="ingredient-list" [ngClass]="ingExpanded ? 'show' : 'hide'">
+        <h2 id="ingredients-title">
+          Ingredients
+          <span
+            class="material-icons expand {{ ingExpanded ? 'show-less' : 'show-more' }}"
+            (click)="ingExpanded = !ingExpanded"
+          >
+            expand_more
+          </span>
+        </h2>
+        <ul class="list-group" [ngClass]="ingExpanded ? 'show' : 'hide'" *ngIf="recipe.ingredients?.length">
+          <li *ngFor="let ing of recipe.ingredients" class="list-group-item">
+             <div><img src="assets/images/svg/fancy-tilda.svg" class="tilda" /></div> 
+            {{ ing }}
+          </li>
+        </ul>
+      </div> -->
+
+      <mat-expansion-panel expanded="true" class="main-section-mep">
+        <mat-expansion-panel-header>
+          <mat-panel-title><h2>Method</h2></mat-panel-title>
+        </mat-expansion-panel-header>
         <div [innerHtml]="recipe.description" class="desc"></div>
-      </div>
+      </mat-expansion-panel>
+
+      <!-- test2 end -->
+      <!-- <div id="method">
+        <h2>
+          Method
+          <span
+            class="material-icons expand {{ methExpanded ? 'show-less' : 'show-more' }}"
+            (click)="methExpanded = !methExpanded"
+          >
+            expand_more
+          </span>
+        </h2>
+        <div [innerHtml]="recipe.description" class="desc"></div>
+      </div> -->
 
       <div class="notes">
         <mat-accordion class="example-headers-align" multi>
