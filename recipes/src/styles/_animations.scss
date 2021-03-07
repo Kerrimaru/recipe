@@ -9,6 +9,17 @@
   }
 }
 
+@keyframes growPercent {
+  from {
+    height: 0px;
+    // width: 0px;
+  }
+  to {
+    height: 100%;
+    // width: 100%;
+  }
+}
+
 @keyframes shrink {
   from {
     height: 100%;

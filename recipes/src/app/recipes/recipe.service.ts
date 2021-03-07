@@ -65,7 +65,13 @@ export class RecipeService {
   }
 
   deleteRecipeByKey(key: string) {
-    this.fb.database.ref(`recipes`).child(key).remove();
+    return this.fb.database
+      .ref(`recipes`)
+      .child(key)
+      .remove()
+      .then((r) => {
+        this.deleteAllNotes(key);
+      });
   }
 
   fetchRecipes(limit?: number) {
@@ -112,6 +118,11 @@ export class RecipeService {
 
   setUserDateMade(userId: string, recipeId: string, date: string) {
     this.fb.database.ref('userDateMade').child(userId).child(recipeId).push(date);
+  }
+
+  // delete all notes asscociated with recipe when recipe deleted
+  deleteAllNotes(recipeId: string) {
+    this.fb.database.ref(`recipeNotes/${recipeId}`).remove();
   }
 
   deleteNote(noteId: string, recipeId: string) {

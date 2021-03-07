@@ -7,6 +7,8 @@ import { environment } from '../../../environments/environment';
 import { UserSettingsService } from 'src/app/settings/user-settings.service';
 import { map } from 'rxjs/operators';
 import { MatAccordion } from '@angular/material/expansion';
+import { DialogService } from 'src/app/shared/dialog/dialog.service';
+import { Observable } from 'rxjs';
 
 interface Note {
   id: string;
@@ -34,6 +36,8 @@ export class RecipeDetailComponent implements OnInit, AfterViewInit {
   showEdit = false;
   showDelete = !environment.production;
   isFavourite: boolean;
+  ingExpanded = true;
+  methExpanded = true;
 
   datesMade: any[] = [];
   dateInput: any;
@@ -50,7 +54,8 @@ export class RecipeDetailComponent implements OnInit, AfterViewInit {
     private router: Router,
     private route: ActivatedRoute,
     private authService: AuthService,
-    private settingsService: UserSettingsService
+    private settingsService: UserSettingsService,
+    private dialog: DialogService
   ) {}
 
   ngOnInit(): void {
@@ -65,6 +70,10 @@ export class RecipeDetailComponent implements OnInit, AfterViewInit {
       this.showEdit = !environment.production || this.recipe.userId === this.user.id;
     } else {
       this.route.params.subscribe((params) => {
+        if (environment.production && this.user.id == 'RDN8uluhOqP8aATgV0QxF60yi2F2') {
+          // cheat to allow me to delete recipes, do this properly at some point
+          this.showEdit = true;
+        }
         this.recipeKey = params['id'];
         this.recSub = this.recipeService
           .getRecipeSub(this.recipeKey)
@@ -72,6 +81,7 @@ export class RecipeDetailComponent implements OnInit, AfterViewInit {
           .subscribe((r) => {
             if (!r) {
               this.loading = true;
+              return;
             }
             this.recipe = r;
             // console.log('reecipe: ', r);
@@ -147,9 +157,15 @@ export class RecipeDetailComponent implements OnInit, AfterViewInit {
     if (this.readOnly) {
       return;
     }
-    window.alert('you fool! ive disabled delete for now until you implement a proper alert');
-    // this.recipeService.deleteRecipeByKey(this.recipeKey);
-    this.router.navigate(['/']);
+    this.showConfirm('recipe').subscribe((res) => {
+      console.log('confirm res: ', res);
+      this.recipeService.deleteRecipeByKey(this.recipeKey).then((r) => {
+        this.router.navigate(['/']);
+      });
+    });
+    // window.alert('you fool! ive disabled delete for now until you implement a proper alert');
+    // // this.recipeService.deleteRecipeByKey(this.recipeKey);
+    // this.router.navigate(['/']);
   }
 
   onNoteChange(e) {
@@ -175,10 +191,17 @@ export class RecipeDetailComponent implements OnInit, AfterViewInit {
     if (this.readOnly) {
       return;
     }
-    this.recipeService.deleteNote(noteId, this.recipe.key);
+    this.showConfirm('note').subscribe((res) => {
+      console.log('confirm res: ', res);
+      this.recipeService.deleteNote(noteId, this.recipe.key);
+    });
   }
 
   deleteDate(e) {
+    this.showConfirm('date').subscribe((res) => {
+      console.log('confirm res: ', res);
+      // this.recipeService.deleteNote(noteId, this.recipe.key);
+    });
     // console.log('delte Date, ', e);
   }
 
@@ -207,5 +230,18 @@ export class RecipeDetailComponent implements OnInit, AfterViewInit {
     const timestamp = event.getTime();
     this.dateInput = null;
     this.recipeService.setUserDateMade(this.user.id, this.recipe.key, timestamp);
+  }
+
+  showConfirm(type: string): Observable<any> {
+    const actions: any = [
+      { text: `Delete`, go: 'delete', primary: true },
+      { text: 'Cancel', secondary: true },
+    ];
+
+    return this.dialog.simple({
+      title: 'Are you sure?',
+      lines: `This will permanently delete this ${type}`,
+      actions: actions,
+    });
   }
 }
