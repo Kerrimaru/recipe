@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs/operators';
-import { BehaviorSubject, of, Observable } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
+import { BehaviorSubject, of, Observable, forkJoin } from 'rxjs';
 import { User } from './user.model';
 import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
@@ -40,7 +40,15 @@ export class AuthService {
   private tokenExpirationCountdown: any;
 
   firebaseLogin(email: string, password: string) {
-    return this.firebaseAuth.signInWithEmailAndPassword(email, password).catch((error) => this.mapError(error));
+    return this.firebaseAuth.signInWithEmailAndPassword(email, password).catch((error) => {
+      console.log('erro: ', error);
+      if (error.code === 'auth/user-not-found') {
+        return 'goSignup';
+      } else {
+        return this.mapError(error);
+      }
+    });
+    // this.mapError(error));
   }
 
   firebaseSignup(email: string, password: string, name: string) {
@@ -63,10 +71,10 @@ export class AuthService {
   autoLogin(user) {
     this.handleAuth(user.email, user.uid, user.displayName, user.refreshToken)
       .pipe(
-        map((res) => {
-          this.settingsRef = this.settingsService.fetchUserSettings(res.id);
-        }),
-        map(() => {
+        tap((res) => (this.settingsRef = this.settingsService.fetchUserSettings(res.id))),
+        tap((res) => (this.settingsRef = this.settingsService.fetchFavsList(res.id))),
+        tap((res) => (this.settingsRef = this.settingsService.fetchToDoList(res.id))),
+        tap(() => {
           const readOnly = this.readOnly.getValue();
           return this.recipeService.fetchRecipes(readOnly ? 30 : null);
         })
@@ -133,7 +141,7 @@ export class AuthService {
         errorMsg = 'Account already exists! Please sign in';
         break;
       case 'auth/user-not-found': // 'EMAIL_NOT_FOUND':
-        errorMsg = 'Email not found! Please go to sign up';
+        errorMsg = 'Account does not exist! Please add your name to create an account';
         break;
       case 'auth/wrong-password': // 'INVALID_PASSWORD':
         errorMsg = 'Wrong password';
