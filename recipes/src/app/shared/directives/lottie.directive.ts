@@ -22,11 +22,12 @@ export class LottieDirective implements OnInit, OnChanges {
   @Input() eventListener: string;
   @Input() play: number[]; // [0] to start at begining, or pass in array with start frame and end frame
   @Input() viewbox: string;
+  @Input() direction: string; // can be 'forward' or 'backward'
 
   @Output() eventEmitter = new EventEmitter();
 
   animationInstance: any;
-
+  // lottie editor here (for frame selection, etc): https://edit.lottiefiles.com/
   constructor(private el: ElementRef, private ngZone: NgZone) {}
 
   ngOnInit() {
@@ -45,6 +46,10 @@ export class LottieDirective implements OnInit, OnChanges {
     if (this.startFrame) {
       this.animationInstance.goToAndStop(this.startFrame, true);
     }
+    if (this.direction) {
+      const dir = this.direction === 'backward' ? -1 : 1;
+      this.animationInstance.setDirection(dir);
+    }
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -57,10 +62,11 @@ export class LottieDirective implements OnInit, OnChanges {
   }
 
   playAnimation(segments: number[] = [0]) {
-    // console.log('play anim ', segments);
     if (!this.animationInstance) {
       return;
     }
+    const dir = this.direction === 'backward' ? -1 : 1;
+    this.animationInstance.setDirection(dir);
     this.ngZone.runOutsideAngular(() => {
       this.animationInstance.playSegments(segments, true);
     });

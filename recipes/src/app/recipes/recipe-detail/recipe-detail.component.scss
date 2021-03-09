@@ -12,9 +12,6 @@ h2 {
   display: flex;
 }
 
-h2:first {
-  // margin-top: 0;
-}
 .material-icons.show-less {
   transform: rotate(-180deg);
 }
@@ -141,10 +138,6 @@ h2:first {
   font-size: 14px;
 }
 
-#ingredients-title {
-  margin-top: 0;
-}
-
 mat-expansion-panel.main-section-mep {
   box-shadow: none;
 }
@@ -161,11 +154,11 @@ li {
   display: list-item;
 }
 
-.section {
+section {
   position: relative;
   padding: 0 20px 20px;
   display: flex;
-  // overflow: hidden;
+  overflow: hidden;
   // margin: 20px auto;
 }
 
@@ -186,28 +179,9 @@ li {
 }
 
 .column-right {
-  // position: relative;
-  // height: 100%;
   overflow: hidden;
-  position: sticky;
-  top: 155px;
   align-self: flex-start;
   text-align: right;
-  .favourite {
-    position: absolute;
-    right: -85px;
-    top: -45px;
-    // color: #e6e6e6;
-    // &:hover {
-    //   transform: scale(1.2);
-    // }
-    // span {
-    //   font-size: 50px;
-    // }
-    // .is-favourite {
-    //   color: #ea2222;
-    // }
-  }
   .recipe-img {
     width: 100% !important;
     // height: auto !important;
@@ -217,17 +191,58 @@ li {
   }
 }
 
-.heart-click-anchor {
-  width: 42px;
-  height: 38px;
+// like and bookmark actions
+.recipe-actions {
   position: absolute;
-  top: 48px;
-  right: 44px;
-  cursor: pointer;
+  height: 50px;
+  width: 102px;
+  // border: 1px solid pink;
+  right: 43px;
+  top: 25px;
 }
 
 .fav-lottie {
   width: 300px;
+  overflow: hidden;
+  position: absolute;
+  right: -77px;
+  top: -92px;
+  &.on {
+    transform: scale3d(1.1, 1.1, 1.1);
+  }
+  .click-anchor {
+    width: 42px;
+    height: 38px;
+    top: 50%;
+    right: 50%;
+    // border: 1px solid green;
+    transform: translate(50%, -55%);
+  }
+}
+
+.lottie-anim .click-anchor {
+  position: absolute;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.todo-lottie {
+  width: 75px;
+  overflow: hidden;
+  position: absolute;
+  right: -15px;
+  top: -19px;
+  &.on {
+    transform: scale3d(1.2, 1.2, 1.2);
+  }
+  .click-anchor {
+    width: 30px;
+    height: 39px;
+    top: 50%;
+    right: 50%;
+    // border: 1px solid blue;
+    transform: translate(14.5px, -21px);
+  }
 }
 
 .added-cont {
@@ -238,9 +253,9 @@ li {
     font-family: 'Rosario';
     letter-spacing: 1.2px;
     font-size: 14px;
-    display: flex;
-    margin: auto;
-    justify-content: center;
+    // display: flex;
+    // margin: auto;
+    // justify-content: center;
   }
 }
 
@@ -464,7 +479,7 @@ mat-accordion .mat-expansion-panel:not(.mat-expanded),
   .hide-sm {
     display: none;
   }
-  .section {
+  section {
     padding: 0;
     flex-direction: column-reverse;
     .column {

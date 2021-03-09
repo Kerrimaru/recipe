@@ -44,7 +44,7 @@
         />
       </div>
 
-      <div class="actions hide">
+      <!-- <div class="actions hide">
         <button type="button" id="login-toggle" (click)="toggleLogin()" *ngIf="!isSignup">
           Go to {{ !isLogin ? 'login' : 'sign up' }}
         </button>
@@ -52,14 +52,14 @@
         <button type="submit" id="auth-submit">
           {{ isLogin ? 'Sign in' : 'Sign up' }}
         </button>
-      </div>
+      </div> -->
 
       <div class="actions actions-mobile">
         <button type="submit" id="auth-submit">
           {{ isLogin ? 'Sign in' : 'Sign up' }}
         </button>
         <div class="other-opts" *ngIf="!isSignup">
-          <p *ngIf="isLogin">Don't have an account?</p>
+          <p [style.opacity]="isLogin ? 1 : 0">Don't have an account?</p>
           <div>
             <p>
               <span id="mobile-toggle" class="other-action" (click)="toggleLogin()">

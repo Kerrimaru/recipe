@@ -36,6 +36,8 @@ export class RecipeDetailComponent implements OnInit, AfterViewInit {
   showEdit = false;
   showDelete = !environment.production;
   isFavourite: boolean;
+  toDoSelected: boolean;
+
   ingExpanded = true;
   methExpanded = true;
 
@@ -70,9 +72,10 @@ export class RecipeDetailComponent implements OnInit, AfterViewInit {
       this.showEdit = !environment.production || this.recipe.userId === this.user.id;
     } else {
       this.route.params.subscribe((params) => {
+        console.log('user: ', this.user);
         if (environment.production && this.user.id == 'RDN8uluhOqP8aATgV0QxF60yi2F2') {
           // cheat to allow me to delete recipes, do this properly at some point
-          this.showEdit = true;
+          this.showDelete = true;
         }
         this.recipeKey = params['id'];
         this.recSub = this.recipeService
@@ -121,6 +124,7 @@ export class RecipeDetailComponent implements OnInit, AfterViewInit {
               .subscribe();
 
             this.isFavourite = this.settingsService.favourites.includes(this.recipeKey);
+            this.toDoSelected = this.settingsService.toDoIds.includes(this.recipeKey);
             this.showEdit = !environment.production || this.recipe.userId === this.user.id;
           });
       });
@@ -147,6 +151,14 @@ export class RecipeDetailComponent implements OnInit, AfterViewInit {
       return;
     }
     this.settingsService.toggleFavourite(this.recipeKey);
+  }
+
+  toDo() {
+    this.toDoSelected = !this.toDoSelected;
+    if (this.readOnly) {
+      return;
+    }
+    this.settingsService.toggleToDo(this.recipeKey);
   }
 
   editRecipe() {

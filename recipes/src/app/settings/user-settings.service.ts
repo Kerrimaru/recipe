@@ -14,6 +14,7 @@ import { UserSettings } from '../auth/user.model';
 export class UserSettingsService {
   constructor(private fb: AngularFireDatabase, public fbAuth: AngularFireAuth) {}
   userSettings: any;
+
   favourites: string[];
   favouritesList: AngularFireList<string>;
   favs$ = new BehaviorSubject<string[]>([]);
@@ -24,10 +25,22 @@ export class UserSettingsService {
   userSettingsRef: firebase.database.Reference;
   favsRef: firebase.database.Reference;
 
+  toDoList: AngularFireList<string>;
+  toDoIds: string[];
+  toDoRef: firebase.database.Reference;
+  // toDo$ = new BehaviorSubject<string[]>([]);
+
   toggleFavourite(recipeKey: string) {
+    console.log('fav ref: ', this.favsRef);
     this.favourites.includes(recipeKey)
       ? this.favsRef.child(recipeKey).remove()
       : this.favsRef.child(recipeKey).set(true);
+  }
+
+  toggleToDo(recipeKey: string) {
+    console.log('to do ref: ', this.toDoRef);
+    console.log('to do ids: ', this.toDoIds);
+    this.toDoIds.includes(recipeKey) ? this.toDoRef.child(recipeKey).remove() : this.toDoRef.child(recipeKey).set(true);
   }
 
   setDiet(userId: string, diet: string) {
@@ -61,7 +74,7 @@ export class UserSettingsService {
       // console.log('fecth user setting');
       this.userSettings = snapshot.val();
       // this.getFavourites(userId);
-      return this.fetchFavsList(userId);
+      // return this.fetchFavsList(userId);
     });
   }
 
@@ -81,6 +94,25 @@ export class UserSettingsService {
         // console.log('fecth fav list');
         this.favourites = res;
         this.favs$.next(res);
+      });
+  }
+
+  fetchToDoList(userId): Subscription {
+    console.log('fecth to do list');
+    this.toDoRef = this.fb.database.ref(`userSettings/${userId}/toDo`);
+    this.toDoList = this.fb.list(`userSettings/${userId}/toDo`);
+    return this.toDoList
+      .snapshotChanges()
+      .pipe(
+        map((changes) => {
+          return changes.map((c) => c.payload.key);
+        }),
+        take(1)
+      )
+      .subscribe((res) => {
+        console.log('fecth to dos ', res);
+        this.toDoIds = res;
+        // this.toDo$.next(res);
       });
   }
 
