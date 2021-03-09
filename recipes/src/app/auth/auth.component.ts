@@ -50,10 +50,16 @@ export class AuthComponent implements OnInit {
       : this.authService.firebaseSignup(email, password, name);
 
     authPromise.then((res) => {
-      this.loading = false;
       if (typeof res === 'string') {
-        return this.openSnackBar(res);
+        this.loading = false;
+        let msg = res;
+        if (res === 'goSignup') {
+          this.isLogin = false;
+          msg = 'Email not found! Please add your name to create an account.';
+        }
+        return this.openSnackBar(msg);
       }
+
       if (this.dialog.dialogData) {
         this.dialog.close(name);
       }
@@ -71,10 +77,10 @@ export class AuthComponent implements OnInit {
   signInGuest() {
     this.loading = true;
     this.authService.guestLogin().then((res) => {
-      this.loading = false;
       if (res === 'success') {
         this.router.navigate(['/recipes'], { queryParams: { notify: 'guest' } });
       } else {
+        this.loading = false;
         this.openSnackBar(res);
       }
     });

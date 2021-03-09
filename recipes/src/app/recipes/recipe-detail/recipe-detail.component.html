@@ -2,17 +2,9 @@
   <div class="rec-header">
     <div class="rec-title">
       <h1>{{ recipe.name | title }}</h1>
-
       <div *ngIf="recipe.addedBy" class="added-cont hide-sm">
         <p>Added by {{ recipe.addedBy }}</p>
-        <ng-container *ngIf="recipe.created">
-          <p [style.font-style]="'italic'">
-            <img src="assets/images/svg/fancy-tilda.svg" class="tilda" />
-            on
-            <img src="assets/images/svg/fancy-tilda.svg" class="tilda" />
-          </p>
-          <p>{{ recipe.created | date }}</p>
-        </ng-container>
+        <p *ngIf="recipe.created">{{ recipe.created | date }}</p>
       </div>
     </div>
     <hr />
@@ -22,7 +14,7 @@
     <div *ngFor="let tag of recipe.tags" class="tag">{{ tag }}</div>
   </div>
 
-  <div class="section">
+  <section>
     <div class="column column-left">
       <mat-expansion-panel expanded="true" class="main-section-mep">
         <mat-expansion-panel-header>
@@ -40,46 +32,12 @@
         </ul>
       </mat-expansion-panel>
 
-      <!-- test end -->
-
-      <!-- <div id="ingredient-list" [ngClass]="ingExpanded ? 'show' : 'hide'">
-        <h2 id="ingredients-title">
-          Ingredients
-          <span
-            class="material-icons expand {{ ingExpanded ? 'show-less' : 'show-more' }}"
-            (click)="ingExpanded = !ingExpanded"
-          >
-            expand_more
-          </span>
-        </h2>
-        <ul class="list-group" [ngClass]="ingExpanded ? 'show' : 'hide'" *ngIf="recipe.ingredients?.length">
-          <li *ngFor="let ing of recipe.ingredients" class="list-group-item">
-             <div><img src="assets/images/svg/fancy-tilda.svg" class="tilda" /></div> 
-            {{ ing }}
-          </li>
-        </ul>
-      </div> -->
-
       <mat-expansion-panel expanded="true" class="main-section-mep">
         <mat-expansion-panel-header>
           <mat-panel-title><h2>Method</h2></mat-panel-title>
         </mat-expansion-panel-header>
         <div [innerHtml]="recipe.description" class="desc"></div>
       </mat-expansion-panel>
-
-      <!-- test2 end -->
-      <!-- <div id="method">
-        <h2>
-          Method
-          <span
-            class="material-icons expand {{ methExpanded ? 'show-less' : 'show-more' }}"
-            (click)="methExpanded = !methExpanded"
-          >
-            expand_more
-          </span>
-        </h2>
-        <div [innerHtml]="recipe.description" class="desc"></div>
-      </div> -->
 
       <div class="notes">
         <mat-accordion class="example-headers-align" multi>
@@ -190,20 +148,34 @@
     </div>
 
     <div class="column column-right">
-      <div class="favourite">
+      <div class="recipe-actions">
         <div
-          class="fav-lottie"
+          class="fav-lottie lottie-anim"
+          [class.on]="isFavourite"
           [appLottie]="'heart-like'"
           [autoplay]="false"
           [startFrame]="isFavourite ? 110 : null"
           [play]="isFavourite ? [60, 110] : [140, 150]"
-        ></div>
+        >
+          <div class="click-anchor" (click)="favourite()"></div>
+        </div>
+
+        <div
+          class="todo-lottie lottie-anim"
+          [class.on]="toDoSelected"
+          [appLottie]="'to-do-green'"
+          [autoplay]="false"
+          [startFrame]="toDoSelected ? 20 : 0"
+          [play]="toDoSelected ? [0, 22] : [22, 0]"
+          [direction]="toDoSelected ? 'forward' : 'backward'"
+        >
+          <div class="click-anchor" (click)="toDo()"></div>
+        </div>
       </div>
-      <div class="heart-click-anchor" (click)="favourite()"></div>
 
       <img [src]="recipe.imagePath" alt="{{ recipe.name }}" class="recipe-img" />
     </div>
-  </div>
+  </section>
 </div>
 
 <div class="actions" *ngIf="showEdit && !readOnly">
