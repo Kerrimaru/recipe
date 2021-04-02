@@ -1,7 +1,7 @@
 <div class="recipe-list-container">
   <div
     class="search"
-    *ngIf="isShowFavourites ? favouritesArr.length : recipes.length"
+    *ngIf="isShowFavourites ? favouritesArr.length : recipes?.length"
     [ngClass]="{ expanded: searchOn, sticky: maxScroll }"
   >
     <input
@@ -15,7 +15,7 @@
     <span class="material-icons" (click)="searchOn = true">search</span>
   </div>
 
-  <div class="recipe-list" *ngIf="(isShowFavourites ? favouritesArr.length : recipes.length) && !loading">
+  <div class="recipe-list" *ngIf="recipes.length && !loading">
     <ng-container *ngFor="let recipe of recipes | recipeFilter: searchTerm; index as index">
       <!-- <div class="rec-container"> -->
       <!-- <img [src]="recipe.imagePath" alt="{{ recipe.name }}" class="recipe-item" /> -->
@@ -62,7 +62,7 @@
     <span *ngIf="maxScroll" (click)="scroll()" class="material-icons">keyboard_arrow_up</span>
   </div>
 
-  <div class="empty" *ngIf="(isShowFavourites ? !favouritesArr.length : !recipes.length) && !loading">
+  <div class="empty" *ngIf="!recipes.length && !loading">
     <img src="assets/images/icons/bubbling-pot.png" />
     <h4>There's nothing here yet!</h4>
     <h4>Why not try something new, you might find a favourite?</h4>

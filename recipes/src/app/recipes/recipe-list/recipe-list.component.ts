@@ -28,6 +28,10 @@ export class RecipeListComponent implements OnInit, OnDestroy {
   // recipeList: Observable<any[]>;
   searchTerm: string;
   favouritesArr: any[];
+
+  toDoSub: Subscription;
+  toDoList: string[];
+
   selectedRecipe: Recipe;
   searchOn = true;
   isShowFavourites: boolean;
@@ -40,6 +44,8 @@ export class RecipeListComponent implements OnInit, OnDestroy {
   userSub: Subscription;
 
   filtersSub: Subscription;
+
+  recipesVisible: any[];
 
   @HostListener('window:scroll', ['$event'])
   checkScroll() {
@@ -65,6 +71,12 @@ export class RecipeListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    // this.route.queryParams.subscribe((res) => {
+    //   if (res) {
+    //     this.recipes = this.handleQueryParams(Object.keys(res)[0]);
+    //   }
+    // });
+
     this.userSub = this.authService.user.subscribe((user) => {
       this.readOnly = this.authService.readOnly.getValue();
       this.user = user;
@@ -102,6 +114,10 @@ export class RecipeListComponent implements OnInit, OnDestroy {
 
     this.favsSub = this.settingsService.favs$.subscribe((res) => {
       this.favouritesArr = res;
+      console.log('favs arr: ', this.favouritesArr);
+    });
+    this.toDoSub = this.settingsService.toDo$.subscribe((res) => {
+      this.toDoList = res;
     });
 
     this.filtersSub = this.settingsService.filtersChanged.subscribe((res) => {
@@ -120,8 +136,12 @@ export class RecipeListComponent implements OnInit, OnDestroy {
         this.filters.push('favourites');
       }
       this.allRecipes = [...recipes];
-      if (this.filters.length) {
-        this.recipes = this.applyFilters([...recipes], this.filters).reverse();
+      const queryParam = this.route.snapshot.queryParams['filter'];
+      if (queryParam) {
+        // this.recipes = this.handleQueryParams(queryParam).reverse();
+        this.recipes = this.applyFilters([...recipes], this.toDoList).reverse();
+      } else if (this.filters.length) {
+        this.recipes = this.applyFilters([...recipes], this.favouritesArr).reverse();
       } else {
         this.recipes = [...recipes].reverse();
       }
@@ -133,9 +153,22 @@ export class RecipeListComponent implements OnInit, OnDestroy {
   // this is fake, do it for real at some point :(
   applyFilters(recipeList: Recipe[], filter: string[]) {
     return recipeList.filter((r) => {
-      return this.favouritesArr.includes(r.key);
-      return r.addedBy === 'Kerri';
+      return filter.includes(r.key);
+      // return r.addedBy === 'Kerri';
     });
+  }
+
+  handleQueryParams(key: string) {
+    const recipeArr = [...this.allRecipes];
+    console.log('all: ', recipeArr);
+    console.log('to do: ', this.toDoList);
+    if (key === 'toDo') {
+      const filt = recipeArr.filter((r) => {
+        return this.toDoList.includes(r.key);
+      });
+      console.log('filt ', filt);
+      return filt;
+    }
   }
 
   ngOnDestroy() {
