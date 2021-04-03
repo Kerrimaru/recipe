@@ -19,16 +19,14 @@ export class FirebaseAuthService {
 
     this.authState.subscribe(
       (user) => {
-        console.log('user :', user);
+        // console.log('user :', user);
         if (user) {
           this.currentUser = user;
           localStorage.setItem('userData', JSON.stringify(user));
           // this.localStorage.storeSimple('userData', user)
           // this.openSnackBar('Successfully authenticated');
-          console.log('AUTHSTATE USER', user);
           this.router.navigate(['home']);
         } else {
-          console.log('AUTHSTATE USER EMPTY', user);
           this.currentUser = null;
         }
       },

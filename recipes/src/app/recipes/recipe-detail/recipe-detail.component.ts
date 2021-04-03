@@ -72,7 +72,7 @@ export class RecipeDetailComponent implements OnInit, AfterViewInit {
       this.showEdit = !environment.production || this.recipe.userId === this.user.id;
     } else {
       this.route.params.subscribe((params) => {
-        console.log('user: ', this.user);
+        // console.log('user: ', this.user);
         if (environment.production && this.user.id == 'RDN8uluhOqP8aATgV0QxF60yi2F2') {
           // cheat to allow me to delete recipes, do this properly at some point
           this.showDelete = true;
@@ -170,7 +170,7 @@ export class RecipeDetailComponent implements OnInit, AfterViewInit {
       return;
     }
     this.showConfirm('recipe').subscribe((res) => {
-      console.log('confirm res: ', res);
+      // console.log('confirm res: ', res);
       this.recipeService.deleteRecipeByKey(this.recipeKey).then((r) => {
         this.router.navigate(['/']);
       });
@@ -196,7 +196,7 @@ export class RecipeDetailComponent implements OnInit, AfterViewInit {
     this.editNoteIndex = index;
   }
   noclickpls() {
-    console.log('doh!!!!!');
+    // console.log('doh!!!!!');
   }
 
   deleteNote(noteId: string) {
@@ -204,14 +204,14 @@ export class RecipeDetailComponent implements OnInit, AfterViewInit {
       return;
     }
     this.showConfirm('note').subscribe((res) => {
-      console.log('confirm res: ', res);
+      // console.log('confirm res: ', res);
       this.recipeService.deleteNote(noteId, this.recipe.key);
     });
   }
 
   deleteDate(e) {
     this.showConfirm('date').subscribe((res) => {
-      console.log('confirm res: ', res);
+      // console.log('confirm res: ', res);
       // this.recipeService.deleteNote(noteId, this.recipe.key);
     });
     // console.log('delte Date, ', e);

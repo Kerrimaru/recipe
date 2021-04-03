@@ -11,7 +11,7 @@ export class IntroComponent implements OnInit {
 
   @HostListener('window:scroll', ['$event'])
   checkScroll(event) {
-    console.log('event: ', event);
+    // console.log('event: ', event);
     if (window.pageYOffset >= 40) {
     } else {
     }
