@@ -29,6 +29,7 @@ export class RecipeEditComponent implements OnInit {
   tags: Tag[] = [
     { name: 'Vegan', selected: false },
     { name: 'Main', selected: false },
+    { name: 'Pasta', selected: false },
     { name: 'Dessert', selected: false },
     { name: 'Gousto', selected: false },
   ];
@@ -173,11 +174,37 @@ export class RecipeEditComponent implements OnInit {
   onPaste(e, index: number) {
     e.preventDefault();
     // get text representation of clipboard
-    const text = (e.originalEvent || e).clipboardData.getData('text/plain');
-    const ingArray = text.split(/\n/);
+    // const text = (e.originalEvent || e).clipboardData.getData('text/plain');
+    // remove images/alt text
+    // this is a bad gousto hack, until I can figure out how to remove images/alt text reliably
+    const containsImages = e.clipboardData.getData('text/html').includes('<img');
+    let text;
+    let ingArray;
+    if (!containsImages) {
+      text = (e.originalEvent || e).clipboardData.getData('text/plain');
+      ingArray = text.split(/\n/);
+    } else {
+      text = e.clipboardData.getData('text/html').replace(/<img[^>]*>/g, '\n');
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(text, 'text/html');
+      const bod = doc.getElementsByTagName('body')[0];
+      ingArray = bod.innerText.split(/\n/);
+    }
+
+    // regular paste event
+    if (ingArray.length === 1) {
+      e.target.value += ingArray[0];
+      return;
+    }
+    // or
+    // paste list of ingredients
     ingArray.filter((i) => !!i).forEach((i) => this.onAddIngredient(i));
 
     this.onRemoveIngredient(index);
+    // or :
+    // const ingArraySet = new Set(text.split(/\n/));
+    // console.log('ing arr: ', ingArraySet);
+    // ingArraySet.forEach((i) => this.onAddIngredient(i));
   }
 
   preview(files) {
@@ -212,7 +239,7 @@ export class RecipeEditComponent implements OnInit {
           elem.height = img.height * scaleFactor;
           const ctx = <CanvasRenderingContext2D>elem.getContext('2d');
           ctx.drawImage(img, 0, 0, width, img.height * scaleFactor);
-          const dataurl = elem.toDataURL('image/jpeg', 0.7);
+          const dataurl = elem.toDataURL('image/jpeg', 0.8);
           observer.next(dataurl);
         }),
           (reader.onerror = (error) => observer.error(error));

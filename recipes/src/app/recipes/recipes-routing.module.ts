@@ -29,11 +29,13 @@ const routes: Routes = [
       { path: '', component: RecipeListComponent },
       { path: 'new', component: RecipeEditComponent },
       {
+        path: 'to-do',
+        component: RecipeListComponent,
+      },
+      {
         path: 'favourites',
         component: RecipeListComponent,
       },
-      { path: 'favourites/:id', component: RecipeDetailComponent },
-      { path: 'favourites/:id/edit', component: RecipeEditComponent },
       { path: ':id', component: RecipeDetailComponent },
       { path: ':id/edit', component: RecipeEditComponent },
     ],

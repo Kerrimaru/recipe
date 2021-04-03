@@ -2,7 +2,7 @@
   class="recipe-item"
   (swipe)="swipe($event.type)"
   [ngClass]="{ flipped: flipped }"
-  [routerLink]="flipped ? null : recipe.key"
+  [routerLink]="flipped ? null : ['/recipes', recipe.key]"
 >
   <img [src]="recipe.imagePath" alt="{{ recipe.name }}" class="recipe-img" />
   <div *ngIf="isNew && !flipped" class="new-recipe-cont">
