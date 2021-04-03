@@ -115,6 +115,10 @@ export class RecipeListComponent implements OnInit, OnDestroy {
 
     this.favsSub = this.settingsService.favs$.subscribe((res) => {
       this.favouritesArr = res;
+      console.log('favs arr: ', this.favouritesArr);
+    });
+    this.toDoSub = this.settingsService.toDo$.subscribe((res) => {
+      this.toDoList = res;
     });
     this.toDoSub = this.settingsService.toDo$.subscribe((res) => {
       this.toDoList = res;
@@ -169,6 +173,19 @@ export class RecipeListComponent implements OnInit, OnDestroy {
         return recipeArr.filter((r) => this.favouritesArr.includes(r.key));
       default:
         return recipeArr;
+    }
+  }
+
+  handleQueryParams(key: string) {
+    const recipeArr = [...this.allRecipes];
+    console.log('all: ', recipeArr);
+    console.log('to do: ', this.toDoList);
+    if (key === 'toDo') {
+      const filt = recipeArr.filter((r) => {
+        return this.toDoList.includes(r.key);
+      });
+      console.log('filt ', filt);
+      return filt;
     }
   }
 
