@@ -41,7 +41,7 @@ export class AuthService {
 
   firebaseLogin(email: string, password: string) {
     return this.firebaseAuth.signInWithEmailAndPassword(email, password).catch((error) => {
-      console.log('erro: ', error);
+      console.error(error);
       if (error.code === 'auth/user-not-found') {
         return 'goSignup';
       } else {

@@ -1,9 +1,6 @@
 <div class="recipe-list-container">
-  <div
-    class="search"
-    *ngIf="isShowFavourites ? favouritesArr.length : recipes.length"
-    [ngClass]="{ expanded: searchOn, sticky: maxScroll }"
-  >
+  <!-- *ngIf="isShowFavourites ? favouritesArr.length : recipes?.length" -->
+  <div class="search" *ngIf="recipes?.length" [ngClass]="{ expanded: searchOn, sticky: maxScroll }">
     <input
       *ngIf="searchOn"
       [ngModelOptions]="{ standalone: true }"
@@ -15,15 +12,18 @@
     <span class="material-icons" (click)="searchOn = true">search</span>
   </div>
 
-  <div class="recipe-list" *ngIf="(isShowFavourites ? favouritesArr.length : recipes.length) && !loading">
+  <div class="recipe-list" *ngIf="recipes.length && !loading">
     <ng-container *ngFor="let recipe of recipes | recipeFilter: searchTerm; index as index">
       <!-- <div class="rec-container"> -->
       <!-- <img [src]="recipe.imagePath" alt="{{ recipe.name }}" class="recipe-item" /> -->
+      <!--  -->
+      <!-- [showFavouriteIcon]="!isShowFavourites"
+        [isFavourite]="!isShowFavourites ? (recipe.key | favourite: favouritesArr) : null" -->
       <app-recipe-item
         [recipe]="recipe"
         [index]="index"
-        [showFavouriteIcon]="!isShowFavourites"
-        [isFavourite]="!isShowFavourites ? (recipe.key | favourite: favouritesArr) : null"
+        [showFavouriteIcon]="filter !== 'favourites'"
+        [isFavourite]="filter !== 'favourites' ? (recipe.key | favourite: favouritesArr) : null"
         (favouriteEmitter)="favourite(recipe)"
       ></app-recipe-item>
       <!-- disabled -->
@@ -62,11 +62,11 @@
     <span *ngIf="maxScroll" (click)="scroll()" class="material-icons">keyboard_arrow_up</span>
   </div>
 
-  <div class="empty" *ngIf="(isShowFavourites ? !favouritesArr.length : !recipes.length) && !loading">
+  <div class="empty" *ngIf="!recipes.length && !loading">
     <img src="assets/images/icons/bubbling-pot.png" />
     <h4>There's nothing here yet!</h4>
     <h4>Why not try something new, you might find a favourite?</h4>
-    <button *ngIf="isShowFavourites && recipes.length" (click)="randomRecipe()">Get inspired</button>
+    <button *ngIf="filter !== null && recipes.length" (click)="randomRecipe()">Get inspired</button>
   </div>
 
   <!--   

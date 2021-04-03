@@ -2,7 +2,7 @@ import { Component, OnInit, Output, EventEmitter, OnDestroy, Input, HostListener
 import { Recipe } from '../recipe.model';
 import { RecipeService } from '../recipe.service';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
-import { Subscription, Observable } from 'rxjs';
+import { Subscription, Observable, BehaviorSubject } from 'rxjs';
 import { DataStorageService } from 'src/app/shared/data-storage.service';
 // import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireDatabase } from '@angular/fire/database';
@@ -28,9 +28,13 @@ export class RecipeListComponent implements OnInit, OnDestroy {
   // recipeList: Observable<any[]>;
   searchTerm: string;
   favouritesArr: any[];
+
+  toDoSub: Subscription;
+  toDoList: string[];
+
   selectedRecipe: Recipe;
   searchOn = true;
-  isShowFavourites: boolean;
+  // isShowFavourites: boolean;
   favsSub: Subscription;
   maxScroll: boolean;
   loading = true;
@@ -40,6 +44,9 @@ export class RecipeListComponent implements OnInit, OnDestroy {
   userSub: Subscription;
 
   filtersSub: Subscription;
+
+  recipesVisible: any[];
+  filter: string;
 
   @HostListener('window:scroll', ['$event'])
   checkScroll() {
@@ -65,6 +72,12 @@ export class RecipeListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    // this.route.queryParams.subscribe((res) => {
+    //   if (res) {
+    //     this.recipes = this.handleRoute(Object.keys(res)[0]);
+    //   }
+    // });
+
     this.userSub = this.authService.user.subscribe((user) => {
       this.readOnly = this.authService.readOnly.getValue();
       this.user = user;
@@ -102,40 +115,78 @@ export class RecipeListComponent implements OnInit, OnDestroy {
 
     this.favsSub = this.settingsService.favs$.subscribe((res) => {
       this.favouritesArr = res;
+      console.log('favs arr: ', this.favouritesArr);
+    });
+    this.toDoSub = this.settingsService.toDo$.subscribe((res) => {
+      this.toDoList = res;
+    });
+    this.toDoSub = this.settingsService.toDo$.subscribe((res) => {
+      this.toDoList = res;
     });
 
-    this.filtersSub = this.settingsService.filtersChanged.subscribe((res) => {
-      this.filters = res;
-      this.recipes = this.applyFilters(this.recipes.slice(), res);
-    });
+    // this.filtersSub = this.settingsService.filtersChanged.subscribe((res) => {
+    //   console.log('is this configured? ');
+    //   this.filters = res;
+    //   this.recipes = this.applyFilters(this.recipes.slice(), res);
+    // });
 
-    this.isShowFavourites = this.router.url.valueOf() === '/recipes/favourites' ? true : false;
-    this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((e: NavigationEnd) => {
-      this.isShowFavourites = e.url === '/recipes/favourites' ? true : false;
-      this.loading = false;
-    });
+    // this.isShowFavourites = this.router.url.valueOf() === '/recipes/favourites' ? true : false;
+    // console.log('routeR: ', this.router, this.router.url);
+
+    // this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((e: NavigationEnd) => {
+    //   this.isShowFavourites = e.url === '/recipes/favourites' ? true : false;
+    //   console.log('nav change event: ', e);
+    //   this.loading = false;
+    // });
+
+    // this.route.url.subscribe((url) => {
+    //   this.filter = url[0] ? url[0].path : null;
+    //   this.loading = false;
+    //   console.log('url: ', url, ' filter: ', this.filter);
+    //   this.recipes = this.handleRoute(this.filter, this.allRecipes).reverse();
+    // });
 
     this.recipesSub = this.recipeService.recipes$.subscribe((recipes) => {
-      if (this.isShowFavourites) {
-        this.filters.push('favourites');
-      }
       this.allRecipes = [...recipes];
-      if (this.filters.length) {
-        this.recipes = this.applyFilters([...recipes], this.filters).reverse();
-      } else {
-        this.recipes = [...recipes].reverse();
-      }
 
+      const urlSegment = (this.route.url as BehaviorSubject<any>).getValue();
+      this.filter = urlSegment.length ? urlSegment[0].path : null;
+      this.recipes = this.handleRoute(this.filter).reverse();
       this.loading = false;
     });
   }
 
   // this is fake, do it for real at some point :(
-  applyFilters(recipeList: Recipe[], filter: string[]) {
-    return recipeList.filter((r) => {
-      return this.favouritesArr.includes(r.key);
-      return r.addedBy === 'Kerri';
-    });
+  // applyFilters(recipeList: Recipe[], filter: string[]) {
+  //   return recipeList.filter((r) => {
+  //     return filter.includes(r.key);
+  //     // return r.addedBy === 'Kerri';
+  //   });
+  // }
+
+  handleRoute(key: string, recipeArray?: any[]) {
+    const recipeArr = recipeArray ? [...recipeArray] : [...this.allRecipes];
+    switch (key) {
+      case 'to-do':
+        return recipeArr.filter((r) => this.toDoList.includes(r.key));
+      case 'favourites':
+        return recipeArr.filter((r) => this.favouritesArr.includes(r.key));
+      default:
+        return recipeArr;
+    }
+  }
+
+  handleQueryParams(key: string) {
+    const recipeArr = [...this.allRecipes];
+    console.log('all: ', recipeArr);
+    console.log('to do: ', this.toDoList);
+    if (key === 'toDo') {
+      const filt = recipeArr.filter((r) => {
+        return this.toDoList.includes(r.key);
+      });
+      console.log('filt ', filt);
+      return filt;
+    }
   }
 
   ngOnDestroy() {
