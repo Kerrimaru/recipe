@@ -40,6 +40,7 @@ import { HammerModule } from '@angular/platform-browser';
 
 import { HammerGestureConfig, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
 import * as Hammer from 'hammerjs';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 export class MyHammerConfig extends HammerGestureConfig {
   buildHammer(element: HTMLElement) {
@@ -81,6 +82,10 @@ export class MyHammerConfig extends HammerGestureConfig {
     DragDropModule,
     BrowserAnimationsModule,
     HammerModule,
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.production,
+      registrationStrategy: 'registerImmediately',
+    }),
     // AuthModule, // is lazy load
 
     // AngularFirestoreModule, // firestore
