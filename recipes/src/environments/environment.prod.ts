@@ -1,14 +1,6 @@
 export const environment = {
   production: true,
   firebase: {
-    // apiKey: 'AIzaSyBaSbh-bfBWCkpkU8X1V_f9VcK3OsJ4mww',
-    // authDomain: 'kerr-recipe.firebaseapp.com',
-    // databaseURL: 'https://kerr-recipe.firebaseio.com',
-    // projectId: 'kerr-recipe',
-    // storageBucket: 'kerr-recipe.appspot.com',
-    // messagingSenderId: '1083330506711',
-    // // appId: '1:1083330506711:web:742df0ca278b02396c2592',
-    // appId: '1:1083330506711:web:92df3d06e76ed5cc6c2592',
     apiKey: 'AIzaSyDBxB1oOvBVvlm49sau0TH2_GDuA4O_9Vo',
     authDomain: 'recipe-hole.firebaseapp.com',
     databaseURL: 'https://recipe-hole.firebaseio.com',
