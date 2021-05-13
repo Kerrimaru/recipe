@@ -11,8 +11,9 @@
         />
       </div>
       <hr />
-      <small><i>click to select tags</i></small>
+
       <div class="tags">
+        <!-- <small>Select tags</small> -->
         <div *ngFor="let tag of tags" class="tag" [class.selected]="tag.selected" (click)="toggleTag(tag)">
           {{ tag.name }}
         </div>
@@ -21,7 +22,7 @@
       <div class="ing-img-cont">
         <div class="column column-left">
           <h2>Ingredients</h2>
-          <small><i>copy and paste a list, or add one by one</i></small>
+          <small>Copy and paste a list, or add one by one</small>
 
           <div formArrayName="ingredients" cdkDropList (cdkDropListDropped)="drop($event)" class="ingredients-list">
             <div
@@ -111,7 +112,7 @@
   </div>
 
   <div class="actions">
-    <button type="button" class="btn btn-secondary show" (click)="onCancel()">Cancel</button>
+    <button type="button" class="btn btn-danger show" (click)="onCancel()">Cancel</button>
     <button
       [ngClass]="{ hide: !recipeForm.dirty }"
       type="submit"

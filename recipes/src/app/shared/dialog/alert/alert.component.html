@@ -11,7 +11,8 @@
       (click)="action.go(mdDialogRef)"
       [ngClass]="{
         'btn-primary': action.primary,
-        'btn-secondary': !action.primary
+        'btn-secondary': !action.primary,
+        'btn-danger': action.danger
       }"
       [innerHtml]="action.text"
     ></button>

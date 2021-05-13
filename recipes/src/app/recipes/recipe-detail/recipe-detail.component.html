@@ -89,9 +89,12 @@
                 matTooltipPosition="left"
                 matTooltipClass="notes-tooltip-short"
                 (click)="note.userId === user.id ? editNote(i) : null"
-              ></div>
-              <div class="note-actions" *ngIf="note.userId === user.id && editNoteIndex !== i">
-                <span class="material-icons edit fake-cta">create</span>
+              >
+                <hr />
+              </div>
+
+              <div class="note-actions" *ngIf="note.userId === user.id">
+                <span class="material-icons edit fake-cta" *ngIf="editNoteIndex !== i">create</span>
                 <span
                   (click)="deleteNote(note.id)"
                   class="material-icons remove"
@@ -179,6 +182,6 @@
 </div>
 
 <div class="actions" *ngIf="showEdit && !readOnly">
-  <button *ngIf="showDelete" type="button" (click)="deleteRecipe()" class="btn btn-secondary">Delete</button>
+  <button *ngIf="showDelete" type="button" (click)="deleteRecipe()" class="btn btn-danger">Delete</button>
   <button type="button" (click)="editRecipe()" class="btn btn-primary">Edit</button>
 </div>
