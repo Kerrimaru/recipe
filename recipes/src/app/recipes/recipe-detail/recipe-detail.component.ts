@@ -246,7 +246,7 @@ export class RecipeDetailComponent implements OnInit, AfterViewInit {
 
   showConfirm(type: string): Observable<any> {
     const actions: any = [
-      { text: `Delete`, go: 'delete', primary: true },
+      { text: `Delete`, go: 'delete', danger: true },
       { text: 'Cancel', secondary: true },
     ];
 
