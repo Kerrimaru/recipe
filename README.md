@@ -16,7 +16,7 @@ My site is currently in a state where it is functional (MVP), and I use it on a 
 - simple **search** functionality
 - add **notes** and **dates** to recipes
 
-## ## Works in progress and To Dos:
+## Works in progress and To Dos:
 
 - include **testing**
 - make into a **progressive web app**
@@ -26,13 +26,14 @@ My site is currently in a state where it is functional (MVP), and I use it on a 
 - user settings
 - constant **ui** changes and **refactoring**
 
-Pipe dreams:
+## Pipe dreams:
 
 - create my own **text editor**, and improvements to recipe methods display
 - **notifications** of new recipes and messaging between users
 - implement **canvas** to allow for more 'real' feeling notes (in book margin, for example)
 
-# Recipes
+
+
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.0.4.
 
