@@ -16,7 +16,6 @@ export class AuthGuard implements CanActivate {
     // return this.authService.user.pipe(
     //   take(1),
     //   map((user) => {
-    //     console.log('res from auth guard: ', user);
     //     const isAuth = !!user;
     //     if (isAuth) {
     //       return true;
@@ -29,8 +28,6 @@ export class AuthGuard implements CanActivate {
       take(1),
       map((user) => {
         if (user) {
-          // this.authService.autoLogin(user);
-          // this.authService.autoLogin(user);
           return true;
         } else {
           return this.router.createUrlTree(['/login']);

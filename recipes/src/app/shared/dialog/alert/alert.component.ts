@@ -11,11 +11,9 @@ import { DialogService } from '../dialog.service';
 export class AlertComponent implements OnInit {
   data: any = this.dialog.dialogData;
   imageUrl: string;
-  // lottieUrl: string = this.data.lottie || null;
   title: string = this.data.title;
   lines: string[] = this.data.lines || [];
   actions: any[] = this.data.actions || [];
-  css: string[] = this.data.css || [];
   class: string = this.data.class;
 
   constructor(private dialog: DialogService, public mdDialogRef: MatDialogRef<AlertComponent>) {}

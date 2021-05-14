@@ -9,7 +9,7 @@ import { RecipesRoutingModule } from './recipes-routing.module';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { SharedModule } from '../shared/shared.module';
 import { MatSliderModule } from '@angular/material/slider';
-import { TagSelectorComponent } from '../tags/tag-selector/tag-selector.component';
+// import { TagSelectorComponent } from '../tags/tag-selector/tag-selector.component';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 
 @NgModule({
@@ -20,22 +20,9 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
     RecipeItemComponent,
 
     RecipeEditComponent,
-    TagSelectorComponent,
+    // TagSelectorComponent,
   ],
-  imports: [
-    RecipesRoutingModule,
-    SharedModule,
-    DragDropModule,
-    // ReactiveFormsModule
-    MatSliderModule,
-    CKEditorModule,
-  ],
-  exports: [
-    //   RecipesComponent,
-    //   RecipeListComponent,
-    //   RecipeDetailComponent,
-    //   RecipeItemComponent,
-    //   RecipeEditComponent,
-  ],
+  imports: [RecipesRoutingModule, SharedModule, DragDropModule, MatSliderModule, CKEditorModule],
+  exports: [],
 })
 export class RecipesModule {}
