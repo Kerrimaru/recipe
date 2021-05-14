@@ -48,8 +48,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     { text: 'Recipes', link: '/recipes' },
     { text: '+New Recipe', link: '/recipes/new' },
     { text: 'My Favourites', link: '/recipes/favourites' },
-    // { text: 'Recipes to Try', link: '/recipes/favourites' },
-    // {text: 'Account',  link: '/settings'}
   ];
 
   private userSub: Subscription;

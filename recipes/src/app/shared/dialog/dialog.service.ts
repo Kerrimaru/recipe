@@ -49,7 +49,7 @@ export class DialogService {
     this.dialogData = null;
   }
 
-  simple(data?: { title?: string; lines?: string[] | string; actions?: any[]; css?: string[] }): Observable<any> {
+  alert(data?: { title?: string; lines?: string[] | string; actions?: any[]; class?: string }): Observable<any> {
     const dialog = this.show(AlertComponent, data, {
       disableClose: true,
     });

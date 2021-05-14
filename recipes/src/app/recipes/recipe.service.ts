@@ -95,8 +95,8 @@ export class RecipeService {
     return this.recipes$;
   }
 
-  setNote(recipeId: string, note: any, userName: string, userId: string) {
-    const recipeNote = { note: note, user: userName, userId: userId, date: Date.now() };
+  setNote(recipeId: string, note: { note: string; userName: string; userId: string }) {
+    const recipeNote = { ...note, date: Date.now() };
     const notesRef = this.fb.database.ref('recipeNotes').child(recipeId).push(recipeNote);
   }
 

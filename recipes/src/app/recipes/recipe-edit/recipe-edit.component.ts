@@ -32,6 +32,10 @@ export class RecipeEditComponent implements OnInit {
     { name: 'Pasta', selected: false },
     { name: 'Dessert', selected: false },
     { name: 'Gousto', selected: false },
+    { name: 'Soup', selected: false },
+    { name: 'Italian', selected: false },
+    { name: 'Indian', selected: false },
+    { name: 'One-pot', selected: false },
   ];
 
   public previewImagePath;

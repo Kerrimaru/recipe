@@ -1,10 +1,9 @@
 <div class="auth-container" [ngClass]="{ 'auth-dialog': isSignup }">
   <img *ngIf="!isSignup" class="hole-logo" src="assets/images/logos/hole-logo.png" />
-  <div class="form-container" [ngClass]="{ dialog: isSignup }">
+  <div class="form-container">
     <div class="loading" [ngClass]="{ show: loading }">
       <app-loading></app-loading>
     </div>
-    <img class="recipe-card" src="/assets/images/recipe-card-kitchen-blank.png" />
 
     <form #authForm="ngForm" (ngSubmit)="onSubmit(authForm)" [ngClass]="{ hidden: loading }">
       <div class="form-group">
@@ -44,31 +43,22 @@
         />
       </div>
 
-      <!-- <div class="actions hide">
-        <button type="button" id="login-toggle" (click)="toggleLogin()" *ngIf="!isSignup">
-          Go to {{ !isLogin ? 'login' : 'sign up' }}
-        </button>
-        <p>Don't have an account?</p>
+      <div class="actions" [ngClass]="{ 'auth-actions': !isSignup }">
         <button type="submit" id="auth-submit">
           {{ isLogin ? 'Sign in' : 'Sign up' }}
         </button>
-      </div> -->
 
-      <div class="actions actions-mobile">
-        <button type="submit" id="auth-submit">
-          {{ isLogin ? 'Sign in' : 'Sign up' }}
-        </button>
         <div class="other-opts" *ngIf="!isSignup">
           <p [style.opacity]="isLogin ? 1 : 0">Don't have an account?</p>
           <div>
             <p>
-              <span id="mobile-toggle" class="other-action" (click)="toggleLogin()">
+              <span id="mobile-toggle" class="other-actions" (click)="toggleLogin()">
                 Go to
                 <b>{{ !isLogin ? 'login' : 'Sign up' }}</b>
               </span>
               <ng-container>
                 <span class="mf-or">or</span>
-                <span class="other-action" (click)="signInGuest()">
+                <span class="other-actions" (click)="signInGuest()">
                   <b>Sign in</b>
                   as a guest
                 </span>
@@ -79,9 +69,4 @@
       </div>
     </form>
   </div>
-
-  <!-- <div class="guest-sign-in" *ngIf="!isSignup">
-    <p>Just looking?</p>
-    <button type="button" (click)="signInGuest()">Sign in as a guest</button>
-  </div> -->
 </div>

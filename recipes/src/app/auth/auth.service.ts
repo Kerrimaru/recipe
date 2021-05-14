@@ -1,15 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map, tap } from 'rxjs/operators';
-import { BehaviorSubject, of, Observable, forkJoin } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import { BehaviorSubject, of, Observable } from 'rxjs';
 import { User } from './user.model';
 import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
-// import * as firebase from 'firebase/app';
-// import { AngularFireDatabase } from '@angular/fire/database';
 import { RecipeService } from '../recipes/recipe.service';
 import { UserSettingsService } from '../settings/user-settings.service';
-// import { auth } from 'firebase/app';
 
 export interface AuthResponseData {
   idToken: string;
@@ -27,8 +24,6 @@ export class AuthService {
     private http: HttpClient,
     private router: Router,
     public firebaseAuth: AngularFireAuth,
-    // private firebase: AngularFireDatabase,
-    // private initializer: InitializerService
     private recipeService: RecipeService,
     private settingsService: UserSettingsService
   ) {}
@@ -59,10 +54,7 @@ export class AuthService {
         const user = res.user;
         user.updateProfile({ displayName: name }).then((res) => {
           this.handleAuth(email, user.uid, name, user.refreshToken);
-
-          // this.user.getValue().name = 'kerri';
           return user;
-          //
         });
       })
       .catch((error) => this.mapError(error));

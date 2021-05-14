@@ -63,14 +63,6 @@
                 (blur)="saveNote($event.target)"
                 [innerHTML]="noteInput"
               ></div>
-
-              <!-- <input
-                id="note-input"
-                placeholder="add a note"
-                (blur)="saveNote()"
-                [(ngModel)]="noteInput"
-                (ngModelChange)="onNoteChange($event)"
-              /> -->
             </div>
 
             <div *ngFor="let note of notes; index as i" class="user-note" [class.active]="editNoteIndex === i">
@@ -81,17 +73,24 @@
                 (keydown.enter)="saveNote($event.target, note)"
                 [contentEditable]="editNoteIndex === i"
                 (blur)="saveNote($event.target, note)"
-                [innerHTML]="note.note"
+                [innerHTML]="note.note || note"
                 [matTooltip]="
-                  (note.userId === user.id ? 'you commented' : 'added by ' + note.user) + ' on ' + (note.date | date)
+                  !note.userId
+                    ? 'Added by Guest'
+                    : (note.userId === user.id ? 'you commented' : 'added by ' + note.user) +
+                      ' on ' +
+                      (note.date | date)
                 "
                 matTooltipShowDelay="250"
                 matTooltipPosition="left"
                 matTooltipClass="notes-tooltip-short"
                 (click)="note.userId === user.id ? editNote(i) : null"
-              ></div>
-              <div class="note-actions" *ngIf="note.userId === user.id && editNoteIndex !== i">
-                <span class="material-icons edit fake-cta">create</span>
+              >
+                <hr />
+              </div>
+
+              <div class="note-actions" *ngIf="note.userId === user.id">
+                <span class="material-icons edit fake-cta" *ngIf="editNoteIndex !== i">create</span>
                 <span
                   (click)="deleteNote(note.id)"
                   class="material-icons remove"
@@ -179,6 +178,6 @@
 </div>
 
 <div class="actions" *ngIf="showEdit && !readOnly">
-  <button *ngIf="showDelete" type="button" (click)="deleteRecipe()" class="btn btn-secondary">Delete</button>
+  <button *ngIf="showDelete" type="button" (click)="deleteRecipe()" class="btn btn-danger">Delete</button>
   <button type="button" (click)="editRecipe()" class="btn btn-primary">Edit</button>
 </div>

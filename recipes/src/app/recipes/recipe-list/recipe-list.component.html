@@ -1,5 +1,4 @@
 <div class="recipe-list-container">
-  <!-- *ngIf="isShowFavourites ? favouritesArr.length : recipes?.length" -->
   <div class="search" *ngIf="recipes?.length" [ngClass]="{ expanded: searchOn, sticky: maxScroll }">
     <input
       *ngIf="searchOn"
@@ -14,11 +13,6 @@
 
   <div class="recipe-list" *ngIf="recipes.length && !loading">
     <ng-container *ngFor="let recipe of recipes | recipeFilter: searchTerm; index as index">
-      <!-- <div class="rec-container"> -->
-      <!-- <img [src]="recipe.imagePath" alt="{{ recipe.name }}" class="recipe-item" /> -->
-      <!--  -->
-      <!-- [showFavouriteIcon]="!isShowFavourites"
-        [isFavourite]="!isShowFavourites ? (recipe.key | favourite: favouritesArr) : null" -->
       <app-recipe-item
         [recipe]="recipe"
         [index]="index"
@@ -26,35 +20,6 @@
         [isFavourite]="filter !== 'favourites' ? (recipe.key | favourite: favouritesArr) : null"
         (favouriteEmitter)="favourite(recipe)"
       ></app-recipe-item>
-      <!-- disabled -->
-      <!-- [ngClass]="{
-        selected: selectedRecipe === recipe,
-        grow: selectedRecipe !== recipe,
-        shrink: selectedRecipe === recipe
-      }"
-      (click)="toggleRecipe(recipe, elRef)" -->
-      <!-- <div class="recipe-detail-cont grow" *ngIf="recipe === selectedRecipe" #recipeDetail>
-        <span class="material-icons" (click)="toggleRecipe(recipe, recipeDetail)">expand_less</span>
-        <app-recipe-detail [recipeInput]="recipe"></app-recipe-detail>
-      </div> -->
-
-      <!-- <span class="material-icons" [ngClass]="{ 'is-favourite': isFavourite }">favorite</span> -->
-      <!-- <div [appLottie]="'heart-bubble'"></div> -->
-      <!-- <span class="material-icons" [ngClass]="{ 'is-favourite': isFavourite }">favorite</span> -->
-
-      <!-- <div class="heart-click-anchor" (click)="favourite(recipe)">
-          <div
-            class="favourite"
-            *ngIf="!isShowFavourites"
-            [routerLink]="recipe.key"
-            class="fav-lottie"
-            [appLottie]="'heart-like'"
-            [autoplay]="false"
-            [startFrame]="(recipe.key | favourite: favouritesArr) ? 110 : null"
-            [play]="(recipe.key | favourite: favouritesArr) ? [60, 110] : [140, 150]"
-          ></div>
-        </div> -->
-      <!-- </div> -->
     </ng-container>
   </div>
 
@@ -64,21 +29,17 @@
 
   <div class="empty" *ngIf="!recipes.length && !loading">
     <img src="assets/images/icons/bubbling-pot.png" />
-    <h4>There's nothing here yet!</h4>
-    <h4>Why not try something new, you might find a favourite?</h4>
-    <button *ngIf="filter !== null && recipes.length" (click)="randomRecipe()">Get inspired</button>
+    <ng-container *ngIf="!readOnly">
+      <h4>There's nothing here yet!</h4>
+      <h4>Why not try something new, you might find a favourite?</h4>
+      <button *ngIf="filter !== null && allRecipes.length" (click)="randomRecipe()" class="spin-btn">
+        Get inspired
+      </button>
+    </ng-container>
+    <ng-container *ngIf="readOnly">
+      <h4>There's more to see!</h4>
+      <button (click)="signup()" class="signup-btn">create an account</button>
+      <p>for full access</p>
+    </ng-container>
   </div>
-
-  <!--   
-  <app-recipe-item
-    class="recipe-item"
-    *ngFor="let recipe of recipes | arrayIncludes: favouritesArr:'key' | recipeFilter: searchTerm; index as index"
-    [recipe]="recipe"
-    [index]="index"
-  ></app-recipe-item> 
---></div>
-<div class="signup-text" *ngIf="readOnly && !loading">
-  <p>There's more to see!</p>
-  <button (click)="signup()">create an account</button>
-  <p>for full access</p>
 </div>
