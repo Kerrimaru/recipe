@@ -4,6 +4,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 
+// not in use
 @Injectable()
 export class FirebaseAuthService {
   private authState: Observable<firebase.User>;
@@ -19,7 +20,6 @@ export class FirebaseAuthService {
 
     this.authState.subscribe(
       (user) => {
-        // console.log('user :', user);
         if (user) {
           this.currentUser = user;
           localStorage.setItem('userData', JSON.stringify(user));

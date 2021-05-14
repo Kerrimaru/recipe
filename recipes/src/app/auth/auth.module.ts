@@ -7,18 +7,15 @@ import { map } from 'rxjs/operators';
 
 const redirectUnauthToLogin = () =>
   map((user) => {
-    // console.log('user in routing: ', user);
     if (user) {
       return [''];
     } else {
       return true;
     }
-    // return !user ? ['login'] : [''];
   });
 
 @NgModule({
   declarations: [AuthComponent],
-  // imports: [SharedModule, RouterModule.forChild([{ path: 'login', component: AuthComponent }])],
   imports: [
     SharedModule,
     RouterModule.forChild([{ path: '', component: AuthComponent, ...canActivate(redirectUnauthToLogin) }]),

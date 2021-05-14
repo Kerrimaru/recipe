@@ -65,7 +65,6 @@ export class AuthComponent implements OnInit {
       }
       this.router.navigate(['/recipes'], { queryParams: params, state: { data: data } });
     });
-    // form.reset();
   }
 
   openSnackBar(message: string, action?: string) {

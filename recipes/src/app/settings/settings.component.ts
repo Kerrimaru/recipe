@@ -5,6 +5,7 @@ import { AuthService } from '../auth/auth.service';
 import { User, UserSettings } from '../auth/user.model';
 import { UserSettingsService } from './user-settings.service';
 
+// component not yet in use
 @Component({
   selector: 'app-settings',
   templateUrl: './settings.component.html',

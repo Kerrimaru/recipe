@@ -4,6 +4,7 @@ import { takeWhile, map, tap } from 'rxjs/operators';
 import { Tag } from './tag.model';
 import { Subject } from 'rxjs';
 
+// tags not yet developed
 @Injectable({ providedIn: 'root' })
 export class TagService {
   constructor(private http: HttpClient) {}
