@@ -2,6 +2,14 @@
 
 .app-header {
   height: 84px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  background-color: white;
+  z-index: 1;
+  width: 100vw;
+  text-align: center;
 }
 
 .app-nav {
@@ -22,16 +30,20 @@
   transition: 0.5s all ease-in-out;
 }
 
-h1 {
-  text-transform: uppercase;
-  padding: 20px;
-  font-size: 30px;
-  position: fixed;
-  background-color: white;
-  z-index: 1;
-  width: 100vw;
-  text-align: center;
-  margin: 0;
+a.main-header {
+  display: flex;
+  h1 {
+    text-transform: uppercase;
+    font-size: 30px;
+    display: inline;
+    margin: 0;
+  }
+  .logo {
+    width: 30px;
+    height: auto;
+    margin-right: 7px;
+    display: inline;
+  }
 }
 
 .menu-tab {
@@ -105,11 +117,6 @@ a {
 
 .material-icons {
   font-size: 35px;
-}
-
-.logo {
-  width: 30px;
-  margin-right: 7px;
 }
 
 .account-actions {
