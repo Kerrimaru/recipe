@@ -7,7 +7,6 @@
   display: flex;
   justify-content: flex-end;
   position: absolute;
-  z-index: 50;
   height: 37px;
   align-items: center;
   transition: 1s width ease-in-out;
@@ -21,6 +20,7 @@
     transition: opacity 0.5s ease-in;
   }
   &.sticky {
+    z-index: 10;
     width: 37px;
     position: fixed;
     right: 106px;
