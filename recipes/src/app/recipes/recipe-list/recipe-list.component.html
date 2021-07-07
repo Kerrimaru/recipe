@@ -14,6 +14,7 @@
   <div class="recipe-list" *ngIf="recipes.length && !loading">
     <ng-container *ngFor="let recipe of recipes | recipeFilter: searchTerm; index as index">
       <app-recipe-item
+        appShowOnScroll
         [recipe]="recipe"
         [index]="index"
         [showFavouriteIcon]="filter !== 'favourites'"

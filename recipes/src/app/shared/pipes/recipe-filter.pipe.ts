@@ -12,6 +12,9 @@ export class RecipeFilterPipe implements PipeTransform {
       return source.toLowerCase().indexOf(keyword.toLowerCase()) > -1;
     } else {
       const arr = source.map((s) => {
+        if (typeof s === 'object') {
+          return;
+        }
         return (s || '').toLowerCase().indexOf(keyword.toLowerCase()) > -1;
       });
       if (arr.some((a) => !!a)) {
@@ -36,7 +39,8 @@ export class RecipeFilterPipe implements PipeTransform {
       const result =
         RecipeFilterPipe.recipeContains(value.ingredients, searchTerm) ||
         RecipeFilterPipe.recipeContains(value.name, searchTerm) ||
-        RecipeFilterPipe.recipeContains(value.addedBy, searchTerm);
+        RecipeFilterPipe.recipeContains(value.addedBy, searchTerm) ||
+        RecipeFilterPipe.recipeContains(value.tags, searchTerm);
       // RecipeFilterPipe.recipeContains(value.tags, searchTerm) ||;
 
       return result;

@@ -23,6 +23,7 @@ export class RecipeItemComponent implements OnInit {
   isMobile: boolean;
   width: number = window.innerWidth;
   mobileWidth = 760;
+  inView = true;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -59,5 +60,15 @@ export class RecipeItemComponent implements OnInit {
     this.isFavourite = !this.isFavourite;
     this.favouriteEmitter.emit();
     // this.settingsService.toggleFavourite(this.recipe.key);
+  }
+
+  isInViewport(element) {
+    const rect = element.getBoundingClientRect();
+    return (
+      rect.top >= 0 &&
+      rect.left >= 0 &&
+      rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+      rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+    );
   }
 }

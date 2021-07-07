@@ -43,7 +43,10 @@ export class RecipeListComponent implements OnInit, OnDestroy {
   filter: string;
 
   @HostListener('window:scroll', ['$event'])
-  checkScroll() {
+  checkScroll(event) {
+    // console.log('scrl? ', event);
+    // console.log('clientHeight: ', event.target.documentElement.clientHeight);
+    // console.log('window.pageYOffset ', window.pageYOffset);
     if (window.pageYOffset > 40) {
       this.searchOn = this.searchTerm ? true : false;
       this.maxScroll = true;
