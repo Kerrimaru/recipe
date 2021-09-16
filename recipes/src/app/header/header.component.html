@@ -1,14 +1,7 @@
 <nav class="app-nav" *ngIf="isAuth" [ngClass]="{ collapse: collapse }">
-  <!-- <img class="logo" src="/assets/images/jlogo.png" routerLink="/" /> -->
   <div class="app-header">
     <h1 style="display: flex; justify-content: center; align-items: center">
-      <!-- <img class="logo" src="assets/images/logos/tools-logo.png" /> -->
-      <!-- <img class="logo" src="assets/images/logos/plate-logo.png" /> -->
-      <img class="logo" src="assets/images/logos/hole-logo.png" />
-      <!-- <img class="logo" src="assets/images/logos/book-logo.png" /> -->
-      <!-- <img class="logo" [src]="'assets/images/logos/' + logos[currentLogo] + '.png'" (click)="advanceLogo()" /> -->
-      <!-- <img class='logo' src='assets/images/logos/.png'> -->
-      <!-- <a routerLink="/">Judith's Kitchen</a> -->
+      <img routerLink="/" class="logo" src="assets/images/logos/hole-logo.png" />
       <a routerLink="/">Recipe Hole</a>
     </h1>
     <div class="account-actions" [ngClass]="{ expanded: headerExpanded, mobile: isMobile }">

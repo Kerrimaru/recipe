@@ -14,6 +14,8 @@ export class Recipe {
   public key: string;
   public created: number; // utc
   public isFavourite: boolean;
+  public time: string;
+  // public nutrition: Nutrition[] = NutritionConst;
   // public selected = false;
 
   // constructor(name: string, desc: string, imagePath: string, ingredients: Ingredient[], addedBy: string) {
@@ -29,3 +31,17 @@ export class Recipe {
     return this._id;
   }
 }
+export interface Nutrition {
+  name: string;
+  units: string;
+  amount: number;
+}
+
+export const NutritionConst = [
+  { name: 'Calories', units: 'kcal', amount: 0 },
+  { name: 'Fat', units: 'g', amount: 0 },
+  { name: 'Carbs', units: 'g', amount: 0 },
+  { name: 'Sugar', units: 'g', amount: 0 },
+  { name: 'Protein', units: 'g', amount: 0 },
+  { name: 'Fibre', units: 'g', amount: 0 },
+];

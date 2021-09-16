@@ -1,0 +1,48 @@
+.nutrition-info {
+  background-color: #f3f3f3;
+  padding: 10px;
+  border-radius: 2px;
+  width: 300px;
+}
+
+h2 {
+    margin: 0;
+}
+
+small {
+    font-style: italic;
+}
+
+table {
+    // width: 100%;
+    margin-top: 10px;
+  tr {
+    width: 33.3%;
+    display: inline-block;
+    border-right: 1.5px solid white;
+  }
+  th {
+    background-color: #e0e0e0;
+  }
+  th,
+  td {
+    display: inline-block;
+    width: 100%;
+    text-align: left;
+    padding: 3px 5px;
+  }
+  td {
+      font-size: 14px;
+  }
+  tr:nth-child(3n) {
+    border-right: none;
+  }
+}
+
+td input {
+    border: none;
+    padding: 0;
+    max-width: 100%;
+    border-radius: 0;
+    background-color: transparent;
+}

@@ -15,6 +15,7 @@ export class AlertComponent implements OnInit {
   lines: string[] = this.data.lines || [];
   actions: any[] = this.data.actions || [];
   class: string = this.data.class;
+  hideClose = false; // true if user selection is required to proceed
 
   constructor(private dialog: DialogService, public mdDialogRef: MatDialogRef<AlertComponent>) {}
 
@@ -50,5 +51,9 @@ export class AlertComponent implements OnInit {
         };
       }
     });
+  }
+
+  closeDialog() {
+    this.dialog.close();
   }
 }
