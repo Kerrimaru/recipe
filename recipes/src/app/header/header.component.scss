@@ -2,6 +2,14 @@
 
 .app-header {
   height: 84px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  background-color: white;
+  z-index: 1;
+  width: 100vw;
+  text-align: center;
 }
 
 .app-nav {
@@ -18,7 +26,7 @@
   justify-content: center;
   flex-grow: 1;
   height: 50px;
-  margin-top: 25px;
+  margin-top: 109px;
   transition: 0.5s all ease-in-out;
 }
 
@@ -108,11 +116,6 @@ a {
 
 .material-icons {
   font-size: 35px;
-}
-
-.logo {
-  width: 30px;
-  margin-right: 7px;
 }
 
 .account-actions {
