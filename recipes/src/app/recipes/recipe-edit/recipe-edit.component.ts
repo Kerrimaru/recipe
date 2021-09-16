@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
 import { RecipeService } from '../recipe.service';
-import { Recipe } from '../recipe.model';
+import { NutritionConst, Recipe } from '../recipe.model';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { AuthService } from 'src/app/auth/auth.service';
 import { Observable } from 'rxjs';
+import { TagsConst } from 'src/app/shared/constants/tags.const';
 
 interface Tag {
   name: string;
@@ -26,17 +27,7 @@ export class RecipeEditComponent implements OnInit {
   readOnly: boolean;
 
   test: any;
-  tags: Tag[] = [
-    { name: 'Vegan', selected: false },
-    { name: 'Main', selected: false },
-    { name: 'Pasta', selected: false },
-    { name: 'Dessert', selected: false },
-    { name: 'Gousto', selected: false },
-    { name: 'Soup', selected: false },
-    { name: 'Italian', selected: false },
-    { name: 'Indian', selected: false },
-    { name: 'One-pot', selected: false },
-  ];
+  tags: Tag[] = TagsConst;
 
   public previewImagePath;
   imgURL: any;
@@ -79,6 +70,9 @@ export class RecipeEditComponent implements OnInit {
           }
         });
       }
+      // if (!this.recipe.nutrition) {
+      //   this.recipe.nutrition = [...NutritionConst];
+      // }
 
       this.previewImagePath = this.recipe.imagePath;
 
@@ -131,6 +125,7 @@ export class RecipeEditComponent implements OnInit {
       ...this.recipeForm.value,
       ingredients: ingArr,
       tags: tagsList,
+      // nutrition: this.recipe.nutrition
     });
 
     if (this.editMode) {

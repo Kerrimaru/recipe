@@ -308,85 +308,241 @@ section {
   height: 100px;
 }
 
+// notes expansion panel
 .notes {
   margin: 50px 0 5px 0;
 }
 
-.user-note {
-  z-index: 1;
-  position: relative;
-  font-style: italic;
-  padding: 6px 0px 6px 12px;
-  margin-right: 24px;
-  padding: 6px 26px 6px 12px;
-  margin-right: 42px;
+.note-section {
+  width: 100%;
 }
 
+// new notes
 #note-input {
-  margin-right: 80px;
-  border: none;
-  border-bottom: 1px solid grey;
-  border-radius: 0;
-  // padding: 5px 0 2px 3px;
-  margin-left: 15px;
-  font-style: italic;
-  color: #add8e6;
-  line-height: 2.5;
+  margin-right: 45px;
+  color: grey;
+  position: relative;
+  background-color: #add8e64a;
+  border-radius: 5px;
+  padding: 7px 10px;
   &:before {
     content: 'Add a new note...';
+    font-style: italic;
   }
   &:focus {
     color: #333333;
-    font-style: normal;
-    background-color: #add8e64a;
-    border-radius: 15px;
-    padding-left: 10px;
-    padding-right: 10px;
-    border: none;
-    content: '';
   }
   &:focus:before {
     content: '';
   }
 }
 
+
+
 .new-note-cont {
+  min-height: 37px;
   position: relative;
-  margin-bottom: 10px;
+  margin-bottom: 22px;
+  padding-left: 15px;
   span {
     cursor: pointer;
     color: #0000008a;
+    margin-top: 6px;
+  }
+  i {
+    color: grey;
+    position: absolute;
+    bottom: -25px;
+    right: 50px;
   }
 }
 
 .new-note-cont label {
   position: absolute;
   left: -14px;
-  // top: 7px;
 }
 
-#dateMade {
-  cursor: pointer;
-  width: 110px;
-  border: none;
-  font-size: 15px;
-  font-weight: 100;
-  padding: 0;
+.note-list {
+  padding: 3px;
+  margin: 0 42px 15px 0;
 }
 
-.date-item {
+.note-container {
+  display: flex;
+  flex-direction: column;
   position: relative;
-  .remove {
-    opacity: 0;
-    cursor: pointer;
-    font-size: 18px;
-    margin-left: 3px;
+}
+
+.test-hover {
+  opacity: 0;
+  position: absolute;
+  left: -20px;
+  bottom: -29px;
+  background-color: lightgray;
+  border-radius: 3px;
+  padding: 4px 7px;
+}
+
+.friend-note .test-hover {
+  left: unset;
+  right: -50px;
+}
+
+.note-container:hover {
+  .test-hover {
+    opacity: 0.9;
+    z-index: 1;
+    transition: ease-in 0.5s;
+    transition-delay: 0.5s;
   }
 }
 
-.date-item:hover {
-  .remove {
-    opacity: 1;
+.note-bubble {
+  position: relative;
+  font-style: italic;
+  margin: 6px 0px 10px 0px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  width: fit-content;
+  max-width: 100%;
+  word-break: break-word;
+}
+
+.note-bubble:after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  width: 0;
+  height: 0;
+  border: 9px solid transparent;
+  border-bottom: 0;
+  margin-left: -4.5px;
+  margin-bottom: -9px;
+}
+
+.my-note {
+  cursor: pointer;
+  .note-bubble {
+    background-color: #add8e6;
+    min-width: 20px;
+  }
+  .active {
+    cursor: text;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    background-color: #add8e64a;
+  }
+  .note-bubble:after {
+    border-top-color: #add8e6;
+    border-left: 0;
+    left: 25px;
+  }
+  .active:after {
+    border-top-color: #add8e64a;
+  }
+}
+
+.friend-note {
+  text-align: right;
+
+  .note-bubble {
+    border-color: #cceab5;
+    background-color: #cceab5;
+    align-self: flex-end;
+  }
+  .note-bubble:after {
+    right: 25px;
+    border-top-color: #cceab5;
+    border-top-color: #cceab5;
+    border-right: 0;
+  }
+  .note-info {
+    text-align: right;
+  }
+}
+
+.note-actions {
+  opacity: 0;
+  position: absolute;
+  right: -26px;
+  right: -40px;
+  top: 3px;
+  span {
+    margin: 0 4.5px;
+    cursor: pointer;
+  }
+}
+
+.note-actions,
+i {
+  transition: 0.25s all ease-in-out;
+}
+
+.note-info {
+  p {
+    margin: 0;
+    font-size: 10px;
+    line-height: 1;
+    font-style: italic;
+  }
+}
+
+// dates expansion panel
+.dates-container {
+  h6 {
+    font-size: 13px;
+    margin: 0;
+    font-style: italic;
+  }
+}
+
+.date-actions {
+  margin: 10px;
+  button {
+    height: 20px;
+    font-size: 12px;
+    border-radius: 22px;
+    border: none;
+    padding: 0px 12px;
+    margin-right: 10px;
+    display: inline-flex;
+    align-items: center;
+    span.material-icons {
+      font-size: 15px;
+    }
+    &.date-select .material-icons {
+      margin-left: 3px;
+    }
+  }
+  input.hidden {
+    opacity: 0;
+    max-width: 0px;
+    padding: 0;
+  }
+}
+
+.dates-list {
+  div {
+    padding: 0 10px;
+  }
+  .date-item {
+    position: relative;
+    margin: 5px 0;
+    width: 50%;
+    display: inline-block;
+    .remove {
+      opacity: 0;
+    cursor: pointer;
+    font-size: 16px;
+    margin-left: 7px;
+    transform: translate(0px, 2px);
+    transition: .5s opacity;
+    }
+  }
+  .date-item:hover {
+    .remove {
+      opacity: 1;
+    }
   }
 }
 
@@ -407,42 +563,13 @@ mat-accordion .mat-expansion-panel:not(.mat-expanded),
   // margin-top: 10px;
 }
 
-.note-actions {
-  opacity: 0;
-  position: absolute;
-  right: -26px;
-  right: -40px;
-  top: 3px;
-  z-index: -1;
-  span {
-    z-index: -1;
-    margin: 0 4.5px;
-    cursor: pointer;
-    // border: 1px solid magenta;
-  }
+.mat-expansion-panel-header.mat-expanded {
+  border-radius: 5px 5px 0 0;
 }
 
-.note-star {
-  position: absolute;
-  left: -5px;
-  top: 6px;
-}
 
-.user-note.active {
-  // border: 1px solid pink;
-  margin-top: 1px;
-  margin-bottom: 1px;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  margin-right: 80px;
-  border-radius: 15px;
-  background-color: #add8e64a;
-  .note-star {
-    opacity: 0;
-  }
-}
 
-.user-note:hover .note-actions {
+.note-bubble:hover .note-actions {
   opacity: 1;
 }
 
@@ -456,10 +583,6 @@ mat-accordion .mat-expansion-panel:not(.mat-expanded),
 
 .tooltip-red {
   background: #b71c1c;
-}
-
-.note-edit-input {
-  cursor: pointer;
 }
 
 // smaller screens

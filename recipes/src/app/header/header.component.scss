@@ -30,18 +30,18 @@
   transition: 0.5s all ease-in-out;
 }
 
-a.main-header {
-  display: flex;
-  h1 {
-    text-transform: uppercase;
-    font-size: 30px;
-    display: inline;
-    margin: 0;
-  }
-  .logo {
-    width: 30px;
-    margin-right: 7px;
-    display: inline;
+h1 {
+  text-transform: uppercase;
+  padding: 20px;
+  font-size: 30px;
+  position: fixed;
+  background-color: white;
+  z-index: 1;
+  width: 100vw;
+  text-align: center;
+  margin: 0;
+  img {
+    cursor: pointer;
   }
 }
 

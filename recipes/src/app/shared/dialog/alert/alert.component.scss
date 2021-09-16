@@ -1,21 +1,22 @@
 .dialog {
   max-width: 560px;
-  padding: 0px 48px;
+  position: relative;
+  // padding: 0px 48px;
 }
 
 .dialog-actions {
   text-align: center;
-  margin: 30px auto 15px;
+  // margin: 30px auto 15px;
 }
 
 button {
-  margin: 10px;
+  margin: 15px 10px 0;
   padding: 0 20px;
-  width: 75%;
+  // width: 75%;
   height: 40px;
-  background-color: #1b1919;
-  color: #ffffff;
-  border-color: #ffffff;
+  // background-color: #1b1919;
+  // color: #ffffff;
+  // border-color: #ffffff;
 }
 
 h2 {
@@ -27,4 +28,21 @@ p {
   letter-spacing: 0.5px;
   font-family: 'Rosario';
   margin: 10px auto;
+}
+
+// to display immediately as in hover state
+.btn-danger {
+  background-color: #ff000045;
+  border-color: #ff000000;
+  &:hover {
+    background-color: #ffd7d5;
+    border-color: #ffd7d5;
+  }
+}
+
+.close-x {
+  position: absolute;
+  right: -15px;
+  top: -25px;
+  cursor: pointer;
 }

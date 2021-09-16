@@ -1,6 +1,14 @@
 export const TagsConst = [
-  { name: 'Vegan', colour: '#4dad05' },
-  { name: 'Main', colour: '#0577ad' },
-  { name: 'Dessert', colour: '#dde005' },
-  { name: 'Gousto', colour: '#ff0032' },
+  { name: 'Vegan', selected: false },
+    { name: 'Main', selected: false },
+    { name: 'Pasta', selected: false },
+    { name: 'Dessert', selected: false },
+    { name: 'Gousto', selected: false },
+    { name: 'Soup', selected: false },
+    { name: 'Italian', selected: false },
+    { name: 'Indian', selected: false },
+    { name: 'One-pot', selected: false },
+    { name: 'Quick', selected: false },
+    { name: 'Low Calorie', selected: false },
+    { name: 'High Protein', selected: false },
 ];

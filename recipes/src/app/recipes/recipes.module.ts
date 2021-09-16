@@ -11,6 +11,7 @@ import { SharedModule } from '../shared/shared.module';
 import { MatSliderModule } from '@angular/material/slider';
 // import { TagSelectorComponent } from '../tags/tag-selector/tag-selector.component';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+import { NutritionTableComponent } from './nutrition-table/nutrition-table.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,8 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
     RecipeItemComponent,
 
     RecipeEditComponent,
+
+    NutritionTableComponent,
     // TagSelectorComponent,
   ],
   imports: [RecipesRoutingModule, SharedModule, DragDropModule, MatSliderModule, CKEditorModule],

@@ -1,4 +1,5 @@
 <div class="dialog dialog-simple" [ngClass]="class">
+  <a *ngIf="!hideClose"><span (click)="closeDialog()" class="material-icons close-x">clear</span></a>
   <div class="dialog-content">
     <h2 *ngIf="title">{{ title }}</h2>
     <p *ngFor="let line of lines" [innerHtml]="line"></p>
@@ -11,7 +12,7 @@
       (click)="action.go(mdDialogRef)"
       [ngClass]="{
         'btn-primary': action.primary,
-        'btn-secondary': !action.primary,
+        'btn-secondary': !action.primary && !action.danger,
         'btn-danger': action.danger
       }"
       [innerHtml]="action.text"
