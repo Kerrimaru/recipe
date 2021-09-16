@@ -73,13 +73,29 @@ button {
     cursor: not-allowed;
   }
   &:hover {
-    box-shadow: inset 0 0 100px 100px rgba(255, 255, 255, 0.3);
+    // box-shadow: inset 0 0 100px 100px rgba(255, 255, 255, 0.3);
   }
 }
 
 .btn-primary {
   background-color: #add8e6;
   border-color: #add8e6;
+  &:hover {
+    background-color: #c6e4ed;
+    border-color: #c6e4ed;
+  }
+}
+
+.btn-danger {
+  // border-color: #ff0000;
+  &:hover {
+    background-color: #ff000045;
+    border-color: #ff000000;
+  }
+}
+
+.btn-secondary:hover {
+  background-color: #80808057;
 }
 
 a:focus,
@@ -112,6 +128,6 @@ div:focus {
 }
 
 .mat-dialog-container {
-  background-color: #1b1919;
-  color: #ffffff;
+  // background-color: #1b1919;
+  // color: #ffffff;
 }

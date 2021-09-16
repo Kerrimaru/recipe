@@ -34,7 +34,13 @@
               (focus)="focus(i)"
             >
               <!-- drag handle -->
-              <div class="ingredient-handle" cdkDragHandle matTooltip="Drag to reorder" matTooltipShowDelay="500">
+              <div
+                class="ingredient-handle"
+                cdkDragHandle
+                matTooltip="Drag to reorder"
+                matTooltipShowDelay="500"
+                [style.z-index]="ingredientControls.length > 1 ? 1 : -1"
+              >
                 <svg width="24px" fill="currentColor" viewBox="0 0 24 24">
                   <path
                     d="M10 9h4V6h3l-5-5-5 5h3v3zm-1 1H6V7l-5 5 5 5v-3h3v-4zm14 2l-5-5v3h-3v4h3v3l5-5zm-9 3h-4v3H7l5 5 5-5h-3v-3z"
@@ -59,6 +65,7 @@
                 (click)="onRemoveIngredient(i)"
                 matTooltip="Delete ingredient"
                 matTooltipShowDelay="500"
+                [style.z-index]="ingredientControls.length > 1 ? 1 : -1"
               />
             </div>
           </div>
@@ -108,6 +115,17 @@
           <ckeditor [editor]="Editor" [config]="{ height: '300px' }" formControlName="description"></ckeditor>
         </div>
       </div>
+
+      <!-- <div class="form-group">
+        <div class="nutrition">
+          <app-nutrition-table [nutritionValues]="recipe.nutrition" [editable]="true"></app-nutrition-table>
+        </div>
+        <div class="time">
+          <h2>Time to prepare</h2>
+          <small>(minutes)</small>
+          <input />
+        </div>
+      </div> -->
     </form>
   </div>
 

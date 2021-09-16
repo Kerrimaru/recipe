@@ -14,17 +14,19 @@ h2 {
   font-family: 'Rosario';
   // font-style: italic;
   font-weight: bold;
-  margin-bottom: 0;
+  margin-bottom: 3px;
 }
 
 small {
-  font-size: 14px;
-  font-family: 'Rosario';
+  // font-size: 14px;
   // color: #ccc;
-  color: #add8e6;
-  font-weight: bold;
+  // color: #add8e6;
+  // color: #cfcdd1;
+  // margin-left: 5px;
+  // font-weight: bold;
   letter-spacing: 1.2px;
   font-style: italic;
+  font-family: 'Rosario';
 }
 
 .recipe-header {
@@ -70,46 +72,24 @@ img.preview {
 .delete-icon {
   width: 20px;
   height: 20px;
-}
-
-.ingredient {
-  display: flex;
-  align-items: center;
   cursor: pointer;
 }
 
-.test-ingerdient textarea {
-  width: 500px;
-  height: 500px;
-}
-
 .editor {
-  margin-top: 20px;
+  margin: 17px 0;
 }
 
 // test
 .ingredients-list {
   width: 500px;
   max-width: 100%;
-  // border: solid 1px #ccc;
-  // min-height: 60px;
   display: block;
   background: white;
   border-radius: 4px;
   margin-top: 20px;
-  // overflow: hidden;
-  &:active {
-    cursor: grabbing;
-  }
-}
-
-.ingredients-list {
-  &.cdk-drop-list-dragging img {
-    opacity: 0;
-  }
-}
-.cdk-drop-list-dragging img {
-  opacity: 0;
+  // &:active {
+  //   cursor: grabbing;
+  // }
 }
 
 .ingredient {
@@ -117,7 +97,6 @@ img.preview {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: white;
   font-size: 14px;
   padding: 4px 10px;
   input {
@@ -126,31 +105,38 @@ img.preview {
   }
 }
 
+// actively dragging element
 .cdk-drag-preview {
   box-sizing: border-box;
   border-radius: 4px;
-  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
+  cursor: grabbing;
+  input {
+    background: white;
+    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
+  }
   img {
     opacity: 0;
   }
 }
 
+// hides active dragging elements former location
 .cdk-drag-placeholder {
   opacity: 0;
-}
-
-.cdk-drag-animating {
-  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
-}
-
-.ingredient:last-child {
-  border: none;
 }
 
 .ingredient-list.cdk-drop-list-dragging .ingredient:not(.cdk-drag-placeholder) {
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
 
+// hide delete and non-active drag icons when dragging
+.cdk-drop-list-dragging .ingredient {
+  cursor: grabbing;
+  .ingredient-handle, img {
+    opacity: 0;
+  }
+}
+
+// drag icon
 .ingredient-handle {
   color: #ccc;
   cursor: grab;
@@ -217,35 +203,6 @@ img.preview {
   top: -9px;
 }
 
-// .empty-image-cont {
-//   // width: 80%;
-//   padding: 10px;
-//   width: 300px;
-//   height: 300px;
-//   border: 1px solid #ccc;
-//   margin: auto;
-//   // border-radius: 5px;
-//   // display: flex;
-//   // align-items: center;
-//   // justify-content: center;
-//   cursor: pointer;
-//   .inner-bg {
-//     display: flex;
-//     align-items: center;
-//     justify-content: center;
-//     margin: auto;
-//     border-radius: 5px;
-//     background-color: #e8e6e6;
-//     height: 100%;
-//     position: relative;
-//     width: 100%;
-//     padding-top: 66%;
-//   }
-//   .inner-bg:hover {
-//     opacity: 0.8;
-//   }
-// }
-
 .ing-img-cont {
   display: flex;
 }
@@ -304,9 +261,6 @@ img.preview {
   text-align: center;
   // margin: 0px auto 15px auto;
   margin: 30px auto 25px auto;
-  h2 {
-    font-size: 16px;
-  }
 }
 
 .tag {

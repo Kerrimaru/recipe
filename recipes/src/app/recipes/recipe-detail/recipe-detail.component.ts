@@ -45,7 +45,7 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
 
   notes: (Note | string)[] = [];
 
-  noteInput: string;
+  noteActive = false;
   editNoteIndex: number;
   readOnly: boolean;
 
@@ -65,6 +65,7 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    
     this.user = this.authService.user.getValue();
     this.readOnly = this.authService.readOnly.getValue();
 
@@ -88,6 +89,7 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
               return;
             }
             this.recipe = r;
+            console.log('rec:' , this.recipe)
 
             this.notesSub = this.recipeService
               .getNotesList(r.key)
@@ -110,7 +112,9 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
               .pipe(
                 map((res) => {
                   this.datesMade = res
-                    .map((date) => date.payload.val())
+                    .map((date) => {
+                      return { date: date.payload.val(), id: date.key };
+                    })
                     .sort()
                     .reverse();
                 })
@@ -155,7 +159,7 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
     if (this.readOnly) {
       return;
     }
-    this.showConfirm('recipe').subscribe((res) => {
+    this.showConfirm('recipe', 'Are you sure?').subscribe((res) => {
       this.recipeService.deleteRecipeByKey(this.recipeKey).then((r) => {
         this.router.navigate(['/']);
       });
@@ -188,12 +192,15 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
   }
 
   deleteDate(e) {
-    // to do
-    this.showConfirm('date').subscribe((res) => {});
+    // this confirm is really annoying and ugly
+    this.showConfirm('date').subscribe((res) => {
+      this.recipeService.deleteUserDateMade(this.user.id, this.recipe.key, e.id);
+    });
   }
 
   saveNote(el: HTMLElement, note?: Note | string) {
     el.blur();
+    this.noteActive = false;
     this.editNoteIndex = null;
     const newNote = el.innerHTML;
 
@@ -208,28 +215,29 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
       const newNote = { note: el.innerHTML, userName: this.user.name, userId: this.user.id };
       this.readOnly ? this.notes.push(newNote.note) : this.recipeService.setNote(this.recipe.key, newNote);
 
-      this.noteInput = null;
       el.innerHTML = '';
     }
   }
 
-  onDateChange(event) {
+  onDateChange(event?) {
     if (this.readOnly) {
       return;
     }
-    const timestamp = event.getTime();
+    const timestamp = event ? event.getTime() : new Date().getTime();
+    // window.alert('time: ' + timestamp);
+    // return
     this.dateInput = null;
     this.recipeService.setUserDateMade(this.user.id, this.recipe.key, timestamp);
   }
 
-  showConfirm(type: string): Observable<any> {
+  showConfirm(type: string, title?: string): Observable<any> {
     const actions: any = [
+      { text: 'Cancel', primary: true },
       { text: `Delete`, go: 'delete', danger: true },
-      { text: 'Cancel', secondary: true },
     ];
 
     return this.dialog.alert({
-      title: 'Are you sure?',
+      title: title,
       lines: `This will permanently delete this ${type}`,
       actions: actions,
     });

@@ -1,0 +1,19 @@
+<div class="nutrition-info">
+  <h2>Nutritional info</h2>
+  <small>per person</small>
+  <table>
+    <ng-container *ngFor="let v of nutritionValues">
+      <tr>
+        <th>{{ v.name }}</th>
+        <td
+          
+        >
+          <!-- {{ v.amount > 0 ? v.amount + v.units : '-' }} -->
+          <span></span>
+          <input *ngIf="editable" type="number"  [value]="v.amount > 0 ? v.amount + v.units : null" [style.text-align]="v.amount > 0 ? 'left' : 'center'" [placeholder]="v.units"/>
+          <span *ngIf="!editable">{{v.amount > 0 ? v.amount + ' ' + v.units : '-'}}</span>
+        </td>
+      </tr>
+    </ng-container>
+  </table>
+</div>
