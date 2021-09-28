@@ -10,7 +10,7 @@ import { DialogService } from '../dialog.service';
 })
 export class AlertComponent implements OnInit {
   data: any = this.dialog.dialogData;
-  imageUrl: string;
+  imagePath: string;
   title: string = this.data.title;
   lines: string[] = this.data.lines || [];
   actions: any[] = this.data.actions || [];
@@ -20,7 +20,8 @@ export class AlertComponent implements OnInit {
   constructor(private dialog: DialogService, public mdDialogRef: MatDialogRef<AlertComponent>) {}
 
   ngOnInit(): void {
-    this.imageUrl = this.data.image ? '/assets/images/' + this.data.image : null;
+    this.imagePath = this.data.image ? '/assets/images/' + this.data.image : null;
+    console.log('img: ', this.imagePath)
     if (typeof this.data.lines === 'string') {
       this.lines = [this.data.lines];
     }

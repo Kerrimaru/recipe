@@ -337,7 +337,12 @@ section {
   }
 }
 
-
+.show .note-info {
+  // z-index: 1;
+  display: flex;
+  // transition: ease-in 0.5s;
+  // transition-delay: 0.5s;
+}
 
 .new-note-cont {
   min-height: 37px;
@@ -373,28 +378,14 @@ section {
   position: relative;
 }
 
-.test-hover {
-  opacity: 0;
-  position: absolute;
-  left: -20px;
-  bottom: -29px;
-  background-color: lightgray;
-  border-radius: 3px;
+.note-info {
+  display: none;
   padding: 4px 7px;
 }
 
-.friend-note .test-hover {
+.friend-note .note-info {
   left: unset;
   right: -50px;
-}
-
-.note-container:hover {
-  .test-hover {
-    opacity: 0.9;
-    z-index: 1;
-    transition: ease-in 0.5s;
-    transition-delay: 0.5s;
-  }
 }
 
 .note-bubble {
@@ -406,6 +397,7 @@ section {
   width: fit-content;
   max-width: 100%;
   word-break: break-word;
+  cursor: pointer;
 }
 
 .note-bubble:after {
@@ -421,7 +413,6 @@ section {
 }
 
 .my-note {
-  cursor: pointer;
   .note-bubble {
     background-color: #add8e6;
     min-width: 20px;
@@ -444,7 +435,6 @@ section {
 
 .friend-note {
   text-align: right;
-
   .note-bubble {
     border-color: #cceab5;
     background-color: #cceab5;
@@ -457,20 +447,13 @@ section {
     border-right: 0;
   }
   .note-info {
-    text-align: right;
+    justify-content: flex-end;
   }
 }
 
-.note-actions {
-  opacity: 0;
-  position: absolute;
-  right: -26px;
-  right: -40px;
-  top: 3px;
-  span {
-    margin: 0 4.5px;
-    cursor: pointer;
-  }
+.note-actions span {
+  margin: 0 4.5px;
+  cursor: pointer;
 }
 
 .note-actions,
@@ -532,11 +515,11 @@ i {
     display: inline-block;
     .remove {
       opacity: 0;
-    cursor: pointer;
-    font-size: 16px;
-    margin-left: 7px;
-    transform: translate(0px, 2px);
-    transition: .5s opacity;
+      cursor: pointer;
+      font-size: 16px;
+      margin-left: 7px;
+      transform: translate(0px, 2px);
+      transition: 0.5s opacity;
     }
   }
   .date-item:hover {
@@ -566,8 +549,6 @@ mat-accordion .mat-expansion-panel:not(.mat-expanded),
 .mat-expansion-panel-header.mat-expanded {
   border-radius: 5px 5px 0 0;
 }
-
-
 
 .note-bubble:hover .note-actions {
   opacity: 1;

@@ -42,7 +42,10 @@
         <mat-accordion class="example-headers-align" multi>
           <mat-expansion-panel>
             <mat-expansion-panel-header>
-              <mat-panel-title>Notes</mat-panel-title>
+              <mat-panel-title>
+                Notes
+                <span *ngIf="notes.length" [style.margin-left.px]="3">({{ notes.length }})</span>
+              </mat-panel-title>
               <mat-panel-description>
                 <span class="material-icons">comment_bank</span>
               </mat-panel-description>
@@ -71,8 +74,13 @@
                   *ngFor="let note of notes; index as i"
                   [class.my-note]="note.userId === user.id"
                   [class.friend-note]="note.userId !== user.id"
+                  [class.show]="note.show"
                 >
-                  <div class="note-bubble" [class.active]="editNoteIndex === i">
+                  <div
+                    class="note-bubble"
+                    [class.active]="editNoteIndex === i"
+                    (click)="note.show && editNoteIndex === i ? (note.show = note.show) : (note.show = !note.show)"
+                  >
                     <!-- tooltip setup, in case I want to restore it, otherwise delete this -->
                     <!--  [matTooltip]="
                       !note.userId
@@ -86,31 +94,51 @@
                     matTooltipClass="notes-tooltip-short" -->
                     <div
                       class="note-edit-input"
-                      tabindex="1"
+                      [tabindex]="i"
                       (keydown.enter)="saveNote($event.target, note)"
                       [contentEditable]="editNoteIndex === i"
-                      (blur)="saveNote($event.target, note)"
                       [innerHTML]="note.note || note"
-                      (click)="note.userId === user.id ? editNote(i) : null"
+                      #activeNoteRef
                     ></div>
-
+                    <!-- (click)="note.userId === user.id ? editNote(i) : null" -->
+                  </div>
+                  <div class="note-info">
+                    <div class="commenter" [style.opacity]="editNoteIndex === i ? 0 : 1">
+                      <p>
+                        {{ note.userId === user.id ? 'You' : note.userName ? note.userName : 'Anonymous' }} commented
+                      </p>
+                      <p>on {{ note.date | date }}</p>
+                    </div>
                     <div class="note-actions" *ngIf="note.userId === user.id">
-                      <!-- <span class="material-icons edit fake-cta" *ngIf="editNoteIndex !== i">create</span> -->
                       <span
-                        (click)="deleteNote(note.id)"
+                        *ngIf="editNoteIndex === i"
+                        class="material-icons"
+                        matTooltip="Save changes"
+                        matTooltipShowDelay="400"
+                        (click)="saveNote(activeNoteRef, note)"
+                      >
+                        check
+                      </span>
+                      <span
+                        *ngIf="editNoteIndex !== i"
+                        (click)="editNote(i, activeNoteRef)"
                         class="material-icons remove"
-                        matTooltip="delete note"
-                        matTooltipClass="tooltip-red"
-                        matTooltipShowDelay="500"
+                        [matTooltip]="'Edit note'"
+                        matTooltipShowDelay="400"
+                      >
+                        edit
+                      </span>
+                      <span
+                        (click)="editNoteIndex === i ? cancelEdit(activeNoteRef, note.note) : deleteNote(note.id)"
+                        class="material-icons remove"
+                        [matTooltip]="editNoteIndex === i ? 'Cancel' : 'Delete note'"
+                        matTooltipShowDelay="400"
                       >
                         clear
                       </span>
                     </div>
                   </div>
-                  <div class="note-info test-hover">
-                    <p>{{ note.userId === user.id ? 'You' : note.userName ? note.userName : 'Anonymous' }} commented</p>
-                    <p>on {{ note.date | date }}</p>
-                  </div>
+
                   <!-- <div class="note-info">
                   <p>{{ note.userId === user.id ? 'You' : note.userName ? note.userName : 'Anonymous' }} commented</p>
                   <p>on {{ note.date | date }}</p>
