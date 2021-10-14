@@ -1,48 +1,76 @@
-.nutrition-info {
+.nutrition-info-v1 {
   background-color: #f3f3f3;
   padding: 10px;
   border-radius: 2px;
   width: 300px;
-}
 
-h2 {
-    margin: 0;
-}
+  h2 {
+    margin: 0 14px 0 0;
+    display: inline;
+  }
 
-small {
+  small {
     font-style: italic;
-}
+  }
 
-table {
+  table {
     // width: 100%;
     margin-top: 10px;
-  tr {
-    width: 33.3%;
-    display: inline-block;
-    border-right: 1.5px solid white;
-  }
-  th {
-    background-color: #e0e0e0;
-  }
-  th,
-  td {
-    display: inline-block;
-    width: 100%;
-    text-align: left;
-    padding: 3px 5px;
-  }
-  td {
+    tr {
+      width: 33.3%;
+      display: inline-block;
+      border-right: 1.5px solid white;
+    }
+    th {
+      background-color: #e0e0e0;
+    }
+    th,
+    td {
+      display: inline-block;
+      width: 100%;
+      text-align: left;
+      padding: 3px 5px;
+    }
+    td {
       font-size: 14px;
+    }
+    tr:nth-child(3n) {
+      border-right: none;
+    }
   }
-  tr:nth-child(3n) {
-    border-right: none;
-  }
-}
 
-td input {
+  td input {
     border: none;
     padding: 0;
     max-width: 100%;
     border-radius: 0;
     background-color: transparent;
+    text-align: center;
+  }
+}
+
+.nutrition-info-v2 {
+  p {
+    font-size: 14px;
+    margin: 0;
+  }
+  .values-container {
+    display: flex;
+    height: 45px;
+    .value {
+      align-content: center;
+      text-align: center;
+      background-color: #d1dfe0;
+      margin: 3px 6px 0 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 8px;
+      min-width: 60px;
+    }
+    .val-amount {
+      font-weight: bold;
+      text-align: center;
+    }
+  }
 }

@@ -100,7 +100,7 @@ h2 {
 
 .rec-header {
   position: sticky;
-  top: 76px;
+  top: 79px;
   padding-bottom: 15px;
   background-color: white;
   z-index: 1;
@@ -140,6 +140,18 @@ h2 {
 
 mat-expansion-panel.main-section-mep {
   box-shadow: none;
+  // position: sticky;
+  // top: 177px;
+}
+
+.column-left {
+  width: 40%;
+  min-width: 40%;
+}
+
+.column-left mat-expansion-panel.main-section-mep {
+  // position: sticky;
+  // top: 177px;
 }
 
 ul#ingredient-list {
@@ -156,24 +168,16 @@ li {
 
 section {
   position: relative;
-  padding: 0 20px 20px;
+  padding: 0 20px;
   display: flex;
-  overflow: hidden;
-  // margin: 20px auto;
 }
 
-.method {
-  padding: 30px;
-  .desc {
-    padding: 20px;
-    p {
-      // margin: 3px;
-    }
-  }
+.desc {
+  text-align: left;
 }
 
 .column {
-  width: 50%;
+  // width: 50%;
   padding: 15px;
   display: inline-block;
 }
@@ -182,6 +186,7 @@ section {
   overflow: hidden;
   align-self: flex-start;
   text-align: right;
+  width: 60%;
   .recipe-img {
     width: 100% !important;
     // height: auto !important;
@@ -300,17 +305,22 @@ section {
   }
 }
 
-.tilda {
-  width: 20px;
-}
-
 .anchor {
   height: 100px;
 }
 
+.additional-details {
+  display: flex;
+  padding: 0 50px 30px;
+}
+
+.nutrition {
+  margin: 0 auto;
+}
+
 // notes expansion panel
-.notes {
-  margin: 50px 0 5px 0;
+.notes-dates {
+  width: 50%;
 }
 
 .note-section {
@@ -482,9 +492,8 @@ i {
 .date-actions {
   margin: 10px;
   button {
-    height: 20px;
     font-size: 12px;
-    border-radius: 22px;
+    border-radius: 5px;
     border: none;
     padding: 0px 12px;
     margin-right: 10px;
@@ -594,5 +603,8 @@ mat-accordion .mat-expansion-panel:not(.mat-expanded),
 
   .actions {
     display: none;
+  }
+  .notes-dates {
+    width: 100%;
   }
 }
