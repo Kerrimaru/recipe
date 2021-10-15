@@ -2,13 +2,11 @@
   border: 1px solid #333333;
   border-top: 1px solid white;
   box-shadow: 0 1px 4px 0 rgba(154, 154, 154, 0.62);
-  // padding: 20px;
 }
 
 h2 {
   font-family: 'Rosario';
   letter-spacing: 1.2px;
-  // margin: 40px 0 20px 0;
   display: flex;
 }
 
@@ -25,14 +23,12 @@ h2 {
 
 .list-group {
   overflow: hidden;
-  // border: 1px solid blue;
   display: flex;
   flex-direction: column;
 }
 
 #ingredient-list {
   overflow: hidden;
-  // border: 1px solid green;
   display: flex;
   flex-direction: column;
 }
@@ -41,11 +37,7 @@ h2 {
   .list-group {
     flex: 0;
     transition: all 0.5s ease-out;
-    // max-height: 0px;
     opacity: 1;
-    // animation: hide 1s;
-    // animation-fill-mode: forwards;
-    // opacity: 0;
   }
 }
 
@@ -54,56 +46,32 @@ h2 {
     height: auto;
     flex: 1;
     transition: all 0.5s ease-in;
-    // max-height: 1000px;
-    // opacity: 1;
     opacity: 1;
-    // animation: show 1s;
-    // animation-fill-mode: forwards;
   }
-}
-
-.show {
-  // opacity: 1;
-  // animation: show 1s;
-  // animation-fill-mode: forwards;
-}
-
-.hide {
-  // opacity: 1;
-  // animation: hide 1s;
-  // animation-fill-mode: forwards;
 }
 
 @keyframes show {
   from {
     height: 0px;
     width: 0px;
-    // width: 0px;
   }
   to {
     height: 100%;
     width: 100%;
-    // width: 100%;
   }
 }
 
 @keyframes hide {
   from {
     height: auto;
-    // width: 100%;
   }
   to {
     height: 0;
-    // width: 0px;
   }
 }
 
 .rec-header {
-  position: sticky;
-  top: 79px;
-  padding-bottom: 15px;
   background-color: white;
-  z-index: 1;
   border-top: 1px solid black;
   hr {
     margin: 0px 20px;
@@ -123,11 +91,6 @@ h2 {
   }
 }
 
-.tags-list {
-  // text-align: center;
-  padding: 0 30px;
-}
-
 .tag {
   margin: 5px;
   border: 1px solid #add8e6;
@@ -140,18 +103,10 @@ h2 {
 
 mat-expansion-panel.main-section-mep {
   box-shadow: none;
-  // position: sticky;
-  // top: 177px;
 }
 
-.column-left {
-  width: 40%;
-  min-width: 40%;
-}
-
-.column-left mat-expansion-panel.main-section-mep {
-  // position: sticky;
-  // top: 177px;
+.method-expansion {
+  flex-grow: 1;
 }
 
 ul#ingredient-list {
@@ -162,48 +117,35 @@ li {
   border: none;
   padding: 0;
   margin: 5px;
-  // display: flex;
   display: list-item;
 }
 
 section {
   position: relative;
-  padding: 0 20px;
+  padding: 30px 40px;
   display: flex;
+  flex-wrap: wrap;
 }
 
 .desc {
   text-align: left;
 }
 
-.column {
-  // width: 50%;
-  padding: 15px;
-  display: inline-block;
-}
-
-.column-right {
-  overflow: hidden;
+.recipe-img {
   align-self: flex-start;
-  text-align: right;
-  width: 60%;
-  .recipe-img {
-    width: 100% !important;
-    // height: auto !important;
-    // margin-top: 28px;
-    // max-height: 600px;
-    // max-height: 60vh;
-  }
+  margin: 0 0 0 auto;
+  flex-grow: 1;
+  flex-shrink: 1;
+  object-fit: cover;
+  max-height: 100vh;
 }
-
 // like and bookmark actions
 .recipe-actions {
   position: absolute;
   height: 50px;
   width: 102px;
-  // border: 1px solid pink;
   right: 43px;
-  top: 25px;
+  top: 41px;
 }
 
 .fav-lottie {
@@ -220,7 +162,6 @@ section {
     height: 38px;
     top: 50%;
     right: 50%;
-    // border: 1px solid green;
     transform: translate(50%, -55%);
   }
 }
@@ -245,7 +186,6 @@ section {
     height: 39px;
     top: 50%;
     right: 50%;
-    // border: 1px solid blue;
     transform: translate(14.5px, -21px);
   }
 }
@@ -258,50 +198,6 @@ section {
     font-family: 'Rosario';
     letter-spacing: 1.2px;
     font-size: 14px;
-    // display: flex;
-    // margin: auto;
-    // justify-content: center;
-  }
-}
-
-.aspect-ratio-box {
-  height: 0;
-  // overflow: hidden;
-  padding-top: 66%;
-  background: #e8e6e6;
-  position: relative;
-  outline: 1px solid #ccc;
-  backdrop-filter: 5px;
-  outline-offset: 15px;
-  border-radius: 7px;
-}
-
-.aspect-ratio-box-inside {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  cursor: pointer;
-}
-
-.flexbox-centering {
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.viewport-sizing {
-  // font-size: 5vw;
-  text-align: center;
-  p {
-    margin: auto;
-    margin: auto;
-    /* overflow: visible; */
-    /* text-align: center; */
-    opacity: 0.9;
-    /* line-height: 1.4; */
-    margin-top: 7px;
   }
 }
 
@@ -348,10 +244,7 @@ section {
 }
 
 .show .note-info {
-  // z-index: 1;
   display: flex;
-  // transition: ease-in 0.5s;
-  // transition-delay: 0.5s;
 }
 
 .new-note-cont {
@@ -499,11 +392,16 @@ i {
     margin-right: 10px;
     display: inline-flex;
     align-items: center;
-    span.material-icons {
-      font-size: 15px;
+    img {
+      height: 16px;
+      margin-left: 7px;
     }
-    &.date-select .material-icons {
-      margin-left: 3px;
+    img.date-select {
+      height: 15px;
+    }
+    &:hover img {
+      transform: scale(1.1);
+      transition: ease-in-out 0.2s;
     }
   }
   input.hidden {
@@ -575,7 +473,50 @@ mat-accordion .mat-expansion-panel:not(.mat-expanded),
   background: #b71c1c;
 }
 
-// smaller screens
+.tags-ing-list {
+  order: 0;
+  width: 45%;
+}
+
+@media (max-width: 1200px) {
+  .notes-dates {
+    width: 75%;
+  }
+}
+
+@media (max-width: 1000px) {
+  section {
+    justify-content: center;
+  }
+  .tags-ing-list {
+    order: 0;
+    max-width: 80%;
+    width: unset;
+    .ingredients-expansion {
+      padding: 0 50px;
+    }
+  }
+  img.recipe-img {
+    order: -1;
+    margin: 0px auto 30px;
+    object-fit: cover;
+    width: 100%;
+    max-height: 100vh;
+  }
+  .rec-title {
+    // need to set both to centre
+    justify-content: center;
+    text-align: center;
+  }
+  .hide-sm {
+    display: none;
+  }
+
+  .notes-dates {
+    width: 100%;
+  }
+}
+
 @media (max-width: 800px) {
   .rec-title h1 {
     font-size: 30px;
@@ -584,21 +525,14 @@ mat-accordion .mat-expansion-panel:not(.mat-expanded),
     border: none;
     box-shadow: none;
   }
-  .rec-header {
-    position: unset;
+  .ingredients-expansion {
+    max-width: 100%;
   }
   .hide-sm {
     display: none;
   }
   section {
     padding: 0;
-    flex-direction: column-reverse;
-    .column {
-      width: 100%;
-    }
-    .column-right {
-      position: unset;
-    }
   }
 
   .actions {

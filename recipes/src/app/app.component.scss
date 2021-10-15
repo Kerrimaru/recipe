@@ -10,3 +10,9 @@
   flex-grow: 1;
   margin-top: 160px;
 }
+
+@media (max-width: 760px) {
+  .main-content {
+    margin-top: 80px;
+  }
+}

@@ -1,4 +1,9 @@
-<header class="app-nav" *ngIf="isAuth" [ngClass]="{ collapse: collapse }" [style.height.px]="scrollHeight">
+<header
+  class="app-nav"
+  *ngIf="isAuth"
+  [ngClass]="{ collapse: collapse }"
+  [style.height.px]="isMobile ? 80 : scrollHeight"
+>
   <div class="app-header">
     <a routerLink="/" class="main-header">
       <img class="logo" src="assets/images/logos/hole-logo.png" />

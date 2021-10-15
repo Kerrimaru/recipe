@@ -10,13 +10,12 @@
     <hr />
   </div>
 
-  <div class="tags-list">
-    <div *ngFor="let tag of recipe.tags" class="tag">{{ tag }}</div>
-  </div>
-
   <section>
-    <div class="column column-left">
-      <mat-expansion-panel expanded="true" class="main-section-mep">
+    <div class="tags-ing-list">
+      <div class="tags-list">
+        <div *ngFor="let tag of recipe.tags" class="tag">{{ tag }}</div>
+      </div>
+      <mat-expansion-panel expanded="true" class="main-section-mep ingredients-expansion">
         <mat-expansion-panel-header>
           <mat-panel-title><h2 id="ingredients-title">Ingredients</h2></mat-panel-title>
         </mat-expansion-panel-header>
@@ -31,49 +30,39 @@
           </li>
         </ul>
       </mat-expansion-panel>
-
-      <mat-expansion-panel expanded="true" class="main-section-mep">
-        <mat-expansion-panel-header>
-          <mat-panel-title><h2>Method</h2></mat-panel-title>
-        </mat-expansion-panel-header>
-        <div [innerHtml]="recipe.description" class="desc"></div>
-      </mat-expansion-panel>
     </div>
 
-    <div class="column column-right">
-      <div class="recipe-actions">
-        <div
-          class="fav-lottie lottie-anim"
-          [class.on]="isFavourite"
-          [appLottie]="'heart-like'"
-          [autoplay]="false"
-          [startFrame]="isFavourite ? 110 : null"
-          [play]="isFavourite ? [60, 110] : [140, 150]"
-        >
-          <div class="click-anchor" (click)="favourite()"></div>
-        </div>
-
-        <div
-          class="todo-lottie lottie-anim"
-          [class.on]="toDoSelected"
-          [appLottie]="'to-do-green'"
-          [autoplay]="false"
-          [startFrame]="toDoSelected ? 20 : 0"
-          [play]="toDoSelected ? [0, 22] : [22, 0]"
-          [direction]="toDoSelected ? 'forward' : 'backward'"
-        >
-          <div class="click-anchor" (click)="toDo()"></div>
-        </div>
+    <img [src]="recipe.imagePath" alt="{{ recipe.name }}" class="recipe-img" />
+    <div class="recipe-actions">
+      <div
+        class="fav-lottie lottie-anim"
+        [class.on]="isFavourite"
+        [appLottie]="'heart-like'"
+        [autoplay]="false"
+        [startFrame]="isFavourite ? 110 : null"
+        [play]="isFavourite ? [60, 110] : [140, 150]"
+      >
+        <div class="click-anchor" (click)="favourite()"></div>
       </div>
 
-      <img [src]="recipe.imagePath" alt="{{ recipe.name }}" class="recipe-img" />
-      <!-- <mat-expansion-panel expanded="true" class="main-section-mep">
-        <mat-expansion-panel-header>
-          <mat-panel-title><h2>Method</h2></mat-panel-title>
-        </mat-expansion-panel-header>
-        <div [innerHtml]="recipe.description" class="desc"></div>
-      </mat-expansion-panel> -->
+      <div
+        class="todo-lottie lottie-anim"
+        [class.on]="toDoSelected"
+        [appLottie]="'to-do-green'"
+        [autoplay]="false"
+        [startFrame]="toDoSelected ? 20 : 0"
+        [play]="toDoSelected ? [0, 22] : [22, 0]"
+        [direction]="toDoSelected ? 'forward' : 'backward'"
+      >
+        <div class="click-anchor" (click)="toDo()"></div>
+      </div>
     </div>
+    <mat-expansion-panel expanded="true" class="main-section-mep method-expansion">
+      <mat-expansion-panel-header>
+        <mat-panel-title><h2>Method</h2></mat-panel-title>
+      </mat-expansion-panel-header>
+      <div [innerHtml]="recipe.description" class="desc"></div>
+    </mat-expansion-panel>
   </section>
 
   <div class="additional-details">
@@ -180,11 +169,11 @@
             <div class="date-actions">
               <button class="btn btn-primary today" (click)="onDateChange()">
                 <span>Today</span>
-                <span class="material-icons">add</span>
+                <img src="assets/images/today.png" />
               </button>
               <button class="btn btn-primary date-select" (click)="picker.open()">
                 <span>Select</span>
-                <span class="material-icons">launch</span>
+                <img src="assets/images/tomorrow.png" />
                 <input
                   class="hidden"
                   id="dateMade"

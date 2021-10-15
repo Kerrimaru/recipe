@@ -56,7 +56,7 @@
   }
   .values-container {
     display: flex;
-    height: 45px;
+    flex-wrap: wrap;
     .value {
       align-content: center;
       text-align: center;
