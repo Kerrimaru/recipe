@@ -16,6 +16,7 @@ interface Note {
   userId: string;
   user: string;
   date: number;
+  show: boolean; // show details
 }
 
 @Component({
@@ -54,6 +55,7 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
   recSub: Subscription;
 
   @ViewChild('recipeRef', { static: false }) recipeElRef: ElementRef;
+  @ViewChild('activeNoteRef') activeNoteRef;
 
   constructor(
     private recipeService: RecipeService,
@@ -65,7 +67,6 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    
     this.user = this.authService.user.getValue();
     this.readOnly = this.authService.readOnly.getValue();
 
@@ -89,7 +90,7 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
               return;
             }
             this.recipe = r;
-            console.log('rec:' , this.recipe)
+            console.log('rec:', this.recipe);
 
             this.notesSub = this.recipeService
               .getNotesList(r.key)
@@ -98,7 +99,7 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
                 map((res) => {
                   this.notes = res
                     .map((note: any): Note => {
-                      return { id: note.payload.key, ...note.payload.val() };
+                      return { id: note.payload.key, ...note.payload.val(), show: false };
                     })
                     .reverse();
                 })
@@ -159,27 +160,24 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
     if (this.readOnly) {
       return;
     }
-    this.showConfirm('recipe', 'Are you sure?').subscribe((res) => {
+    this.showConfirm('recipe', 'This will permanently delete this recipe', 'Are you sure?', 'takeout-delete.png', [
+      { text: 'Cancel', primary: true },
+      { text: `Delete`, go: 'delete', danger: true },
+    ]).subscribe((res) => {
       this.recipeService.deleteRecipeByKey(this.recipeKey).then((r) => {
         this.router.navigate(['/']);
       });
     });
-    // window.alert('you fool! ive disabled delete for now until you implement a proper alert');
-    // // this.recipeService.deleteRecipeByKey(this.recipeKey);
-    // this.router.navigate(['/']);
   }
 
   editNote(index: number, ref?: HTMLElement) {
+    this.editNoteIndex = index;
     if (ref) {
+      ref.contentEditable = 'true';
       ref.focus();
       document.execCommand('selectAll', false, null);
       document.getSelection().collapseToEnd();
     }
-
-    this.editNoteIndex = index;
-  }
-  noclickpls() {
-    // console.log('doh!!!!!');
   }
 
   deleteNote(noteId: string) {
@@ -198,13 +196,20 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
     });
   }
 
+  cancelEdit(el: HTMLElement, note: string) {
+    el.innerHTML = note;
+    el.blur();
+    this.noteActive = false;
+    this.editNoteIndex = null;
+  }
+
   saveNote(el: HTMLElement, note?: Note | string) {
     el.blur();
     this.noteActive = false;
     this.editNoteIndex = null;
     const newNote = el.innerHTML;
 
-    // empty note or guest note or  no changes to edited note
+    // empty note or guest note or no changes to edited note
     if (!newNote || typeof note === 'string' || (!!note && newNote === note.note)) {
       return;
     }
@@ -224,22 +229,17 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
       return;
     }
     const timestamp = event ? event.getTime() : new Date().getTime();
-    // window.alert('time: ' + timestamp);
-    // return
     this.dateInput = null;
     this.recipeService.setUserDateMade(this.user.id, this.recipe.key, timestamp);
   }
 
-  showConfirm(type: string, title?: string): Observable<any> {
-    const actions: any = [
-      { text: 'Cancel', primary: true },
-      { text: `Delete`, go: 'delete', danger: true },
-    ];
-
+  showConfirm(type: string, lines?, title?: string, image?: string, actions?: any[]): Observable<any> {
     return this.dialog.alert({
       title: title,
-      lines: `This will permanently delete this ${type}`,
-      actions: actions,
+      // lines: `This will permanently delete this ${type}`,
+      lines: lines || `Delete this ${type}?`,
+      actions: actions || [{ text: 'Delete', go: 'delete', danger: true }],
+      image: image || 'takeout-delete.png',
     });
   }
 }

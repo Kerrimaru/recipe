@@ -70,9 +70,9 @@ export class RecipeEditComponent implements OnInit {
           }
         });
       }
-      // if (!this.recipe.nutrition) {
-      //   this.recipe.nutrition = [...NutritionConst];
-      // }
+      if (!this.recipe.nutrition) {
+        this.recipe.nutrition = [...NutritionConst];
+      }
 
       this.previewImagePath = this.recipe.imagePath;
 
@@ -96,16 +96,23 @@ export class RecipeEditComponent implements OnInit {
       imagePath: new FormControl(this.recipe.imagePath, Validators.required),
       description: new FormControl(this.recipe.description, Validators.required),
       ingredients: this.ingredientsArrayRef,
+      // nutritionValues: new FormControl([...this.recipe.nutrition]),
     });
+
+    console.log('form: ', this.recipeForm);
 
     this.onAddIngredient();
   }
 
   toggleTag(tag: Tag) {
+    this.markDirty();
+    tag.selected = !tag.selected;
+  }
+
+  markDirty() {
     if (!this.recipeForm.dirty) {
       this.recipeForm.markAsDirty();
     }
-    tag.selected = !tag.selected;
   }
 
   drop(event: CdkDragDrop<string[]>) {
@@ -125,8 +132,9 @@ export class RecipeEditComponent implements OnInit {
       ...this.recipeForm.value,
       ingredients: ingArr,
       tags: tagsList,
-      // nutrition: this.recipe.nutrition
+      nutrition: this.recipe.nutrition,
     });
+    console.log('rec: ', _recipe);
 
     if (this.editMode) {
       this.recipeService.updateRecipe(_recipe, this.recipe.key);
@@ -210,6 +218,7 @@ export class RecipeEditComponent implements OnInit {
     if (files.length === 0) {
       return;
     }
+    this.markDirty();
 
     const mimeType = files[0].type;
     if (mimeType.match(/image\/*/) === null) {

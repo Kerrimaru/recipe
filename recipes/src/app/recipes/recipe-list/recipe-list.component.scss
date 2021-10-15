@@ -1,5 +1,6 @@
 .recipe-list-container {
   position: relative;
+  margin-top: 20px;
 }
 
 .search {
@@ -145,6 +146,7 @@
 
   .recipe-list-container {
     flex-direction: column;
+    margin-top: 30px;
   }
 
   .recipe-list {

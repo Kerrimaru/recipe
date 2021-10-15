@@ -13,7 +13,6 @@
       <hr />
 
       <div class="tags">
-        <!-- <small>Select tags</small> -->
         <div *ngFor="let tag of tags" class="tag" [class.selected]="tag.selected" (click)="toggleTag(tag)">
           {{ tag.name }}
         </div>
@@ -116,16 +115,20 @@
         </div>
       </div>
 
-      <!-- <div class="form-group">
+      <div class="form-group">
         <div class="nutrition">
-          <app-nutrition-table [nutritionValues]="recipe.nutrition" [editable]="true"></app-nutrition-table>
+          <app-nutrition-table
+            [(nutritionValues)]="recipe.nutrition"
+            [editable]="true"
+            (changeEmitter)="recipe.nutrition = $event; markDirty()"
+          ></app-nutrition-table>
         </div>
-        <div class="time">
+        <!-- <div class="time">
           <h2>Time to prepare</h2>
           <small>(minutes)</small>
           <input />
-        </div>
-      </div> -->
+        </div> -->
+      </div>
     </form>
   </div>
 

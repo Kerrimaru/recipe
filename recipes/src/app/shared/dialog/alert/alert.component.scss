@@ -1,7 +1,17 @@
 .dialog {
   max-width: 560px;
-  position: relative;
-  // padding: 0px 48px;
+  min-width: 210px;
+}
+
+img {
+  width: 63px;
+  align-self: center;
+  margin: 15px;
+}
+
+.dialog-content {
+  display: flex;
+  flex-direction: column;
 }
 
 .dialog-actions {
@@ -21,7 +31,8 @@ button {
 
 h2 {
   text-align: center;
-  margin: 12px auto 28px;
+  margin: auto;
+  color: #031a5d;
 }
 
 p {
@@ -42,7 +53,7 @@ p {
 
 .close-x {
   position: absolute;
-  right: -15px;
-  top: -25px;
+  right: 15px;
+  top: 15px;
   cursor: pointer;
 }

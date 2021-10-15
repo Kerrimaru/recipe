@@ -49,7 +49,8 @@ export class DialogService {
     this.dialogData = null;
   }
 
-  alert(data?: { title?: string; lines?: string[] | string; actions?: any[]; class?: string }): Observable<any> {
+  alert(data?: { title?: string; lines?: string[] | string; actions?: any[]; class?: string, image?: string }): Observable<any> {
+    console.log('img: ', data)
     const dialog = this.show(AlertComponent, data, {
       disableClose: true,
     });

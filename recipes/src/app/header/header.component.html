@@ -1,9 +1,14 @@
-<nav class="app-nav" *ngIf="isAuth" [ngClass]="{ collapse: collapse }">
+<header
+  class="app-nav"
+  *ngIf="isAuth"
+  [ngClass]="{ collapse: collapse }"
+  [style.height.px]="isMobile ? 80 : scrollHeight"
+>
   <div class="app-header">
-    <h1 style="display: flex; justify-content: center; align-items: center">
-      <img routerLink="/" class="logo" src="assets/images/logos/hole-logo.png" />
-      <a routerLink="/">Recipe Hole</a>
-    </h1>
+    <a routerLink="/" class="main-header">
+      <img class="logo" src="assets/images/logos/hole-logo.png" />
+      <h1>Recipe Hole</h1>
+    </a>
     <div class="account-actions" [ngClass]="{ expanded: headerExpanded, mobile: isMobile }">
       <!-- <span class="material-icons">account_circle</span> -->
       <span class="material-icons" (click)="toggleMenu()">menu</span>
@@ -47,4 +52,5 @@
       </div>
     </ng-container>
   </div>
-</nav>
+  <!-- <app-main-nav></app-main-nav> -->
+</header>

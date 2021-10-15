@@ -10,13 +10,12 @@
     <hr />
   </div>
 
-  <div class="tags-list">
-    <div *ngFor="let tag of recipe.tags" class="tag">{{ tag }}</div>
-  </div>
-
   <section>
-    <div class="column column-left">
-      <mat-expansion-panel expanded="true" class="main-section-mep">
+    <div class="tags-ing-list">
+      <div class="tags-list">
+        <div *ngFor="let tag of recipe.tags" class="tag">{{ tag }}</div>
+      </div>
+      <mat-expansion-panel expanded="true" class="main-section-mep ingredients-expansion">
         <mat-expansion-panel-header>
           <mat-panel-title><h2 id="ingredients-title">Ingredients</h2></mat-panel-title>
         </mat-expansion-panel-header>
@@ -31,174 +30,193 @@
           </li>
         </ul>
       </mat-expansion-panel>
+    </div>
 
-      <mat-expansion-panel expanded="true" class="main-section-mep">
-        <mat-expansion-panel-header>
-          <mat-panel-title><h2>Method</h2></mat-panel-title>
-        </mat-expansion-panel-header>
-        <div [innerHtml]="recipe.description" class="desc"></div>
-      </mat-expansion-panel>
-      <div class="notes">
-        <mat-accordion class="example-headers-align" multi>
-          <mat-expansion-panel>
-            <mat-expansion-panel-header>
-              <mat-panel-title>Notes</mat-panel-title>
-              <mat-panel-description>
-                <span class="material-icons">comment_bank</span>
-              </mat-panel-description>
-            </mat-expansion-panel-header>
-            <div class="note-section">
-              <div class="new-note-cont">
-                <label for="note-input">
-                  <span class="material-icons custom-note" matTooltip="add a note" matTooltipShowDelay="500">
-                    note_add
-                  </span>
-                </label>
+    <img [src]="recipe.imagePath" alt="{{ recipe.name }}" class="recipe-img" />
+    <div class="recipe-actions">
+      <div
+        class="fav-lottie lottie-anim"
+        [class.on]="isFavourite"
+        [appLottie]="'heart-like'"
+        [autoplay]="false"
+        [startFrame]="isFavourite ? 110 : null"
+        [play]="isFavourite ? [60, 110] : [140, 150]"
+      >
+        <div class="click-anchor" (click)="favourite()"></div>
+      </div>
+
+      <div
+        class="todo-lottie lottie-anim"
+        [class.on]="toDoSelected"
+        [appLottie]="'to-do-green'"
+        [autoplay]="false"
+        [startFrame]="toDoSelected ? 20 : 0"
+        [play]="toDoSelected ? [0, 22] : [22, 0]"
+        [direction]="toDoSelected ? 'forward' : 'backward'"
+      >
+        <div class="click-anchor" (click)="toDo()"></div>
+      </div>
+    </div>
+    <mat-expansion-panel expanded="true" class="main-section-mep method-expansion">
+      <mat-expansion-panel-header>
+        <mat-panel-title><h2>Method</h2></mat-panel-title>
+      </mat-expansion-panel-header>
+      <div [innerHtml]="recipe.description" class="desc"></div>
+    </mat-expansion-panel>
+  </section>
+
+  <div class="additional-details">
+    <div class="notes-dates">
+      <mat-accordion class="example-headers-align" multi>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Notes
+              <span *ngIf="notes.length" [style.margin-left.px]="3">({{ notes.length }})</span>
+            </mat-panel-title>
+            <mat-panel-description>
+              <span class="material-icons">comment_bank</span>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <div class="note-section">
+            <div class="new-note-cont">
+              <label for="note-input">
+                <span class="material-icons custom-note" matTooltip="add a note" matTooltipShowDelay="500">
+                  note_add
+                </span>
+              </label>
+              <div
+                tabindex="1"
+                (keydown.enter)="saveNote($event.target)"
+                contenteditable
+                id="note-input"
+                placeholder="add a note"
+                (blur)="saveNote($event.target)"
+                (focus)="noteActive = true"
+              ></div>
+              <i [style.opacity]="noteActive ? 1 : 0">click away to save</i>
+            </div>
+            <div class="note-list">
+              <div
+                class="note-container"
+                *ngFor="let note of notes; index as i"
+                [class.my-note]="note.userId === user.id"
+                [class.friend-note]="note.userId !== user.id"
+                [class.show]="note.show"
+              >
                 <div
-                  tabindex="1"
-                  (keydown.enter)="saveNote($event.target)"
-                  contenteditable
-                  id="note-input"
-                  placeholder="add a note"
-                  (blur)="saveNote($event.target)"
-                  (focus)="noteActive = true"
-                ></div>
-                <i [style.opacity]="noteActive ? 1 : 0">click away to save</i>
-              </div>
-              <div class="note-list">
-                <div
-                  class="note-container"
-                  *ngFor="let note of notes; index as i"
-                  [class.my-note]="note.userId === user.id"
-                  [class.friend-note]="note.userId !== user.id"
+                  class="note-bubble"
+                  [class.active]="editNoteIndex === i"
+                  (click)="note.show && editNoteIndex === i ? (note.show = note.show) : (note.show = !note.show)"
                 >
-                  <div class="note-bubble" [class.active]="editNoteIndex === i">
-                    <!-- tooltip setup, in case I want to restore it, otherwise delete this -->
-                    <!--  [matTooltip]="
-                      !note.userId
-                        ? 'Added by Guest'
-                        : (note.userId === user.id ? 'you commented' : 'added by ' + note.user) +
-                          ' on ' +
-                          (note.date | date)
-                    "
-                    matTooltipShowDelay="250"
-                    matTooltipPosition="left"
-                    matTooltipClass="notes-tooltip-short" -->
-                    <div
-                      class="note-edit-input"
-                      tabindex="1"
-                      (keydown.enter)="saveNote($event.target, note)"
-                      [contentEditable]="editNoteIndex === i"
-                      (blur)="saveNote($event.target, note)"
-                      [innerHTML]="note.note || note"
-                      (click)="note.userId === user.id ? editNote(i) : null"
-                    ></div>
-
-                    <div class="note-actions" *ngIf="note.userId === user.id">
-                      <!-- <span class="material-icons edit fake-cta" *ngIf="editNoteIndex !== i">create</span> -->
-                      <span
-                        (click)="deleteNote(note.id)"
-                        class="material-icons remove"
-                        matTooltip="delete note"
-                        matTooltipClass="tooltip-red"
-                        matTooltipShowDelay="500"
-                      >
-                        clear
-                      </span>
-                    </div>
-                  </div>
-                  <div class="note-info test-hover">
+                  <div
+                    class="note-edit-input"
+                    [tabindex]="i"
+                    (keydown.enter)="saveNote($event.target, note)"
+                    [contentEditable]="editNoteIndex === i"
+                    [innerHTML]="note.note || note"
+                    #activeNoteRef
+                  ></div>
+                </div>
+                <div class="note-info">
+                  <div class="commenter" [style.opacity]="editNoteIndex === i ? 0 : 1">
                     <p>{{ note.userId === user.id ? 'You' : note.userName ? note.userName : 'Anonymous' }} commented</p>
                     <p>on {{ note.date | date }}</p>
                   </div>
-                  <!-- <div class="note-info">
-                  <p>{{ note.userId === user.id ? 'You' : note.userName ? note.userName : 'Anonymous' }} commented</p>
-                  <p>on {{ note.date | date }}</p>
-                </div> -->
-                </div>
-              </div>
-            </div>
-          </mat-expansion-panel>
-
-          <mat-expansion-panel>
-            <mat-expansion-panel-header>
-              <mat-panel-title>Dates</mat-panel-title>
-              <mat-panel-description>
-                <span class="material-icons">event</span>
-              </mat-panel-description>
-            </mat-expansion-panel-header>
-            <div class="dates-container">
-              <h6>{{ datesMade.length ? 'Add another date' : 'Have you made this recipe?' }}</h6>
-              <div class="date-actions">
-                <button class="btn btn-primary today" (click)="onDateChange()">
-                  <span>Today</span>
-                  <span class="material-icons">add</span>
-                </button>
-                <button class="btn btn-primary date-select" (click)="picker.open()">
-                  <span>Select</span>
-                  <span class="material-icons">launch</span>
-                  <input
-                    class="hidden"
-                    id="dateMade"
-                    [matDatepicker]="picker"
-                    [(ngModel)]="dateInput"
-                    (ngModelChange)="onDateChange($event)"
-                  />
-                  <mat-datepicker #picker></mat-datepicker>
-                </button>
-              </div>
-              <div *ngIf="datesMade.length" class="dates-list">
-                <h6>You made this recipe on...</h6>
-                <div>
-                  <p class="date-item" *ngFor="let d of datesMade">
-                    <span>{{ d.date | date }}</span>
-                    <!-- not implemented yet -->
+                  <div class="note-actions" *ngIf="note.userId === user.id">
                     <span
-                      (click)="deleteDate(d)"
+                      *ngIf="editNoteIndex === i"
+                      class="material-icons"
+                      matTooltip="Save changes"
+                      matTooltipShowDelay="400"
+                      (click)="saveNote(activeNoteRef, note)"
+                    >
+                      check
+                    </span>
+                    <span
+                      *ngIf="editNoteIndex !== i"
+                      (click)="editNote(i, activeNoteRef)"
                       class="material-icons remove"
-                      matTooltip="remove this date"
-                      matTooltipShowDelay="500"
+                      [matTooltip]="'Edit note'"
+                      matTooltipShowDelay="400"
+                    >
+                      edit
+                    </span>
+                    <span
+                      (click)="editNoteIndex === i ? cancelEdit(activeNoteRef, note.note) : deleteNote(note.id)"
+                      class="material-icons remove"
+                      [matTooltip]="editNoteIndex === i ? 'Cancel' : 'Delete note'"
+                      matTooltipShowDelay="400"
                     >
                       clear
                     </span>
-                  </p>
+                  </div>
                 </div>
               </div>
             </div>
-          </mat-expansion-panel>
-        </mat-accordion>
-      </div>
+          </div>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>Dates</mat-panel-title>
+            <mat-panel-description>
+              <span class="material-icons">event</span>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <div class="dates-container">
+            <h6>{{ datesMade.length ? 'Add another date' : 'Have you made this recipe?' }}</h6>
+            <div class="date-actions">
+              <button class="btn btn-primary today" (click)="onDateChange()">
+                <span>Today</span>
+                <img src="assets/images/today.png" />
+              </button>
+              <button class="btn btn-primary date-select" (click)="picker.open()">
+                <span>Select</span>
+                <img src="assets/images/tomorrow.png" />
+                <input
+                  class="hidden"
+                  id="dateMade"
+                  [matDatepicker]="picker"
+                  [(ngModel)]="dateInput"
+                  (ngModelChange)="onDateChange($event)"
+                />
+                <mat-datepicker #picker></mat-datepicker>
+              </button>
+            </div>
+            <div *ngIf="datesMade.length" class="dates-list">
+              <h6>You made this recipe on...</h6>
+              <div>
+                <p class="date-item" *ngFor="let d of datesMade">
+                  <span>{{ d.date | date }}</span>
+                  <span
+                    (click)="deleteDate(d)"
+                    class="material-icons remove"
+                    matTooltip="remove this date"
+                    matTooltipShowDelay="500"
+                  >
+                    clear
+                  </span>
+                </p>
+              </div>
+            </div>
+          </div>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel expanded>
+          <mat-expansion-panel-header>
+            <mat-panel-title>Nutrition</mat-panel-title>
+            <mat-panel-description>
+              <span class="material-icons">spa</span>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <div class="nutrition">
+            <app-nutrition-table [nutritionValues]="recipe.nutrition"></app-nutrition-table>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
     </div>
-
-    <div class="column column-right">
-      <div class="recipe-actions">
-        <div
-          class="fav-lottie lottie-anim"
-          [class.on]="isFavourite"
-          [appLottie]="'heart-like'"
-          [autoplay]="false"
-          [startFrame]="isFavourite ? 110 : null"
-          [play]="isFavourite ? [60, 110] : [140, 150]"
-        >
-          <div class="click-anchor" (click)="favourite()"></div>
-        </div>
-
-        <div
-          class="todo-lottie lottie-anim"
-          [class.on]="toDoSelected"
-          [appLottie]="'to-do-green'"
-          [autoplay]="false"
-          [startFrame]="toDoSelected ? 20 : 0"
-          [play]="toDoSelected ? [0, 22] : [22, 0]"
-          [direction]="toDoSelected ? 'forward' : 'backward'"
-        >
-          <div class="click-anchor" (click)="toDo()"></div>
-        </div>
-      </div>
-
-      <img [src]="recipe.imagePath" alt="{{ recipe.name }}" class="recipe-img" />
-    </div>
-  </section>
+  </div>
 </div>
 
 <div class="actions" *ngIf="showEdit && !readOnly">

@@ -29,7 +29,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   isMobile = false;
   headerExpanded = false;
   width: number = window.innerWidth;
-  // height: number = window.innerHeight;
+  scrollHeight = 160;
   mobileWidth = 760;
   collapse = false;
   hideHeader: boolean;
@@ -61,18 +61,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   @HostListener('window:scroll', ['$event'])
   checkScroll() {
-    // console.log('offset: ', window.pageYOffset);
-    if (window.pageYOffset >= 40) {
+    if (window.pageYOffset >= 16) {
       this.collapse = true;
+      this.scrollHeight = 160 - window.pageYOffset;
     } else {
       this.collapse = false;
-    }
-  }
-
-  advanceLogo() {
-    this.currentLogo++;
-    if (this.currentLogo >= this.logos.length) {
-      this.currentLogo = 0;
+      this.scrollHeight = 160;
     }
   }
 
