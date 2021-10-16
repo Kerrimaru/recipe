@@ -1,7 +1,9 @@
 <div class="dialog dialog-simple" [ngClass]="class">
-  <a *ngIf="!hideClose"><span (click)="closeDialog()" class="material-icons close-x">clear</span></a>
+  <a *ngIf="!hideClose" class="close-x"><span (click)="closeDialog()" class="material-icons">clear</span></a>
   <div class="dialog-content">
     <h2 *ngIf="title">{{ title }}</h2>
+    <img *ngIf="imagePath" [src]="imagePath" />
+
     <p *ngFor="let line of lines" [innerHtml]="line"></p>
   </div>
   <div class="dialog-actions" *ngIf="actions.length">

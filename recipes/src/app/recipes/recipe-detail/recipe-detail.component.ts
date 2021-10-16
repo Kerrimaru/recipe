@@ -16,6 +16,7 @@ interface Note {
   userId: string;
   user: string;
   date: number;
+  show: boolean; // show details
 }
 
 @Component({
@@ -45,8 +46,6 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
 
   notes: (Note | string)[] = [];
 
-  noteActive = false;
-  editNoteIndex: number;
   readOnly: boolean;
 
   datesSub: Subscription;
@@ -54,6 +53,7 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
   recSub: Subscription;
 
   @ViewChild('recipeRef', { static: false }) recipeElRef: ElementRef;
+  @ViewChild('activeNoteRef') activeNoteRef;
 
   constructor(
     private recipeService: RecipeService,
@@ -65,7 +65,6 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    
     this.user = this.authService.user.getValue();
     this.readOnly = this.authService.readOnly.getValue();
 
@@ -89,7 +88,7 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
               return;
             }
             this.recipe = r;
-            console.log('rec:' , this.recipe)
+            console.log('rec:', this.recipe);
 
             this.notesSub = this.recipeService
               .getNotesList(r.key)
@@ -98,7 +97,7 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
                 map((res) => {
                   this.notes = res
                     .map((note: any): Note => {
-                      return { id: note.payload.key, ...note.payload.val() };
+                      return { id: note.payload.key, ...note.payload.val(), show: false };
                     })
                     .reverse();
                 })
@@ -143,7 +142,7 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
     this.settingsService.toggleFavourite(this.recipeKey);
   }
 
-  toDo() {
+  toggleToDo() {
     this.toDoSelected = !this.toDoSelected;
     if (this.readOnly) {
       return;
@@ -159,36 +158,23 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
     if (this.readOnly) {
       return;
     }
-    this.showConfirm('recipe', 'Are you sure?').subscribe((res) => {
+    this.showConfirm('recipe', 'This will permanently delete this recipe', 'Are you sure?', 'takeout-delete.png', [
+      { text: 'Cancel', primary: true },
+      { text: `Delete`, go: 'delete', danger: true },
+    ]).subscribe((res) => {
       this.recipeService.deleteRecipeByKey(this.recipeKey).then((r) => {
         this.router.navigate(['/']);
       });
     });
-    // window.alert('you fool! ive disabled delete for now until you implement a proper alert');
-    // // this.recipeService.deleteRecipeByKey(this.recipeKey);
-    // this.router.navigate(['/']);
   }
 
-  editNote(index: number, ref?: HTMLElement) {
-    if (ref) {
-      ref.focus();
-      document.execCommand('selectAll', false, null);
-      document.getSelection().collapseToEnd();
-    }
-
-    this.editNoteIndex = index;
-  }
-  noclickpls() {
-    // console.log('doh!!!!!');
-  }
-
-  deleteNote(noteId: string) {
+  onDateChange(event?) {
     if (this.readOnly) {
       return;
     }
-    this.showConfirm('note').subscribe((res) => {
-      this.recipeService.deleteNote(noteId, this.recipe.key);
-    });
+    const timestamp = event ? event.getTime() : new Date().getTime();
+    this.dateInput = null;
+    this.recipeService.setUserDateMade(this.user.id, this.recipe.key, timestamp);
   }
 
   deleteDate(e) {
@@ -198,48 +184,31 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
     });
   }
 
-  saveNote(el: HTMLElement, note?: Note | string) {
-    el.blur();
-    this.noteActive = false;
-    this.editNoteIndex = null;
-    const newNote = el.innerHTML;
-
-    // empty note or guest note or  no changes to edited note
-    if (!newNote || typeof note === 'string' || (!!note && newNote === note.note)) {
-      return;
-    }
-    if (note) {
-      this.recipeService.updateNote(newNote, note.id, this.recipe.key);
-      return;
+  onNoteSave(note) {
+    if (!note.id) {
+      const newNote = { note: note.text, userName: this.user.name, userId: this.user.id };
+      this.recipeService.setNote(this.recipe.key, newNote);
     } else {
-      const newNote = { note: el.innerHTML, userName: this.user.name, userId: this.user.id };
-      this.readOnly ? this.notes.push(newNote.note) : this.recipeService.setNote(this.recipe.key, newNote);
-
-      el.innerHTML = '';
+      this.recipeService.updateNote(note.text, note.id, this.recipe.key);
     }
   }
 
-  onDateChange(event?) {
+  onDeleteNote(noteId: string) {
     if (this.readOnly) {
       return;
     }
-    const timestamp = event ? event.getTime() : new Date().getTime();
-    // window.alert('time: ' + timestamp);
-    // return
-    this.dateInput = null;
-    this.recipeService.setUserDateMade(this.user.id, this.recipe.key, timestamp);
+    this.showConfirm('note').subscribe((res) => {
+      this.recipeService.deleteNote(noteId, this.recipe.key);
+    });
   }
 
-  showConfirm(type: string, title?: string): Observable<any> {
-    const actions: any = [
-      { text: 'Cancel', primary: true },
-      { text: `Delete`, go: 'delete', danger: true },
-    ];
-
+  showConfirm(type: string, lines?, title?: string, image?: string, actions?: any[]): Observable<any> {
     return this.dialog.alert({
       title: title,
-      lines: `This will permanently delete this ${type}`,
-      actions: actions,
+      // lines: `This will permanently delete this ${type}`,
+      lines: lines || `Delete this ${type}?`,
+      actions: actions || [{ text: 'Delete', go: 'delete', danger: true }],
+      image: image || 'takeout-delete.png',
     });
   }
 }

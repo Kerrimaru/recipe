@@ -1,0 +1,14 @@
+<div class="nav-list" [ngClass]="{ 'nav-left': navLeft }">
+  <ng-container>
+    <div
+      *ngFor="let item of navItems"
+      class="menu-tab {{ item.class }}"
+      routerLinkActive="active"
+      [routerLink]="item.link"
+      [routerLinkActiveOptions]="{ exact: true }"
+    >
+      <h4>{{ item.text }}</h4>
+      <div class="grow"></div>
+    </div>
+  </ng-container>
+</div>
