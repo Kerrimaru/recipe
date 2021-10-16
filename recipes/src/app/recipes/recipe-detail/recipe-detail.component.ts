@@ -46,8 +46,6 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
 
   notes: (Note | string)[] = [];
 
-  noteActive = false;
-  editNoteIndex: number;
   readOnly: boolean;
 
   datesSub: Subscription;
@@ -144,7 +142,7 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
     this.settingsService.toggleFavourite(this.recipeKey);
   }
 
-  toDo() {
+  toggleToDo() {
     this.toDoSelected = !this.toDoSelected;
     if (this.readOnly) {
       return;
@@ -170,23 +168,13 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
     });
   }
 
-  editNote(index: number, ref?: HTMLElement) {
-    this.editNoteIndex = index;
-    if (ref) {
-      ref.contentEditable = 'true';
-      ref.focus();
-      document.execCommand('selectAll', false, null);
-      document.getSelection().collapseToEnd();
-    }
-  }
-
-  deleteNote(noteId: string) {
+  onDateChange(event?) {
     if (this.readOnly) {
       return;
     }
-    this.showConfirm('note').subscribe((res) => {
-      this.recipeService.deleteNote(noteId, this.recipe.key);
-    });
+    const timestamp = event ? event.getTime() : new Date().getTime();
+    this.dateInput = null;
+    this.recipeService.setUserDateMade(this.user.id, this.recipe.key, timestamp);
   }
 
   deleteDate(e) {
@@ -196,41 +184,22 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
     });
   }
 
-  cancelEdit(el: HTMLElement, note: string) {
-    el.innerHTML = note;
-    el.blur();
-    this.noteActive = false;
-    this.editNoteIndex = null;
-  }
-
-  saveNote(el: HTMLElement, note?: Note | string) {
-    el.blur();
-    this.noteActive = false;
-    this.editNoteIndex = null;
-    const newNote = el.innerHTML;
-
-    // empty note or guest note or no changes to edited note
-    if (!newNote || typeof note === 'string' || (!!note && newNote === note.note)) {
-      return;
-    }
-    if (note) {
-      this.recipeService.updateNote(newNote, note.id, this.recipe.key);
-      return;
+  onNoteSave(note) {
+    if (!note.id) {
+      const newNote = { note: note.text, userName: this.user.name, userId: this.user.id };
+      this.recipeService.setNote(this.recipe.key, newNote);
     } else {
-      const newNote = { note: el.innerHTML, userName: this.user.name, userId: this.user.id };
-      this.readOnly ? this.notes.push(newNote.note) : this.recipeService.setNote(this.recipe.key, newNote);
-
-      el.innerHTML = '';
+      this.recipeService.updateNote(note.text, note.id, this.recipe.key);
     }
   }
 
-  onDateChange(event?) {
+  onDeleteNote(noteId: string) {
     if (this.readOnly) {
       return;
     }
-    const timestamp = event ? event.getTime() : new Date().getTime();
-    this.dateInput = null;
-    this.recipeService.setUserDateMade(this.user.id, this.recipe.key, timestamp);
+    this.showConfirm('note').subscribe((res) => {
+      this.recipeService.deleteNote(noteId, this.recipe.key);
+    });
   }
 
   showConfirm(type: string, lines?, title?: string, image?: string, actions?: any[]): Observable<any> {

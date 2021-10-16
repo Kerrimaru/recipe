@@ -1,0 +1,79 @@
+<div class="note-section">
+  <!-- new notes input -->
+  <div class="new-note-cont" *ngIf="currentUserId">
+    <label for="note-input">
+      <span class="material-icons custom-note" matTooltip="add a note" matTooltipShowDelay="500">note_add</span>
+    </label>
+    <div
+      tabindex="1"
+      (keydown.enter)="$event.target.blur()"
+      contenteditable
+      id="note-input"
+      placeholder="add a note"
+      (blur)="saveNewNote($event.target.innerHTML); $event.target.innerHTML = null"
+    ></div>
+    <i>press enter or click away to save</i>
+  </div>
+
+  <!-- only show for guest users -->
+  <div *ngIf="!notes.length && !currentUserId"><p>No one has commented yet!</p></div>
+
+  <!-- main notes -->
+  <div class="note-list">
+    <div
+      class="note-container"
+      *ngFor="let note of notes; index as i"
+      [class.my-note]="note.userId === currentUserId"
+      [class.friend-note]="note.userId !== currentUserId"
+      [class.show]="note.show"
+    >
+      <div
+        class="note-bubble"
+        [class.active]="editNoteIndex === i"
+        (click)="note.show && editNoteIndex === i ? (note.show = note.show) : (note.show = !note.show)"
+      >
+        <div
+          class="note-edit-input"
+          [tabindex]="i"
+          (keydown.enter)="updateNote($event.target.innerHTML, note.id)"
+          [innerHTML]="note.note"
+          #activeNoteRef
+        ></div>
+      </div>
+      <div class="note-info">
+        <div class="commenter" [style.opacity]="editNoteIndex === i ? 0 : 1">
+          <p>{{ note.userId === currentUserId ? 'You' : note.userName ? note.userName : 'Anonymous' }} commented</p>
+          <p>on {{ note.date | date }}</p>
+        </div>
+        <div class="note-actions" *ngIf="note.userId === currentUserId">
+          <span
+            *ngIf="editNoteIndex === i"
+            class="material-icons"
+            matTooltip="Save changes"
+            matTooltipShowDelay="400"
+            (click)="updateNote(activeNoteRef.innerHTML, note.id)"
+          >
+            check
+          </span>
+          <span
+            *ngIf="editNoteIndex !== i"
+            (click)="editNote(i, activeNoteRef)"
+            class="material-icons remove"
+            [matTooltip]="'Edit note'"
+            matTooltipShowDelay="400"
+          >
+            edit
+          </span>
+          <span
+            (click)="editNoteIndex === i ? cancelEdit(activeNoteRef, note.note) : deleteEmitter.emit(note.id)"
+            class="material-icons remove"
+            [matTooltip]="editNoteIndex === i ? 'Cancel' : 'Delete note'"
+            matTooltipShowDelay="400"
+          >
+            clear
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

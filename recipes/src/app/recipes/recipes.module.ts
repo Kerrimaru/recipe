@@ -12,6 +12,7 @@ import { MatSliderModule } from '@angular/material/slider';
 // import { TagSelectorComponent } from '../tags/tag-selector/tag-selector.component';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { NutritionTableComponent } from './nutrition-table/nutrition-table.component';
+import { NotesComponent } from './notes/notes.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,8 @@ import { NutritionTableComponent } from './nutrition-table/nutrition-table.compo
     RecipeEditComponent,
 
     NutritionTableComponent,
+
+    NotesComponent,
     // TagSelectorComponent,
   ],
   imports: [RecipesRoutingModule, SharedModule, DragDropModule, MatSliderModule, CKEditorModule],
