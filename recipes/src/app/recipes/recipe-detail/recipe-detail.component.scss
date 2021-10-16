@@ -138,6 +138,7 @@ section {
   flex-shrink: 1;
   object-fit: cover;
   max-height: 100vh;
+  max-width: 55%;
 }
 // like and bookmark actions
 .recipe-actions {
@@ -217,160 +218,6 @@ section {
 // notes expansion panel
 .notes-dates {
   width: 50%;
-}
-
-.note-section {
-  width: 100%;
-}
-
-// new notes
-#note-input {
-  margin-right: 45px;
-  color: grey;
-  position: relative;
-  background-color: #add8e64a;
-  border-radius: 5px;
-  padding: 7px 10px;
-  &:before {
-    content: 'Add a new note...';
-    font-style: italic;
-  }
-  &:focus {
-    color: #333333;
-  }
-  &:focus:before {
-    content: '';
-  }
-}
-
-.show .note-info {
-  display: flex;
-}
-
-.new-note-cont {
-  min-height: 37px;
-  position: relative;
-  margin-bottom: 22px;
-  padding-left: 15px;
-  span {
-    cursor: pointer;
-    color: #0000008a;
-    margin-top: 6px;
-  }
-  i {
-    color: grey;
-    position: absolute;
-    bottom: -25px;
-    right: 50px;
-  }
-}
-
-.new-note-cont label {
-  position: absolute;
-  left: -14px;
-}
-
-.note-list {
-  padding: 3px;
-  margin: 0 42px 15px 0;
-}
-
-.note-container {
-  display: flex;
-  flex-direction: column;
-  position: relative;
-}
-
-.note-info {
-  display: none;
-  padding: 4px 7px;
-}
-
-.friend-note .note-info {
-  left: unset;
-  right: -50px;
-}
-
-.note-bubble {
-  position: relative;
-  font-style: italic;
-  margin: 6px 0px 10px 0px;
-  padding: 5px 10px;
-  border-radius: 5px;
-  width: fit-content;
-  max-width: 100%;
-  word-break: break-word;
-  cursor: pointer;
-}
-
-.note-bubble:after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  width: 0;
-  height: 0;
-  border: 9px solid transparent;
-  border-bottom: 0;
-  margin-left: -4.5px;
-  margin-bottom: -9px;
-}
-
-.my-note {
-  .note-bubble {
-    background-color: #add8e6;
-    min-width: 20px;
-  }
-  .active {
-    cursor: text;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    background-color: #add8e64a;
-  }
-  .note-bubble:after {
-    border-top-color: #add8e6;
-    border-left: 0;
-    left: 25px;
-  }
-  .active:after {
-    border-top-color: #add8e64a;
-  }
-}
-
-.friend-note {
-  text-align: right;
-  .note-bubble {
-    border-color: #cceab5;
-    background-color: #cceab5;
-    align-self: flex-end;
-  }
-  .note-bubble:after {
-    right: 25px;
-    border-top-color: #cceab5;
-    border-top-color: #cceab5;
-    border-right: 0;
-  }
-  .note-info {
-    justify-content: flex-end;
-  }
-}
-
-.note-actions span {
-  margin: 0 4.5px;
-  cursor: pointer;
-}
-
-.note-actions,
-i {
-  transition: 0.25s all ease-in-out;
-}
-
-.note-info {
-  p {
-    margin: 0;
-    font-size: 10px;
-    line-height: 1;
-    font-style: italic;
-  }
 }
 
 // dates expansion panel
@@ -502,9 +349,10 @@ mat-accordion .mat-expansion-panel:not(.mat-expanded),
     object-fit: cover;
     width: 100%;
     max-height: 100vh;
+    max-width: 100%;
   }
   .rec-title {
-    // need to set both to centre
+    // must set both to centre for screen scaling
     justify-content: center;
     text-align: center;
   }
@@ -514,6 +362,10 @@ mat-accordion .mat-expansion-panel:not(.mat-expanded),
 
   .notes-dates {
     width: 100%;
+  }
+  .tags-list {
+    justify-content: center;
+    display: flex;
   }
 }
 
