@@ -8,11 +8,8 @@ import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { AuthService } from 'src/app/auth/auth.service';
 import { Observable } from 'rxjs';
 import { TagsConst } from 'src/app/shared/constants/tags.const';
+import { __assign } from 'tslib';
 
-interface Tag {
-  name: string;
-  selected: boolean;
-}
 @Component({
   selector: 'app-recipe-edit',
   templateUrl: './recipe-edit.component.html',
@@ -27,7 +24,7 @@ export class RecipeEditComponent implements OnInit {
   readOnly: boolean;
 
   test: any;
-  tags: Tag[] = TagsConst;
+  tags: string[] = [...TagsConst];
 
   public previewImagePath;
   imgURL: any;
@@ -48,6 +45,7 @@ export class RecipeEditComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log('init recipe edit: ');
     this.readOnly = this.auth.readOnly.getValue();
     this.route.params.subscribe((params) => {
       this.selectedRecipeId = params['id'];
@@ -60,16 +58,12 @@ export class RecipeEditComponent implements OnInit {
     this.ingredientsArrayRef = new FormArray([]);
 
     if (this.editMode) {
-      // this.recipe = this.recipeService.getRecipe(this.selectedRecipeId);
       this.recipe = this.recipeService.getRecipeByKey(this.selectedRecipeId);
-      if (this.recipe.tags) {
-        this.recipe.tags.forEach((t) => {
-          const tag = this.tags.find((tag) => tag.name === t);
-          if (tag) {
-            tag.selected = true;
-          }
-        });
+
+      if (!this.recipe.tags) {
+        this.recipe.tags = [];
       }
+
       if (!this.recipe.nutrition) {
         this.recipe.nutrition = [...NutritionConst];
       }
@@ -96,17 +90,21 @@ export class RecipeEditComponent implements OnInit {
       imagePath: new FormControl(this.recipe.imagePath, Validators.required),
       description: new FormControl(this.recipe.description, Validators.required),
       ingredients: this.ingredientsArrayRef,
-      // nutritionValues: new FormControl([...this.recipe.nutrition]),
     });
-
-    console.log('form: ', this.recipeForm);
 
     this.onAddIngredient();
   }
 
-  toggleTag(tag: Tag) {
+  toggleTag(tag: string, elRef: HTMLElement) {
     this.markDirty();
-    tag.selected = !tag.selected;
+    const selected = this.recipe.tags.indexOf(tag);
+    if (selected >= 0) {
+      elRef.classList.remove('selected');
+      this.recipe.tags.splice(selected, 1);
+    } else {
+      this.recipe.tags.push(tag);
+      elRef.classList.add('selected');
+    }
   }
 
   markDirty() {
@@ -126,15 +124,11 @@ export class RecipeEditComponent implements OnInit {
 
     // remove empty ingredients and flatten obj
     const ingArr = this.ingredientsArrayRef.value.filter((i) => !!i.name).map((_i) => _i.name);
-    const tagsList = this.tags.filter((t) => t.selected).map((t) => t.name);
 
     const _recipe = Object.assign(this.recipe, {
       ...this.recipeForm.value,
       ingredients: ingArr,
-      tags: tagsList,
-      nutrition: this.recipe.nutrition,
     });
-    console.log('rec: ', _recipe);
 
     if (this.editMode) {
       this.recipeService.updateRecipe(_recipe, this.recipe.key);

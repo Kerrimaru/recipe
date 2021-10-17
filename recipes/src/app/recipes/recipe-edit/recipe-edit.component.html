@@ -13,8 +13,13 @@
       <hr />
 
       <div class="tags">
-        <div *ngFor="let tag of tags" class="tag" [class.selected]="tag.selected" (click)="toggleTag(tag)">
-          {{ tag.name }}
+        <div
+          *ngFor="let tag of tags"
+          class="tag"
+          [class.selected]="tag | arrayIncludes: recipe.tags"
+          (click)="toggleTag(tag, $event.target)"
+        >
+          {{ tag }}
         </div>
       </div>
 
