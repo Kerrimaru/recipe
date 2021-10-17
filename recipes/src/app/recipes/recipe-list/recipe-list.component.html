@@ -14,17 +14,19 @@
 
   <div class="recipe-list" *ngIf="columns.length && !loading">
     <div *ngFor="let col of columns" class="custom-col {{ col.column }}" [style.width.%]="100 / columnCount">
-      <app-recipe-item
-        *ngFor="let recipeIndex of col.indexes; index as subIndex"
-        class="recipe-item index-{{ recipeIndex }}"
-        [recipe]="recipes[recipeIndex]"
-        [ngClass]="subIndex > scrollShow ? 'hide' : 'show'"
-        [showFavouriteIcon]="filter !== 'favourites'"
-        [isFavourite]="filter !== 'favourites' ? (recipes[recipeIndex].key | favourite: favouritesArr) : null"
-        (favouriteEmitter)="favourite(recipes[recipeIndex])"
-        (imgLoadEmitter)="onImageLoad($event, recipeIndex)"
-      ></app-recipe-item>
+      <ng-container *ngFor="let recipeIndex of col.indexes; index as subIndex">
+        <app-recipe-item
+          *ngIf="subIndex < scrollShow"
+          class="recipe-item index-{{ recipeIndex }}"
+          [recipe]="recipes[recipeIndex]"
+          [showFavouriteIcon]="filter !== 'favourites'"
+          [isFavourite]="filter !== 'favourites' ? (recipes[recipeIndex].key | favourite: favouritesArr) : null"
+          (favouriteEmitter)="favourite(recipes[recipeIndex])"
+          (imgLoadEmitter)="onImageLoad($event, recipeIndex)"
+        ></app-recipe-item>
+      </ng-container>
     </div>
+    <!-- [ngClass]="subIndex > scrollShow ? 'hide' : 'show'" -->
 
     <!-- <ng-container *ngFor="let recipe of recipes | recipeFilter: searchTerm | slice: 0:offset; index as index">
       
