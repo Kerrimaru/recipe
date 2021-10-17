@@ -1,5 +1,5 @@
 <div class="recipe-list-container">
-  <div class="search" *ngIf="recipes?.length" [ngClass]="{ expanded: searchOn, sticky: maxScroll }">
+  <div class="search" [ngClass]="{ expanded: searchOn, sticky: maxScroll }">
     <input
       *ngIf="searchOn"
       [ngModelOptions]="{ standalone: true }"
@@ -7,20 +7,37 @@
       placeholder="Search"
       [(ngModel)]="searchTerm"
       (blur)="searchBlur()"
+      (keyup)="runSearch()"
     />
     <span class="material-icons" (click)="searchOn = true">search</span>
   </div>
 
-  <div class="recipe-list" *ngIf="recipes.length && !loading">
-    <ng-container *ngFor="let recipe of recipes | recipeFilter: searchTerm; index as index">
+  <div class="recipe-list" *ngIf="columns.length && !loading">
+    <div *ngFor="let col of columns" class="custom-col {{ col.column }}" [style.width.%]="100 / columnCount">
       <app-recipe-item
+        *ngFor="let recipeIndex of col.indexes; index as subIndex"
+        class="recipe-item index-{{ recipeIndex }}"
+        [recipe]="recipes[recipeIndex]"
+        [ngClass]="subIndex > scrollShow ? 'hide' : 'show'"
+        [showFavouriteIcon]="filter !== 'favourites'"
+        [isFavourite]="filter !== 'favourites' ? (recipes[recipeIndex].key | favourite: favouritesArr) : null"
+        (favouriteEmitter)="favourite(recipes[recipeIndex])"
+        (imgLoadEmitter)="onImageLoad($event, recipeIndex)"
+      ></app-recipe-item>
+    </div>
+
+    <!-- <ng-container *ngFor="let recipe of recipes | recipeFilter: searchTerm | slice: 0:offset; index as index">
+      
+      <app-recipe-item
+        class="recipe-item index-{{ index }} flex-child"
         [recipe]="recipe"
-        [index]="index"
+      
         [showFavouriteIcon]="filter !== 'favourites'"
         [isFavourite]="filter !== 'favourites' ? (recipe.key | favourite: favouritesArr) : null"
         (favouriteEmitter)="favourite(recipe)"
+        (imgLoadEmitter)="onImageLoad($event, index)"
       ></app-recipe-item>
-    </ng-container>
+    </ng-container> -->
   </div>
 
   <div class="scroll-top" [ngStyle]="{ opacity: maxScroll ? 1 : 0 }">

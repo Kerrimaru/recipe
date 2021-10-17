@@ -11,11 +11,12 @@ import { AuthService } from 'src/app/auth/auth.service';
 import { DialogService } from 'src/app/shared/dialog/dialog.service';
 import { User } from 'src/app/auth/user.model';
 import { AuthComponent } from 'src/app/auth/auth.component';
-
+import { RecipeFilterPipe } from 'src/app/shared/pipes/recipe-filter.pipe';
 @Component({
   selector: 'app-recipe-list',
   templateUrl: './recipe-list.component.html',
   styleUrls: ['./recipe-list.component.scss'],
+  providers: [RecipeFilterPipe],
 })
 export class RecipeListComponent implements OnInit, OnDestroy {
   recipes: Recipe[] = [];
@@ -42,14 +43,32 @@ export class RecipeListComponent implements OnInit, OnDestroy {
   recipesVisible: any[];
   filter: string;
 
+  offset = 2;
+  loadedCount = 0;
+
+  columns = [];
+  columnCount = 1;
+  scrollShow = 5;
+
   @HostListener('window:scroll', ['$event'])
-  checkScroll() {
+  checkScroll(event) {
     if (window.pageYOffset > 40) {
       this.searchOn = this.searchTerm ? true : false;
       this.maxScroll = true;
     } else {
       this.searchOn = true;
       this.maxScroll = false;
+    }
+    const mult = Math.floor(window.scrollY / window.innerHeight) + 1;
+    this.scrollShow = 5 * mult;
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    const prevCount = this.columnCount;
+    this.columnCount = this.setColumnCount(event.target.innerWidth);
+    if (prevCount !== this.columnCount) {
+      this.columns = this.populateColumns(this.allRecipes);
     }
   }
 
@@ -62,10 +81,12 @@ export class RecipeListComponent implements OnInit, OnDestroy {
     private fb: AngularFireDatabase,
     private settingsService: UserSettingsService,
     private authService: AuthService,
-    private dialog: DialogService
+    private dialog: DialogService,
+    private filterPipe: RecipeFilterPipe
   ) {}
 
   ngOnInit(): void {
+    this.columnCount = this.setColumnCount(window.innerWidth);
     this.userSub = this.authService.user.subscribe((user) => {
       this.readOnly = this.authService.readOnly.getValue();
       this.user = user;
@@ -79,7 +100,7 @@ export class RecipeListComponent implements OnInit, OnDestroy {
         title += ', Guest!';
         message = [
           'As a guest, feel free to explore! You will be able to preview the site, but with limited functionality.',
-          'You can view up to <b>30 recipes</b>, but cannot:',
+          'You can view recipes, but cannot:',
           'add new recipes<br> favourite or bookmark recipes<br> add comments or add dates',
           'and any changes made will not be saved.',
         ];
@@ -107,13 +128,63 @@ export class RecipeListComponent implements OnInit, OnDestroy {
     });
 
     this.recipesSub = this.recipeService.recipes$.subscribe((recipes) => {
-      this.allRecipes = [...recipes];
+      this.allRecipes = [...recipes.reverse()];
 
       const urlSegment = (this.route.url as BehaviorSubject<any>).getValue();
       this.filter = urlSegment.length ? urlSegment[0].path : null;
-      this.recipes = this.handleRoute(this.filter).reverse();
+      this.recipes = this.handleRoute(this.filter);
+      this.columns = this.populateColumns(this.recipes);
       this.loading = false;
     });
+  }
+
+  runSearch() {
+    if (!this.searchTerm) {
+      this.resetAll();
+    }
+    const arr = this.filterPipe.transform(this.allRecipes, this.searchTerm);
+    this.recipes = arr;
+    this.columns = this.populateColumns(arr);
+  }
+
+  resetAll() {
+    this.recipes = this.handleRoute(this.filter);
+    this.columns = this.populateColumns(this.recipes);
+  }
+
+  populateColumns(recipesArray) {
+    const columns = [];
+    for (let index = 1; index <= this.columnCount; index++) {
+      const name = 'column' + index;
+      const indexes = [...Array(recipesArray.length).keys()].filter((i) => {
+        // console.log('i: ', i, ' col count: ', this.columnCount, ' modulo: ', i % this.columnCount === index - 1);
+        return i % this.columnCount === index - 1;
+      });
+      columns.push({ column: name, indexes: indexes });
+    }
+    return columns;
+  }
+
+  setColumnCount(width) {
+    if (width < 600) {
+      return 1;
+    } else if (width < 800) {
+      return 2;
+    } else if (width < 1000) {
+      return 3;
+    } else {
+      return 4;
+    }
+  }
+
+  loadMore() {}
+
+  onImageLoad(event, index) {
+    // console.log('event: ', event, ' index: ', index);
+    // this.loadedCount++;
+    // if (this.loadedCount === this.offset) {
+    //   this.offset += 2;
+    // }
   }
 
   handleRoute(key: string, recipeArray?: any[]) {
