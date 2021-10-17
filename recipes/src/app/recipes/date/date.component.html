@@ -1,0 +1,37 @@
+<div class="dates-container">
+  <h6>{{ dates.length ? 'Add another date' : 'Have you made this recipe?' }}</h6>
+  <div class="date-actions">
+    <button class="btn btn-primary today" (click)="addDateEmitter.emit()">
+      <span>Today</span>
+      <img src="assets/images/today.png" />
+    </button>
+    <button class="btn btn-primary date-select" (click)="picker.open()">
+      <span>Select</span>
+      <img src="assets/images/tomorrow.png" />
+      <input
+        class="hidden"
+        id="dateMade"
+        [matDatepicker]="picker"
+        [(ngModel)]="dateInput"
+        (ngModelChange)="addDateEmitter.emit($event)"
+      />
+      <mat-datepicker #picker></mat-datepicker>
+    </button>
+  </div>
+  <div *ngIf="dates.length" class="dates-list">
+    <h6>You made this recipe on...</h6>
+    <div>
+      <p class="date-item" *ngFor="let d of dates">
+        <span>{{ d.date | date }}</span>
+        <span
+          (click)="deleteDateEmitter.emit(d)"
+          class="material-icons remove"
+          matTooltip="remove this date"
+          matTooltipShowDelay="500"
+        >
+          clear
+        </span>
+      </p>
+    </div>
+  </div>
+</div>

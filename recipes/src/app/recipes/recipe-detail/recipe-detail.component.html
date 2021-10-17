@@ -10,12 +10,12 @@
     <hr />
   </div>
 
-  <section>
+  <section class="recipe-main-content">
     <div class="tags-ing-list">
       <div class="tags-list">
         <div *ngFor="let tag of recipe.tags" class="tag">{{ tag }}</div>
       </div>
-      <mat-expansion-panel expanded="true" class="main-section-mep ingredients-expansion">
+      <mat-expansion-panel expanded="true" class="ingredients-expansion">
         <mat-expansion-panel-header>
           <mat-panel-title><h2 id="ingredients-title">Ingredients</h2></mat-panel-title>
         </mat-expansion-panel-header>
@@ -57,7 +57,7 @@
         <div class="click-anchor" (click)="toggleToDo()"></div>
       </div>
     </div>
-    <mat-expansion-panel expanded="true" class="main-section-mep method-expansion">
+    <mat-expansion-panel expanded="true" class="method-expansion">
       <mat-expansion-panel-header>
         <mat-panel-title><h2>Method</h2></mat-panel-title>
       </mat-expansion-panel-header>
@@ -65,86 +65,52 @@
     </mat-expansion-panel>
   </section>
 
-  <div class="additional-details">
-    <div class="notes-dates">
-      <mat-accordion class="example-headers-align" multi>
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              Notes
-              <span *ngIf="notes.length" [style.margin-left.px]="3">({{ notes.length }})</span>
-            </mat-panel-title>
-            <mat-panel-description>
-              <span class="material-icons">comment_bank</span>
-            </mat-panel-description>
-          </mat-expansion-panel-header>
-          <app-notes
-            [notes]="notes"
-            [currentUserId]="readOnly ? null : user.id"
-            (deleteEmitter)="onDeleteNote($event)"
-            (saveEmitter)="onNoteSave($event)"
-          ></app-notes>
-        </mat-expansion-panel>
+  <div class="expansion-panels">
+    <mat-accordion class="example-headers-align" multi>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Notes
+            <span *ngIf="notes.length" [style.margin-left.px]="3">({{ notes.length }})</span>
+          </mat-panel-title>
+          <mat-panel-description>
+            <span class="material-icons">comment_bank</span>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <app-notes
+          [notes]="notes"
+          [currentUserId]="readOnly ? null : user.id"
+          (deleteEmitter)="onDeleteNote($event)"
+          (saveEmitter)="onNoteSave($event)"
+        ></app-notes>
+      </mat-expansion-panel>
 
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            <mat-panel-title>Dates</mat-panel-title>
-            <mat-panel-description>
-              <span class="material-icons">event</span>
-            </mat-panel-description>
-          </mat-expansion-panel-header>
-          <div class="dates-container">
-            <h6>{{ datesMade.length ? 'Add another date' : 'Have you made this recipe?' }}</h6>
-            <div class="date-actions">
-              <button class="btn btn-primary today" (click)="onDateChange()">
-                <span>Today</span>
-                <img src="assets/images/today.png" />
-              </button>
-              <button class="btn btn-primary date-select" (click)="picker.open()">
-                <span>Select</span>
-                <img src="assets/images/tomorrow.png" />
-                <input
-                  class="hidden"
-                  id="dateMade"
-                  [matDatepicker]="picker"
-                  [(ngModel)]="dateInput"
-                  (ngModelChange)="onDateChange($event)"
-                />
-                <mat-datepicker #picker></mat-datepicker>
-              </button>
-            </div>
-            <div *ngIf="datesMade.length" class="dates-list">
-              <h6>You made this recipe on...</h6>
-              <div>
-                <p class="date-item" *ngFor="let d of datesMade">
-                  <span>{{ d.date | date }}</span>
-                  <span
-                    (click)="deleteDate(d)"
-                    class="material-icons remove"
-                    matTooltip="remove this date"
-                    matTooltipShowDelay="500"
-                  >
-                    clear
-                  </span>
-                </p>
-              </div>
-            </div>
-          </div>
-        </mat-expansion-panel>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>Dates</mat-panel-title>
+          <mat-panel-description>
+            <span class="material-icons">event</span>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <app-date
+          [dates]="datesMade"
+          (addDateEmitter)="onDateChange($event)"
+          (deleteDateEmitter)="deleteDate($event)"
+        ></app-date>
+      </mat-expansion-panel>
 
-        <mat-expansion-panel expanded>
-          <mat-expansion-panel-header>
-            <mat-panel-title>Nutrition</mat-panel-title>
-            <mat-panel-description>
-              <span class="material-icons">spa</span>
-            </mat-panel-description>
-          </mat-expansion-panel-header>
-          <div class="nutrition">
-            <app-nutrition-table [nutritionValues]="recipe.nutrition"></app-nutrition-table>
-          </div>
-        </mat-expansion-panel>
-      </mat-accordion>
-    </div>
+      <mat-expansion-panel expanded>
+        <mat-expansion-panel-header>
+          <mat-panel-title>Nutrition</mat-panel-title>
+          <mat-panel-description>
+            <span class="material-icons">spa</span>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <div class="nutrition">
+          <app-nutrition-table [nutritionValues]="recipe.nutrition"></app-nutrition-table>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
   </div>
 </div>
 
