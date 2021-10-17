@@ -25,7 +25,7 @@ export class RecipeFilterPipe implements PipeTransform {
       return recipes;
     }
 
-    return recipes.filter((rec) => {
+    const _recipes = recipes.filter((rec) => {
       let value;
 
       if (rec.value) {
@@ -41,5 +41,6 @@ export class RecipeFilterPipe implements PipeTransform {
 
       return result;
     });
+    return _recipes;
   }
 }

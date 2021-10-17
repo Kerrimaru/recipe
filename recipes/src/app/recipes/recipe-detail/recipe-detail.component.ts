@@ -88,7 +88,7 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
               return;
             }
             this.recipe = r;
-            console.log('rec:', this.recipe);
+            // console.log('rec:', this.recipe);
 
             this.notesSub = this.recipeService
               .getNotesList(r.key)

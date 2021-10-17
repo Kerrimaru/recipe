@@ -27,7 +27,7 @@ export class NutritionTableComponent implements OnInit {
 
   ngOnInit(): void {
     if (!this.nutritionValues) {
-      this.nutritionValues = NutritionConst;
+      this.nutritionValues = [...NutritionConst];
     }
   }
 }

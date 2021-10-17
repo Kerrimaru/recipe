@@ -4,7 +4,7 @@
   [ngClass]="{ flipped: flipped }"
   [routerLink]="flipped ? null : ['/recipes', recipe.key]"
 >
-  <img [src]="recipe.imagePath" alt="{{ recipe.name }}" class="recipe-img" />
+  <img [src]="recipe.imagePath" alt="{{ recipe.name }}" class="recipe-img" (load)="imgLoadEmitter.emit($event)" />
   <div *ngIf="isNew && !flipped" class="new-recipe-cont">
     <!-- <div class="ribbon ribbon-top-left"><span>ribbon</span></div> -->
 
