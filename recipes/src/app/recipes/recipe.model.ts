@@ -14,7 +14,7 @@ export class Recipe {
   public key: string;
   public created: number; // utc
   public isFavourite: boolean;
-  public time: string;
+  public time: number;
   public nutrition: Nutrition[] = NutritionConst;
   // public selected = false;
 
