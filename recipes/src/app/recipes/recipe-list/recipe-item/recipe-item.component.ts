@@ -11,11 +11,11 @@ export class RecipeItemComponent implements OnInit {
   constructor() {}
 
   @Input() recipe: Recipe;
-  @Input() index: number; // not being used
   @Input() isFavourite: boolean;
   @Input() showFavouriteIcon = true;
 
   @Output() favouriteEmitter = new EventEmitter<string>();
+  @Output() imgLoadEmitter = new EventEmitter<any>();
 
   flipped = false;
   // expanded = false;

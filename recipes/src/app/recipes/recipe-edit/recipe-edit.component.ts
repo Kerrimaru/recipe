@@ -45,7 +45,6 @@ export class RecipeEditComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log('init recipe edit: ');
     this.readOnly = this.auth.readOnly.getValue();
     this.route.params.subscribe((params) => {
       this.selectedRecipeId = params['id'];
