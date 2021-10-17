@@ -272,9 +272,6 @@ mat-accordion .mat-expansion-panel:not(.mat-expanded),
     order: 0;
     max-width: 80%;
     width: unset;
-    .ingredients-expansion {
-      padding: 0 50px;
-    }
   }
   img.recipe-img {
     order: -1;
@@ -299,10 +296,14 @@ mat-accordion .mat-expansion-panel:not(.mat-expanded),
   .tags-list {
     justify-content: center;
     display: flex;
+    flex-wrap: wrap;
   }
 }
 
 @media (max-width: 800px) {
+  .tags-ing-list {
+    width: 100%;
+  }
   .rec-title h1 {
     font-size: 30px;
   }

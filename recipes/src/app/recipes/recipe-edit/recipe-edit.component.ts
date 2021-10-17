@@ -32,6 +32,7 @@ export class RecipeEditComponent implements OnInit {
   public Editor = ClassicEditor;
   ingredientsArrayRef: FormArray;
   tagsArrayRef: FormArray;
+  prepTime: number;
 
   constructor(
     private route: ActivatedRoute,
@@ -66,6 +67,8 @@ export class RecipeEditComponent implements OnInit {
       if (!this.recipe.nutrition) {
         this.recipe.nutrition = [...NutritionConst];
       }
+
+      this.prepTime = this.recipe.time || null;
 
       this.previewImagePath = this.recipe.imagePath;
 
@@ -127,6 +130,7 @@ export class RecipeEditComponent implements OnInit {
     const _recipe = Object.assign(this.recipe, {
       ...this.recipeForm.value,
       ingredients: ingArr,
+      time: this.prepTime,
     });
 
     if (this.editMode) {

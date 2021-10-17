@@ -128,13 +128,16 @@
             (changeEmitter)="recipe.nutrition = $event; markDirty()"
           ></app-nutrition-table>
         </div>
-        <!-- <div class="time">
-          <h2>Time to prepare</h2>
-          <small>(minutes)</small>
-          <input />
-        </div> -->
       </div>
     </form>
+    <div class="time">
+      <h2>
+        Time to prepare
+        <small>(minutes)</small>
+      </h2>
+
+      <input [(ngModel)]="prepTime" type="number" />
+    </div>
   </div>
 
   <div class="actions">
