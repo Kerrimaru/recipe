@@ -112,6 +112,11 @@
       </mat-expansion-panel>
     </mat-accordion>
   </div>
+
+  <div class="time-wtf">
+    <h6>Prep time</h6>
+    <p>{{ recipe.time || '-' }}</p>
+  </div>
 </div>
 
 <div class="actions" *ngIf="showEdit && !readOnly">
