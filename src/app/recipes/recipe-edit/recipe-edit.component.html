@@ -1,0 +1,180 @@
+<div class="edit-container">
+  <div>
+    <form
+      [formGroup]="recipeForm"
+      (ngSubmit)="onSubmit()"
+      (keydown.enter)="$event.preventDefault()"
+    >
+      <div class="recipe-header">
+        <input
+          type="text"
+          id="recipe-name"
+          class="app-form-control"
+          formControlName="name"
+          placeholder="Recipe title"
+        />
+      </div>
+      <hr />
+
+      <div class="tags">
+        <div
+          *ngFor="let tag of tags"
+          class="tag"
+          [class.selected]="tag | arrayIncludes: recipe.tags"
+          (click)="toggleTag(tag, $event.target)"
+        >
+          {{ tag }}
+        </div>
+      </div>
+
+      <div class="ing-img-cont">
+        <div class="column column-left">
+          <h2>Ingredients</h2>
+          <small>Copy and paste a list, or add one by one</small>
+
+          <div
+            formArrayName="ingredients"
+            cdkDropList
+            (cdkDropListDropped)="drop($event)"
+            class="ingredients-list"
+          >
+            <div
+              cdkDrag
+              class="ingredient"
+              [formGroupName]="i"
+              *ngFor="let ingredientCtrl of ingredientControls; let i = index"
+              (blur)="checkIfLast(i)"
+              (focus)="focus(i)"
+            >
+              <!-- drag handle -->
+              <div
+                class="ingredient-handle"
+                cdkDragHandle
+                matTooltip="Drag to reorder"
+                matTooltipShowDelay="500"
+                [style.z-index]="ingredientControls.length > 1 ? 1 : -1"
+              >
+                <svg width="24px" fill="currentColor" viewBox="0 0 24 24">
+                  <path
+                    d="M10 9h4V6h3l-5-5-5 5h3v3zm-1 1H6V7l-5 5 5 5v-3h3v-4zm14 2l-5-5v3h-3v4h3v3l5-5zm-9 3h-4v3H7l5 5 5-5h-3v-3z"
+                  ></path>
+                  <path d="M0 0h24v24H0z" fill="none"></path>
+                </svg>
+              </div>
+
+              <input
+                type="text"
+                class="form-control"
+                formControlName="name"
+                (blur)="checkIfLast(i)"
+                (focus)="focus(i)"
+                (paste)="onPaste($event, i)"
+              />
+
+              <!-- <button type="button" class="btn btn-secondary" (click)="onRemoveIngredient(i)">Delete</button> -->
+              <img
+                src="/assets/images/icons/delete-icon-3.png"
+                class="delete-icon"
+                (click)="onRemoveIngredient(i)"
+                matTooltip="Delete ingredient"
+                matTooltipShowDelay="500"
+                [style.z-index]="ingredientControls.length > 1 ? 1 : -1"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="column column-right image-upload">
+          <!-- hidden upload input -->
+          <div>
+            <input
+              #imgfile
+              type="file"
+              accept="image/*"
+              (change)="preview(imgfile.files)"
+              #imagePath
+              id="imagePath"
+              style="display: none"
+            />
+          </div>
+
+          <div class="aspect-ratio-box" *ngIf="!previewImage && !recipeImgUrl">
+            <div
+              class="aspect-ratio-box-inside"
+              (click)="imgfile.click()"
+              matTooltip="Click to upload an image"
+              matTooltipShowDelay="700"
+            >
+              <div class="flexbox-centering">
+                <div class="viewport-sizing">
+                  <span class="material-icons">add_a_photo</span>
+                  <!-- <p>
+                    Browse or
+                    <br />
+                    drop image here
+                  </p> -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <img
+            class="preview"
+            [src]="previewImage ? previewImage : recipeImgUrl"
+            (click)="imgfile.click()"
+          />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <h2>Method</h2>
+        <div class="editor">
+          <ckeditor
+            [editor]="Editor"
+            [config]="{ height: '300px' }"
+            formControlName="description"
+          ></ckeditor>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="nutrition">
+          <app-nutrition-table
+            [(nutritionValues)]="recipe.nutrition"
+            [editable]="true"
+            (changeEmitter)="recipe.nutrition = $event; markDirty()"
+          ></app-nutrition-table>
+        </div>
+      </div>
+    </form>
+    <div class="time">
+      <h2>
+        Time to prepare
+        <small>(minutes)</small>
+      </h2>
+
+      <input [(ngModel)]="prepTime" type="number" />
+    </div>
+  </div>
+
+  <div class="actions">
+    <button type="button" class="btn btn-danger show" (click)="onCancel()">
+      Cancel
+    </button>
+    <button
+      [ngClass]="{ hide: !recipeForm.dirty }"
+      type="submit"
+      class="btn btn-primary"
+      (click)="onSubmit()"
+      [matTooltip]="
+        readOnly
+          ? 'Please create an account to add recipes'
+          : !recipeForm.valid
+          ? 'Please fill in all fields'
+          : ''
+      "
+    >
+      Save
+    </button>
+  </div>
+</div>
