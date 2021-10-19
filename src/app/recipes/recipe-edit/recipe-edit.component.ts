@@ -34,7 +34,7 @@ export class RecipeEditComponent implements OnInit {
   public Editor = ClassicEditor;
   ingredientsArrayRef: FormArray;
   tagsArrayRef: FormArray;
-  prepTime: number;
+  prepTime: number = null;
 
   previewImage: any; // image added by user, but not yet saved
   uploadPercent: any; // why?
@@ -134,6 +134,7 @@ export class RecipeEditComponent implements OnInit {
   }
 
   onSubmit() {
+    // to do: show errors!!!
     if (!this.recipeForm.valid || this.readOnly) {
       return;
     }
@@ -163,8 +164,7 @@ export class RecipeEditComponent implements OnInit {
       ingredients: ingArr,
       time: this.prepTime,
     });
-    console.log("recipe: ", _recipe);
-    // return;
+
     if (this.editMode) {
       this.recipeService.updateRecipe(_recipe, this.recipe.key);
       this.onCancel();
