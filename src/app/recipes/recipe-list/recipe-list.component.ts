@@ -1,21 +1,21 @@
-import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
-import { Recipe } from '../recipe.model';
-import { RecipeService } from '../recipe.service';
-import { Router, ActivatedRoute } from '@angular/router';
-import { Subscription, BehaviorSubject } from 'rxjs';
-import { DataStorageService } from 'src/app/shared/data-storage.service';
-import { AngularFireDatabase } from '@angular/fire/database';
-import { AngularFireAuth } from '@angular/fire/auth';
-import { UserSettingsService } from 'src/app/settings/user-settings.service';
-import { AuthService } from 'src/app/auth/auth.service';
-import { DialogService } from 'src/app/shared/dialog/dialog.service';
-import { User } from 'src/app/auth/user.model';
-import { AuthComponent } from 'src/app/auth/auth.component';
-import { RecipeFilterPipe } from 'src/app/shared/pipes/recipe-filter.pipe';
+import { Component, OnInit, OnDestroy, HostListener } from "@angular/core";
+import { Recipe } from "../recipe.model";
+import { RecipeService } from "../recipe.service";
+import { Router, ActivatedRoute } from "@angular/router";
+import { Subscription, BehaviorSubject } from "rxjs";
+import { DataStorageService } from "src/app/shared/data-storage.service";
+import { AngularFireDatabase } from "@angular/fire/database";
+import { AngularFireAuth } from "@angular/fire/auth";
+import { UserSettingsService } from "src/app/settings/user-settings.service";
+import { AuthService } from "src/app/auth/auth.service";
+import { DialogService } from "src/app/shared/dialog/dialog.service";
+import { User } from "src/app/auth/user.model";
+import { AuthComponent } from "src/app/auth/auth.component";
+import { RecipeFilterPipe } from "src/app/shared/pipes/recipe-filter.pipe";
 @Component({
-  selector: 'app-recipe-list',
-  templateUrl: './recipe-list.component.html',
-  styleUrls: ['./recipe-list.component.scss'],
+  selector: "app-recipe-list",
+  templateUrl: "./recipe-list.component.html",
+  styleUrls: ["./recipe-list.component.scss"],
   providers: [RecipeFilterPipe],
 })
 export class RecipeListComponent implements OnInit, OnDestroy {
@@ -50,7 +50,7 @@ export class RecipeListComponent implements OnInit, OnDestroy {
   columnCount = 1;
   scrollShow = 5;
 
-  @HostListener('window:scroll', ['$event'])
+  @HostListener("window:scroll", ["$event"])
   checkScroll(event) {
     if (window.pageYOffset > 40) {
       this.searchOn = this.searchTerm ? true : false;
@@ -60,10 +60,11 @@ export class RecipeListComponent implements OnInit, OnDestroy {
       this.maxScroll = false;
     }
     const mult = Math.floor(window.scrollY / window.innerHeight) + 1;
-    this.scrollShow = 5 * mult;
+
+    this.scrollShow = 5 * mult > this.scrollShow ? 5 * mult : this.scrollShow;
   }
 
-  @HostListener('window:resize', ['$event'])
+  @HostListener("window:resize", ["$event"])
   onResize(event) {
     const prevCount = this.columnCount;
     this.columnCount = this.setColumnCount(event.target.innerWidth);
@@ -91,33 +92,38 @@ export class RecipeListComponent implements OnInit, OnDestroy {
       this.readOnly = this.authService.readOnly.getValue();
       this.user = user;
     });
-    const notify = this.route.snapshot.queryParams['notify'];
+    const notify = this.route.snapshot.queryParams["notify"];
     if (notify) {
-      let title = 'Welcome';
+      let title = "Welcome";
       let message: string[];
-      let actions: any = [{ text: 'view recipes' }];
-      if (notify === 'guest') {
-        title += ', Guest!';
+      let actions: any = [{ text: "view recipes" }];
+      if (notify === "guest") {
+        title += ", Guest!";
         message = [
-          'As a guest, feel free to explore! You will be able to preview the site, but with limited functionality.',
-          'You can view recipes, but cannot:',
-          'add new recipes<br> favourite or bookmark recipes<br> add comments or add dates',
-          'and any changes made will not be saved.',
+          "As a guest, feel free to explore! You will be able to preview the site, but with limited functionality.",
+          "You can view recipes, but cannot:",
+          "add new recipes<br> favourite or bookmark recipes<br> add comments or add dates",
+          "and any changes made will not be saved.",
         ];
       } else {
         const testy = history.state.data;
         if (!!testy && !!testy.name) {
-          title += ', ' + testy.name;
+          title += ", " + testy.name;
         }
 
-        message = ['Thanks for signing up! Get started by', 'browsing recipes, or add your own straight away!'];
-        actions.push({ text: 'add new recipe', go: 'new', secondary: true });
+        message = [
+          "Thanks for signing up! Get started by",
+          "browsing recipes, or add your own straight away!",
+        ];
+        actions.push({ text: "add new recipe", go: "new", secondary: true });
       }
-      this.dialog.alert({ title: title, lines: message, actions: actions }).subscribe((res) => {
-        if (res === 'new') {
-          this.router.navigate(['recipes', 'new']);
-        }
-      });
+      this.dialog
+        .alert({ title: title, lines: message, actions: actions })
+        .subscribe((res) => {
+          if (res === "new") {
+            this.router.navigate(["recipes", "new"]);
+          }
+        });
     }
 
     this.favsSub = this.settingsService.favs$.subscribe((res) => {
@@ -155,7 +161,7 @@ export class RecipeListComponent implements OnInit, OnDestroy {
   populateColumns(recipesArray) {
     const columns = [];
     for (let index = 1; index <= this.columnCount; index++) {
-      const name = 'column' + index;
+      const name = "column" + index;
       const indexes = [...Array(recipesArray.length).keys()].filter((i) => {
         // console.log('i: ', i, ' col count: ', this.columnCount, ' modulo: ', i % this.columnCount === index - 1);
         return i % this.columnCount === index - 1;
@@ -190,9 +196,9 @@ export class RecipeListComponent implements OnInit, OnDestroy {
   handleRoute(key: string, recipeArray?: any[]) {
     const recipeArr = recipeArray ? [...recipeArray] : [...this.allRecipes];
     switch (key) {
-      case 'to-do':
+      case "to-do":
         return recipeArr.filter((r) => this.toDoList.includes(r.key));
-      case 'favourites':
+      case "favourites":
         return recipeArr.filter((r) => this.favouritesArr.includes(r.key));
       default:
         return recipeArr;
@@ -201,7 +207,7 @@ export class RecipeListComponent implements OnInit, OnDestroy {
 
   handleQueryParams(key: string) {
     const recipeArr = [...this.allRecipes];
-    if (key === 'toDo') {
+    if (key === "toDo") {
       const filt = recipeArr.filter((r) => {
         return this.toDoList.includes(r.key);
       });
@@ -227,9 +233,9 @@ export class RecipeListComponent implements OnInit, OnDestroy {
 
   scroll(el?) {
     if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
+      el.scrollIntoView({ behavior: "smooth" });
     } else {
-      window.scroll({ top: 0, behavior: 'smooth' });
+      window.scroll({ top: 0, behavior: "smooth" });
     }
   }
 
@@ -243,12 +249,17 @@ export class RecipeListComponent implements OnInit, OnDestroy {
   }
 
   randomRecipe() {
-    const rec = this.allRecipes[Math.floor(Math.random() * this.recipes.length)];
-    this.router.navigate(['recipes', rec.key]);
+    const rec =
+      this.allRecipes[Math.floor(Math.random() * this.recipes.length)];
+    this.router.navigate(["recipes", rec.key]);
   }
 
   signup() {
-    const dialogRef = this.dialog.show(AuthComponent, { signup: true }, { panelClass: 'auth-dialog' });
+    const dialogRef = this.dialog.show(
+      AuthComponent,
+      { signup: true },
+      { panelClass: "auth-dialog" }
+    );
     const onClose = dialogRef.afterClosed();
     onClose.subscribe((userName) => {
       if (!!userName) {
