@@ -24,21 +24,9 @@ export class RecipesResolverService implements Resolve<Recipe[]> {
     const id = route.params.id;
 
     // if (!recipes.length) {
-    return this.recipeService.fetchRecipes(readOnly ? 30 : null).pipe(
+    return this.recipeService.fetchRecipes().pipe(
       first(),
-      map((res) => {
-        res.forEach((r) => {
-          let count = 0;
-          if (r.imagePath.includes("data:image/")) {
-            // console.log("imgpath: ", typeof val.imagePath, val.imagePath);
-            // console.log()
-            console.log(count, "r: ", r);
-            count++;
-            this.recipeService.uploadFile(r);
-          }
-        });
-        return res;
-      })
+      map((res) => res)
     );
   }
 }
