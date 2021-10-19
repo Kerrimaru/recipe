@@ -81,6 +81,7 @@ export class RecipeService {
       });
   }
 
+  // i've removed limit for guests
   fetchRecipes(limit?: number) {
     this.recipeList = this.fb.list("recipes", (ref) => {
       if (limit) {
@@ -102,28 +103,19 @@ export class RecipeService {
     return this.recipes$;
   }
 
+  // hack to update the db
   uploadFile(recipe: Recipe) {
-    const filePath = recipe.userId || "unassigned" + "/" + uuid.v4();
+    const filePath = (recipe.userId || "unassigned") + "/" + uuid.v4();
     const fileRef = this.storage.ref(filePath);
     const ref = this.storage.ref(filePath);
     const task = ref.putString(recipe.imagePath, "data_url");
-    // this.uploadPercent = task.percentageChanges();
-    // get notified when the download URL is available
     task
       .snapshotChanges()
       .pipe(
         finalize(() => {
-          fileRef.getDownloadURL().subscribe((ref) => {
-            console.log("reF: ", ref);
-            // const _recipe = Object.assign(recipe, {
-            // imagePath: ref,
-            // });
-            const _recipe = { ...recipe, imagePath: ref };
-            console.log("new rec: ", _recipe);
+          fileRef.getDownloadURL().subscribe((newURL) => {
+            const _recipe = { ...recipe, imagePath: newURL };
             this.updateRecipe(_recipe, recipe.key);
-            // const imgCtrl = this.recipeForm.get("imagePath");
-            // imgCtrl.setValue(ref);
-            // this.saveRecipe();
           });
         })
       )

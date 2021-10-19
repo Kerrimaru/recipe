@@ -272,7 +272,9 @@ export class RecipeEditComponent implements OnInit {
   }
 
   uploadFile() {
-    const filePath = this.auth.user.value.id + "/" + uuid.v4();
+    // to do: remove old image from storage (if exist) & replace with new image, in cases where user edits recipe
+    const filePath =
+      (this.auth.user.value.id || "unassigned") + "/" + uuid.v4();
     const fileRef = this.storage.ref(filePath);
     const task = this.storage.upload(filePath, this.fileToUpload);
     this.uploadPercent = task.percentageChanges();
@@ -281,9 +283,9 @@ export class RecipeEditComponent implements OnInit {
       .snapshotChanges()
       .pipe(
         finalize(() => {
-          fileRef.getDownloadURL().subscribe((ref) => {
+          fileRef.getDownloadURL().subscribe((imgURL) => {
             const imgCtrl = this.recipeForm.get("imagePath");
-            imgCtrl.setValue(ref);
+            imgCtrl.setValue(imgURL);
             this.saveRecipe();
           });
         })
