@@ -76,7 +76,6 @@ export class RecipeEditComponent implements OnInit {
       }
 
       this.prepTime = this.recipe.time || null;
-
       this.recipeImgUrl = this.recipe.imagePath;
 
       if (this.recipe.ingredients && this.recipe.ingredients.length) {
@@ -134,23 +133,17 @@ export class RecipeEditComponent implements OnInit {
   }
 
   onSubmit() {
-    // to do: show errors!!!
+    // to do: show better errors
     if (!this.recipeForm.valid || this.readOnly) {
+      console.warn("form invalid! ", this.recipeForm);
       return;
     }
 
-    // remove empty ingredients and flatten obj
-    // const ingArr = this.ingredientsArrayRef.value
-    //   .filter((i) => !!i.name)
-    //   .map((_i) => _i.name);
-
-    // const _recipe = Object.assign(this.recipe, {
-    //   ...this.recipeForm.value,
-    //   ingredients: ingArr,
-    //   time: this.prepTime,
-    // });
-
-    this.uploadFile();
+    if (this.fileToUpload) {
+      this.uploadFile();
+    } else {
+      this.saveRecipe();
+    }
   }
 
   saveRecipe() {
@@ -272,7 +265,10 @@ export class RecipeEditComponent implements OnInit {
   }
 
   uploadFile() {
-    // to do: remove old image from storage (if exist) & replace with new image, in cases where user edits recipe
+    if (this.editMode) {
+      // remove previously saved image
+      this.deleteImgFile(this.recipeImgUrl);
+    }
     const filePath =
       (this.auth.user.value.id || "unassigned") + "/" + uuid.v4();
     const fileRef = this.storage.ref(filePath);
@@ -291,6 +287,10 @@ export class RecipeEditComponent implements OnInit {
         })
       )
       .subscribe();
+  }
+
+  deleteImgFile(downloadUrl) {
+    return this.storage.storage.refFromURL(downloadUrl).delete();
   }
 
   compress(file: File): Observable<any> {

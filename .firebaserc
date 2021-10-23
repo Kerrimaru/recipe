@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "recipe-hole"
+  },
+  "targets": {
+    "recipe-hole": {
+      "hosting": {
+        "recipes": [
+          "recipe-hole"
+        ]
+      }
+    }
+  }
+}
