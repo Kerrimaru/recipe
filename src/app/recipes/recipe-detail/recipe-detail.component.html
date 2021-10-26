@@ -15,10 +15,7 @@
       <div class="tags-list">
         <div *ngFor="let tag of recipe.tags" class="tag">{{ tag }}</div>
       </div>
-      <div class="time-wtf" *ngIf="recipe.time">
-        <h6>Prep time</h6>
-        <p>{{ recipe.time || "-" }}</p>
-      </div>
+
       <div #ingredientListRef>
         <mat-expansion-panel expanded="true" class="ingredients-expansion">
           <mat-expansion-panel-header>
@@ -39,30 +36,40 @@
         </mat-expansion-panel>
       </div>
     </div>
-
-    <img [src]="recipe.imagePath" alt="{{ recipe.name }}" class="recipe-img" />
-    <div class="recipe-actions">
-      <div
-        class="fav-lottie lottie-anim"
-        [class.on]="isFavourite"
-        [appLottie]="'heart-like'"
-        [autoplay]="false"
-        [startFrame]="isFavourite ? 110 : null"
-        [play]="isFavourite ? [60, 110] : [140, 150]"
-      >
-        <div class="click-anchor" (click)="favourite()"></div>
+    <div class="img-container">
+      <img
+        [src]="recipe.imagePath"
+        alt="{{ recipe.name }}"
+        class="recipe-img"
+      />
+      <div class="time-wtf" *ngIf="recipe.time">
+        <!-- <h6>Prep time</h6> -->
+        <p>{{ recipe.time || "-" }}</p>
+        <p>mins</p>
       </div>
+      <div class="recipe-actions">
+        <div
+          class="fav-lottie lottie-anim"
+          [class.on]="isFavourite"
+          [appLottie]="'heart-like'"
+          [autoplay]="false"
+          [startFrame]="isFavourite ? 110 : null"
+          [play]="isFavourite ? [60, 110] : [140, 150]"
+        >
+          <div class="click-anchor" (click)="favourite()"></div>
+        </div>
 
-      <div
-        class="todo-lottie lottie-anim"
-        [class.on]="toDoSelected"
-        [appLottie]="'to-do-green'"
-        [autoplay]="false"
-        [startFrame]="toDoSelected ? 20 : 0"
-        [play]="toDoSelected ? [0, 22] : [22, 0]"
-        [direction]="toDoSelected ? 'forward' : 'backward'"
-      >
-        <div class="click-anchor" (click)="toggleToDo()"></div>
+        <div
+          class="todo-lottie lottie-anim"
+          [class.on]="toDoSelected"
+          [appLottie]="'to-do-green'"
+          [autoplay]="false"
+          [startFrame]="toDoSelected ? 20 : 0"
+          [play]="toDoSelected ? [0, 22] : [22, 0]"
+          [direction]="toDoSelected ? 'forward' : 'backward'"
+        >
+          <div class="click-anchor" (click)="toggleToDo()"></div>
+        </div>
       </div>
     </div>
     <div #methodRef>

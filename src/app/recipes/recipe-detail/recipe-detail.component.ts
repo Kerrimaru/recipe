@@ -86,9 +86,12 @@ export class RecipeDetailComponent implements OnInit, AfterViewInit, OnDestroy {
   checkScroll(event) {
     const offset = window.scrollY;
     this.scrollDirection = this.previousOffset < offset ? "down" : "up";
-    // console.log("scroll ev: ", event);
+    console.log("scroll ev: ", event);
+    if (!this.ingredientListRef) {
+      console.log("no ing ref");
+      return;
+    }
     const ingEl = this.ingredientListRef["last"].nativeElement;
-    console.log("ing: ", ingEl);
     const halfway = ingEl.offsetTop + ingEl.clientHeight / 2;
     if (halfway < window.scrollY) {
       this.ingredientsInViewport = false;
@@ -135,8 +138,6 @@ export class RecipeDetailComponent implements OnInit, AfterViewInit, OnDestroy {
             }
             this.recipe = r;
             this.loading = false;
-            console.log("ing list after load: ", this.ingredientListRef);
-            // console.log('rec:', this.recipe);
 
             this.notesSub = this.recipeService
               .getNotesList(r.key)
@@ -183,13 +184,9 @@ export class RecipeDetailComponent implements OnInit, AfterViewInit, OnDestroy {
           });
       });
     }
-
-    console.log("this.ing list: ", this.ingredientListRef);
   }
 
-  ngAfterViewInit() {
-    console.log("after view .ing list: ", this.ingredientListRef);
-  }
+  ngAfterViewInit() {}
 
   ngOnDestroy() {
     this.notesSub.unsubscribe();

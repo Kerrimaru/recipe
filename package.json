@@ -8,6 +8,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
+    "start:mobile":"ng serve --host 0.0.0.0",
     "start:prod": "ng build --prod && -c dist/recipes",
     "start:pwa": "ng build --prod && http-server -p 8080 -c-1 dist/recipes",
     "deploy:prod":"ng deploy"
