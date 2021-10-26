@@ -1,14 +1,24 @@
-import { Component, OnInit, Input, AfterViewInit, ElementRef, ViewChild, OnDestroy } from '@angular/core';
-import { Recipe } from '../recipe.model';
-import { RecipeService } from '../recipe.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService } from 'src/app/auth/auth.service';
-import { environment } from '../../../environments/environment';
-import { UserSettingsService } from 'src/app/settings/user-settings.service';
-import { map } from 'rxjs/operators';
-import { DialogService } from 'src/app/shared/dialog/dialog.service';
-import { Observable, Subscription } from 'rxjs';
-import { User } from 'src/app/auth/user.model';
+import {
+  Component,
+  OnInit,
+  Input,
+  AfterViewInit,
+  ElementRef,
+  ViewChild,
+  OnDestroy,
+  HostListener,
+  ViewChildren,
+} from "@angular/core";
+import { Recipe } from "../recipe.model";
+import { RecipeService } from "../recipe.service";
+import { ActivatedRoute, Router } from "@angular/router";
+import { AuthService } from "src/app/auth/auth.service";
+import { environment } from "../../../environments/environment";
+import { UserSettingsService } from "src/app/settings/user-settings.service";
+import { map } from "rxjs/operators";
+import { DialogService } from "src/app/shared/dialog/dialog.service";
+import { Observable, Subscription } from "rxjs";
+import { User } from "src/app/auth/user.model";
 
 interface Note {
   id: string;
@@ -20,16 +30,16 @@ interface Note {
 }
 
 @Component({
-  selector: 'app-recipe-detail',
-  templateUrl: './recipe-detail.component.html',
-  styleUrls: ['./recipe-detail.component.scss'],
+  selector: "app-recipe-detail",
+  templateUrl: "./recipe-detail.component.html",
+  styleUrls: ["./recipe-detail.component.scss"],
 })
-export class RecipeDetailComponent implements OnInit, OnDestroy {
+export class RecipeDetailComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() recipeInput: Recipe;
 
   recipe: Recipe;
   recipeKey: string;
-  loading = false;
+  loading = true;
   recipes: any;
 
   user: User;
@@ -52,8 +62,16 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
   notesSub: Subscription;
   recSub: Subscription;
 
-  @ViewChild('recipeRef', { static: false }) recipeElRef: ElementRef;
-  @ViewChild('activeNoteRef') activeNoteRef;
+  ingredientsInViewport = true;
+  returnScrollPoint: number;
+  opacity = 100;
+  scrollDirection: string;
+  previousOffset: number;
+
+  // @ViewChild("recipeRef", { static: false }) recipeElRef: ElementRef;
+  // @ViewChild("activeNoteRef") activeNoteRef;
+  @ViewChildren("ingredientListRef") ingredientListRef: ElementRef;
+  @ViewChildren("methodRef") methodRef: ElementRef;
 
   constructor(
     private recipeService: RecipeService,
@@ -64,6 +82,30 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
     private dialog: DialogService
   ) {}
 
+  @HostListener("window:scroll", ["$event"])
+  checkScroll(event) {
+    const offset = window.scrollY;
+    this.scrollDirection = this.previousOffset < offset ? "down" : "up";
+    // console.log("scroll ev: ", event);
+    const ingEl = this.ingredientListRef["last"].nativeElement;
+    console.log("ing: ", ingEl);
+    const halfway = ingEl.offsetTop + ingEl.clientHeight / 2;
+    if (halfway < window.scrollY) {
+      this.ingredientsInViewport = false;
+    } else {
+      this.ingredientsInViewport = true;
+    }
+    const methodEl = this.methodRef["last"].nativeElement;
+
+    if (window.scrollY > methodEl.offsetTop && this.returnScrollPoint) {
+      this.opacity = 100 - (window.scrollY - methodEl.offsetTop) / 2;
+      if (this.opacity <= 0 && this.scrollDirection === "down") {
+        this.returnScrollPoint = null;
+      }
+    }
+    this.previousOffset = offset;
+  }
+
   ngOnInit(): void {
     this.user = this.authService.user.getValue();
     this.readOnly = this.authService.readOnly.getValue();
@@ -71,14 +113,18 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
     // this is disabled for now
     if (this.recipeInput) {
       this.recipe = this.recipeInput;
-      this.showEdit = !environment.production || this.recipe.userId === this.user.id;
+      this.showEdit =
+        !environment.production || this.recipe.userId === this.user.id;
     } else {
       this.route.params.subscribe((params) => {
         // a cheat to allow only me to delete recipes, but do this properly at some point
-        if (environment.production && this.user.id == 'RDN8uluhOqP8aATgV0QxF60yi2F2') {
+        if (
+          environment.production &&
+          this.user.id == "RDN8uluhOqP8aATgV0QxF60yi2F2"
+        ) {
           this.showDelete = true;
         }
-        this.recipeKey = params['id'];
+        this.recipeKey = params["id"];
         this.recSub = this.recipeService
           .getRecipeSub(this.recipeKey)
           .pipe()
@@ -88,6 +134,8 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
               return;
             }
             this.recipe = r;
+            this.loading = false;
+            console.log("ing list after load: ", this.ingredientListRef);
             // console.log('rec:', this.recipe);
 
             this.notesSub = this.recipeService
@@ -97,7 +145,11 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
                 map((res) => {
                   this.notes = res
                     .map((note: any): Note => {
-                      return { id: note.payload.key, ...note.payload.val(), show: false };
+                      return {
+                        id: note.payload.key,
+                        ...note.payload.val(),
+                        show: false,
+                      };
                     })
                     .reverse();
                 })
@@ -120,12 +172,23 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
               )
               .subscribe();
 
-            this.isFavourite = this.settingsService.favourites.includes(this.recipeKey);
-            this.toDoSelected = this.settingsService.toDoIds.includes(this.recipeKey);
-            this.showEdit = !environment.production || this.recipe.userId === this.user.id;
+            this.isFavourite = this.settingsService.favourites.includes(
+              this.recipeKey
+            );
+            this.toDoSelected = this.settingsService.toDoIds.includes(
+              this.recipeKey
+            );
+            this.showEdit =
+              !environment.production || this.recipe.userId === this.user.id;
           });
       });
     }
+
+    console.log("this.ing list: ", this.ingredientListRef);
+  }
+
+  ngAfterViewInit() {
+    console.log("after view .ing list: ", this.ingredientListRef);
   }
 
   ngOnDestroy() {
@@ -151,19 +214,25 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
   }
 
   editRecipe() {
-    this.router.navigate(['edit'], { relativeTo: this.route });
+    this.router.navigate(["edit"], { relativeTo: this.route });
   }
 
   deleteRecipe() {
     if (this.readOnly) {
       return;
     }
-    this.showConfirm('recipe', 'This will permanently delete this recipe', 'Are you sure?', 'takeout-delete.png', [
-      { text: 'Cancel', primary: true },
-      { text: `Delete`, go: 'delete', danger: true },
-    ]).subscribe((res) => {
+    this.showConfirm(
+      "recipe",
+      "This will permanently delete this recipe",
+      "Are you sure?",
+      "takeout-delete.png",
+      [
+        { text: "Cancel", primary: true },
+        { text: `Delete`, go: "delete", danger: true },
+      ]
+    ).subscribe((res) => {
       this.recipeService.deleteRecipeByKey(this.recipeKey).then((r) => {
-        this.router.navigate(['/']);
+        this.router.navigate(["/"]);
       });
     });
   }
@@ -174,19 +243,31 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
     }
     const timestamp = event ? event.getTime() : new Date().getTime();
     this.dateInput = null;
-    this.recipeService.setUserDateMade(this.user.id, this.recipe.key, timestamp);
+    this.recipeService.setUserDateMade(
+      this.user.id,
+      this.recipe.key,
+      timestamp
+    );
   }
 
   deleteDate(e) {
     // this confirm is really annoying and ugly
-    this.showConfirm('date').subscribe((res) => {
-      this.recipeService.deleteUserDateMade(this.user.id, this.recipe.key, e.id);
+    this.showConfirm("date").subscribe((res) => {
+      this.recipeService.deleteUserDateMade(
+        this.user.id,
+        this.recipe.key,
+        e.id
+      );
     });
   }
 
   onNoteSave(note) {
     if (!note.id) {
-      const newNote = { note: note.text, userName: this.user.name, userId: this.user.id };
+      const newNote = {
+        note: note.text,
+        userName: this.user.name,
+        userId: this.user.id,
+      };
       this.recipeService.setNote(this.recipe.key, newNote);
     } else {
       this.recipeService.updateNote(note.text, note.id, this.recipe.key);
@@ -197,18 +278,55 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
     if (this.readOnly) {
       return;
     }
-    this.showConfirm('note').subscribe((res) => {
+    this.showConfirm("note").subscribe((res) => {
       this.recipeService.deleteNote(noteId, this.recipe.key);
     });
   }
 
-  showConfirm(type: string, lines?, title?: string, image?: string, actions?: any[]): Observable<any> {
+  showConfirm(
+    type: string,
+    lines?,
+    title?: string,
+    image?: string,
+    actions?: any[]
+  ): Observable<any> {
     return this.dialog.alert({
       title: title,
       // lines: `This will permanently delete this ${type}`,
       lines: lines || `Delete this ${type}?`,
-      actions: actions || [{ text: 'Delete', go: 'delete', danger: true }],
-      image: image || 'takeout-delete.png',
+      actions: actions || [{ text: "Delete", go: "delete", danger: true }],
+      image: image || "takeout-delete.png",
     });
+  }
+
+  showIngredients() {
+    const isMobile = false;
+    if (isMobile) {
+      // swoop in from the side
+    } else {
+      this.returnScrollPoint = window.scrollY;
+      this.opacity = 100;
+      console.log("op: ", this.opacity, " scroll: ", this.returnScrollPoint);
+
+      this.ingredientListRef["last"].nativeElement.scrollIntoView({
+        behavior: "smooth",
+        block: "end",
+        inline: "nearest",
+      });
+      // window.scrollTo({
+      //   top: this.ingredientListRef["last"].nativeElement.offsetTop,
+      //   left: 0,
+      //   behavior: "smooth",
+      // });
+    }
+  }
+
+  returnToMethod() {
+    window.scrollTo({
+      top: this.returnScrollPoint,
+      left: 0,
+      behavior: "smooth",
+    });
+    this.returnScrollPoint = null;
   }
 }

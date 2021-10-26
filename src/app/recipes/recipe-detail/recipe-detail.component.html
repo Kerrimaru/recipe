@@ -1,4 +1,4 @@
-<div *ngIf="recipe" class="recipe-details" #recipeRef>
+<div *ngIf="!loading" class="recipe-details" #recipeRef>
   <div class="rec-header">
     <div class="rec-title">
       <h1>{{ recipe.name | title }}</h1>
@@ -15,21 +15,29 @@
       <div class="tags-list">
         <div *ngFor="let tag of recipe.tags" class="tag">{{ tag }}</div>
       </div>
-      <mat-expansion-panel expanded="true" class="ingredients-expansion">
-        <mat-expansion-panel-header>
-          <mat-panel-title><h2 id="ingredients-title">Ingredients</h2></mat-panel-title>
-        </mat-expansion-panel-header>
-        <ul
-          class="list-group"
-          id="ingredient-list"
-          [ngClass]="ingExpanded ? 'show' : 'hide'"
-          *ngIf="recipe.ingredients?.length"
-        >
-          <li *ngFor="let ing of recipe.ingredients" class="list-group-item">
-            {{ ing }}
-          </li>
-        </ul>
-      </mat-expansion-panel>
+      <div class="time-wtf" *ngIf="recipe.time">
+        <h6>Prep time</h6>
+        <p>{{ recipe.time || "-" }}</p>
+      </div>
+      <div #ingredientListRef>
+        <mat-expansion-panel expanded="true" class="ingredients-expansion">
+          <mat-expansion-panel-header>
+            <mat-panel-title
+              ><h2 id="ingredients-title">Ingredients</h2></mat-panel-title
+            >
+          </mat-expansion-panel-header>
+          <ul
+            class="list-group"
+            id="ingredient-list"
+            [ngClass]="ingExpanded ? 'show' : 'hide'"
+            *ngIf="recipe.ingredients?.length"
+          >
+            <li *ngFor="let ing of recipe.ingredients" class="list-group-item">
+              {{ ing }}
+            </li>
+          </ul>
+        </mat-expansion-panel>
+      </div>
     </div>
 
     <img [src]="recipe.imagePath" alt="{{ recipe.name }}" class="recipe-img" />
@@ -57,12 +65,14 @@
         <div class="click-anchor" (click)="toggleToDo()"></div>
       </div>
     </div>
-    <mat-expansion-panel expanded="true" class="method-expansion">
-      <mat-expansion-panel-header>
-        <mat-panel-title><h2>Method</h2></mat-panel-title>
-      </mat-expansion-panel-header>
-      <div [innerHtml]="recipe.description" class="desc"></div>
-    </mat-expansion-panel>
+    <div #methodRef>
+      <mat-expansion-panel expanded="true" class="method-expansion">
+        <mat-expansion-panel-header>
+          <mat-panel-title><h2>Method</h2></mat-panel-title>
+        </mat-expansion-panel-header>
+        <div [innerHtml]="recipe.description" class="desc"></div>
+      </mat-expansion-panel>
+    </div>
   </section>
 
   <div class="expansion-panels">
@@ -71,7 +81,9 @@
         <mat-expansion-panel-header>
           <mat-panel-title>
             Notes
-            <span *ngIf="notes.length" [style.margin-left.px]="3">({{ notes.length }})</span>
+            <span *ngIf="notes.length" [style.margin-left.px]="3"
+              >({{ notes.length }})</span
+            >
           </mat-panel-title>
           <mat-panel-description>
             <span class="material-icons">comment_bank</span>
@@ -107,19 +119,48 @@
           </mat-panel-description>
         </mat-expansion-panel-header>
         <div class="nutrition">
-          <app-nutrition-table [nutritionValues]="recipe.nutrition"></app-nutrition-table>
+          <app-nutrition-table
+            [nutritionValues]="recipe.nutrition"
+          ></app-nutrition-table>
         </div>
       </mat-expansion-panel>
     </mat-accordion>
   </div>
 
-  <div class="time-wtf">
-    <h6>Prep time</h6>
-    <p>{{ recipe.time || '-' }}</p>
+  <div
+    class="ingredients-recall"
+    [ngClass]="{ 'show-scroll': !ingredientsInViewport }"
+    matTooltip="Scroll up to ingredients"
+    matTooltipShowDelay="300"
+  >
+    <img
+      (click)="showIngredients()"
+      src="assets/images/icons/ingredients.png"
+    />
+    <!-- <img (click)="showIngredients()" src="assets/images/icons/veg.png" /> -->
   </div>
+  <div class="return-method" *ngIf="!!returnScrollPoint">
+    <img
+      (click)="returnToMethod()"
+      src="assets/images/icons/down.png"
+      [style.opacity]="opacity + '%'"
+    />
+  </div>
+  <!-- <div class="scroll-to">
+    {{ scrollDirection }}<br />{{ returnScrollPoint }}
+  </div> -->
 </div>
 
 <div class="actions" *ngIf="showEdit && !readOnly">
-  <button *ngIf="showDelete" type="button" (click)="deleteRecipe()" class="btn btn-danger">Delete</button>
-  <button type="button" (click)="editRecipe()" class="btn btn-primary">Edit</button>
+  <button
+    *ngIf="showDelete"
+    type="button"
+    (click)="deleteRecipe()"
+    class="btn btn-danger"
+  >
+    Delete
+  </button>
+  <button type="button" (click)="editRecipe()" class="btn btn-primary">
+    Edit
+  </button>
 </div>
