@@ -59,3 +59,19 @@
     }
   }
 }
+
+@media (max-width: 800px) {
+  .date-actions {
+    display: flex;
+    margin: 10px auto;
+    width: 100%;
+    justify-content: space-evenly;
+    button {
+      flex-grow: 1;
+      max-width: 200px;
+      text-align: center;
+      justify-content: center;
+      height: 40px;
+    }
+  }
+}

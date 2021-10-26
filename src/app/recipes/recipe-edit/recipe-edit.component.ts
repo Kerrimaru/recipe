@@ -34,7 +34,7 @@ export class RecipeEditComponent implements OnInit {
   public Editor = ClassicEditor;
   ingredientsArrayRef: FormArray;
   tagsArrayRef: FormArray;
-  prepTime: number = null;
+  // prepTime: number = null;
 
   previewImage: any; // image added by user, but not yet saved
   uploadPercent: any; // why?
@@ -75,7 +75,7 @@ export class RecipeEditComponent implements OnInit {
         this.recipe.nutrition = [...NutritionConst];
       }
 
-      this.prepTime = this.recipe.time || null;
+      // this.prepTime = this.recipe.time || null;
       this.recipeImgUrl = this.recipe.imagePath;
 
       if (this.recipe.ingredients && this.recipe.ingredients.length) {
@@ -96,6 +96,7 @@ export class RecipeEditComponent implements OnInit {
     this.recipeForm = new FormGroup({
       name: new FormControl(this.recipe.name, Validators.required),
       imagePath: new FormControl(this.recipe.imagePath, Validators.required),
+      time: new FormControl(this.recipe.time),
       description: new FormControl(
         this.recipe.description,
         Validators.required
@@ -146,16 +147,20 @@ export class RecipeEditComponent implements OnInit {
     }
   }
 
+  timeChange() {
+    console.log("changed");
+  }
+
   saveRecipe() {
     // remove empty ingredients and flatten obj
     const ingArr = this.ingredientsArrayRef.value
       .filter((i) => !!i.name)
       .map((_i) => _i.name);
-
+    console.log("rec form: ", this.recipeForm.value);
     const _recipe = Object.assign(this.recipe, {
       ...this.recipeForm.value,
       ingredients: ingArr,
-      time: this.prepTime,
+      // time: this.prepTime,
     });
 
     if (this.editMode) {

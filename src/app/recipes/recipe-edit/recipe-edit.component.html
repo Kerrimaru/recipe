@@ -29,6 +29,14 @@
 
       <div class="ing-img-cont">
         <div class="column column-left">
+          <div class="time">
+            <h2>
+              Time to prepare
+              <small>(minutes)</small>
+            </h2>
+            <input formControlName="time" type="number" />
+          </div>
+
           <h2>Ingredients</h2>
           <small>Copy and paste a list, or add one by one</small>
 
@@ -147,14 +155,6 @@
         </div>
       </div>
     </form>
-    <div class="time">
-      <h2>
-        Time to prepare
-        <small>(minutes)</small>
-      </h2>
-
-      <input [(ngModel)]="prepTime" type="number" />
-    </div>
   </div>
 
   <div class="actions">
