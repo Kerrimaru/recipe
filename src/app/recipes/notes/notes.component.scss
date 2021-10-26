@@ -14,14 +14,14 @@
     opacity: 0;
   }
   &:before {
-    content: 'Add a new note...';
+    content: "Add a new note...";
     font-style: italic;
   }
   &:focus {
     color: #333333;
   }
   &:focus:before {
-    content: '';
+    content: "";
   }
   &:focus + i {
     opacity: 1;
@@ -89,7 +89,7 @@
 }
 
 .note-bubble:after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: 0;
   width: 0;
@@ -155,5 +155,12 @@ i {
     font-size: 10px;
     line-height: 1;
     font-style: italic;
+  }
+}
+
+@media (max-width: 800px) {
+  .note-list,
+  #note-input {
+    margin-right: 0;
   }
 }
