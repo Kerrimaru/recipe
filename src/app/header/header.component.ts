@@ -1,18 +1,24 @@
-import { Component, OnInit, EventEmitter, Output, OnDestroy } from '@angular/core';
-import { DataStorageService } from '../shared/data-storage.service';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { AuthService } from '../auth/auth.service';
-import { Subscription } from 'rxjs';
-import { User } from '../auth/user.model';
-import { HostBinding } from '@angular/core';
-import { HostListener } from '@angular/core';
-import { UserSettingsService } from '../settings/user-settings.service';
-import { filter } from 'rxjs/operators';
+import {
+  Component,
+  OnInit,
+  EventEmitter,
+  Output,
+  OnDestroy,
+} from "@angular/core";
+import { DataStorageService } from "../shared/data-storage.service";
+import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
+import { AuthService } from "../auth/auth.service";
+import { Subscription } from "rxjs";
+import { User } from "../auth/user.model";
+import { HostBinding } from "@angular/core";
+import { HostListener } from "@angular/core";
+import { UserSettingsService } from "../settings/user-settings.service";
+import { filter } from "rxjs/operators";
 
 @Component({
-  selector: 'app-header',
-  templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss'],
+  selector: "app-header",
+  templateUrl: "./header.component.html",
+  styleUrls: ["./header.component.scss"],
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   constructor(
@@ -30,14 +36,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
   headerExpanded = false;
   width: number = window.innerWidth;
   scrollHeight = 160;
-  mobileWidth = 760;
+  mobileWidth = 820;
   collapse = false;
-  hideHeader: boolean;
 
   logos = [
-    'tools-logo',
+    "tools-logo",
     // 'plate-logo',
-    'hole-logo',
+    "hole-logo",
     // 'book-logo',
     // '-logo',
   ];
@@ -45,22 +50,31 @@ export class HeaderComponent implements OnInit, OnDestroy {
   currentLogo = 0;
 
   navItems = [
-    { text: 'Recipes', link: '/recipes' },
-    { text: '+New Recipe', link: '/recipes/new' },
-    { text: 'My Favourites', link: '/recipes/favourites' },
+    { text: "Recipes", link: "/recipes", tabItem: true },
+    { text: "Add a recipe", link: "/recipes/new", tabItem: true },
+    { text: "My favourites", link: "/recipes/favourites", tabItem: true },
+    { text: "Recipes to Try", link: "/recipes/to-do", tabItem: false },
+    { text: "Logout", action: "logout", tabItem: false, hideMobile: true },
   ];
 
   private userSub: Subscription;
   // @Output() featureSelected = new EventEmitter<string>();
 
-  @HostListener('window:resize', ['$event'])
+  @HostListener("window:click", ["$event.target"])
+  onClick(element: HTMLElement) {
+    if (this.headerExpanded && element.id !== "nav-open") {
+      this.headerExpanded = false;
+    }
+  }
+
+  @HostListener("window:resize", ["$event"])
   onResize(event) {
     this.width = event.target.innerWidth;
     this.isMobile = this.width < this.mobileWidth;
   }
 
-  @HostListener('window:scroll', ['$event'])
-  checkScroll() {
+  @HostListener("window:scroll", ["$event"])
+  checkScroll(event: Event) {
     if (window.pageYOffset >= 16) {
       this.collapse = true;
       this.scrollHeight = 160 - window.pageYOffset;
@@ -71,12 +85,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    // this.hideHeader = this.router.url.valueOf() === '/login' ? true : false;
-    // this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((e: NavigationEnd) => {
-    //   this.hideHeader = e.url === '/login' ? true : false;
-    //   // this.loading = false;
-    // });
-
     this.isMobile = this.width < this.mobileWidth;
     this.userSub = this.authService.user.subscribe((user) => {
       this.user = user;
@@ -84,7 +92,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     });
 
     this.route.url.subscribe((params) => {
-      this.login = params['login'];
+      this.login = params["login"];
     });
   }
 
@@ -105,6 +113,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   logout() {
+    this.headerExpanded = false;
+    this.collapse = false;
     this.authService.logout();
   }
 
@@ -112,7 +122,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     if (!this.isMobile) {
       return;
     }
-
     this.headerExpanded = !this.headerExpanded;
   }
 
@@ -121,6 +130,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.settingsService.setFilters(filter);
     } else {
       this.settingsService.filters = [];
+    }
+  }
+
+  navAction(action) {
+    console.log("action ", action);
+    if (action === "logout") {
+      this.logout();
     }
   }
 }

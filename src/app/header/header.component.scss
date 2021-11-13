@@ -1,10 +1,10 @@
-@import '../../styles/variables';
+@import "../../styles/variables";
 .app-nav {
   z-index: 1;
   width: 100vw;
   position: fixed;
   overflow: hidden;
-  font-family: 'BenchNine';
+  font-family: "BenchNine";
   flex-direction: column;
   align-items: center;
   background-color: white;
@@ -16,7 +16,7 @@
   padding: 24px 0;
 }
 
-.nav-list {
+.tab-list {
   display: flex;
   justify-content: center;
   flex-grow: 1;
@@ -26,7 +26,7 @@
 
 .collapse {
   border-bottom: 1px solid black;
-  .nav-list {
+  .tab-list {
     font-size: 14px;
     position: absolute;
     bottom: 15px;
@@ -162,7 +162,7 @@ a {
   span {
     // color: $white;
   }
-  .account-nav {
+  .dropdown-nav {
     display: block;
     min-width: 200px;
     // max-height: 1000px;
@@ -184,7 +184,7 @@ a {
   }
 }
 
-.account-actions .account-nav {
+.account-actions .dropdown-nav {
   display: none;
   transition: 1s all;
   // max-height: 0;
@@ -200,7 +200,7 @@ a {
     font-size: 14px;
     cursor: pointer;
   }
-  h5 {
+  h3 {
     margin: 7px;
     position: absolute;
     top: 0;
@@ -221,6 +221,62 @@ a {
   }
 }
 
+.sidepop-nav {
+  width: 220px;
+  top: -19px;
+  position: absolute;
+  right: -240px;
+  background-color: #ffffff;
+  height: 100vh;
+  border-left: 1px solid #000000;
+  transition: 0.5s;
+  z-index: 10;
+  overflow-y: none;
+  // background-color: #ffffff4a;
+  // backdrop-filter: blur(18px);
+  &.popped {
+    transform: translateX(-100%);
+    .close span {
+      transform: rotate(-180deg);
+    }
+  }
+  .details {
+    background-color: #000000;
+    padding-bottom: 18px;
+    padding-left: 20px;
+  }
+  hr {
+    margin: 0;
+  }
+  .tabs {
+    padding: 0 20px;
+  }
+  h3 {
+    margin: 0;
+    color: #ffffff;
+  }
+  .close {
+    text-align: right;
+    padding: 18px 13px 0 0;
+
+    span {
+      color: #ffffff;
+      transition: 0.5s;
+    }
+  }
+}
+.logout {
+  position: fixed;
+  bottom: 20px;
+  right: -271px;
+  z-index: 10;
+  transition: 0.5s;
+  cursor: pointer;
+  &.popped {
+    right: 20px;
+  }
+}
+
 @media (max-width: 760px) {
   h1 {
     font-size: 26px;
@@ -235,7 +291,7 @@ a {
     top: 18px;
     right: 18px;
     .active {
-      background-color: white;
+      background-color: #ffffff;
       transform: none;
     }
     h4 {
