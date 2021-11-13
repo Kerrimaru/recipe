@@ -9,39 +9,52 @@
       <img class="logo" src="assets/images/logos/hole-logo.png" />
       <h1>Recipe Hole</h1>
     </a>
-    <div class="account-actions" [ngClass]="{ expanded: headerExpanded, mobile: isMobile }">
-      <!-- <span class="material-icons">account_circle</span> -->
-      <span class="material-icons" (click)="toggleMenu()">menu</span>
-      <div class="account-nav">
-        <h5>Hi, {{ user?.name || 'Guest' }}</h5>
-        <ng-container *ngIf="isMobile">
-          <h4 *ngFor="let item of navItems" routerLinkActive="active">
-            <a [routerLink]="item.link">{{ item.text }}</a>
-          </h4>
-        </ng-container>
-        <!-- <h4>Hi, {{ user.name }}</h4> -->
 
-        <!-- <h3>Filters</h3>
+    <div
+      class="account-actions"
+      [ngClass]="{ expanded: headerExpanded, mobile: isMobile }"
+    >
+      <span class="material-icons" id="nav-open" (click)="toggleMenu()"
+        >menu</span
+      >
+      <div
+        [ngClass]="{
+          popped: headerExpanded && isMobile,
+          'sidepop-nav': isMobile,
+          'dropdown-nav': !isMobile
+        }"
+      >
+        <div class="details">
+          <div *ngIf="isMobile" class="close">
+            <span (click)="toggleMenu()" class="material-icons remove">
+              clear
+            </span>
+          </div>
+          <h3>Hi, {{ user?.name || "Guest" }}</h3>
+        </div>
         <hr />
-        <p>
-          <mat-slide-toggle ngModel (ngModelChange)="toggleFilter('myRecipes', $event)"></mat-slide-toggle>
-          Added by me
-        </p>
-        <p>
-          <mat-slide-toggle ngModel (ngModelChange)="toggleFilter('vegan', $event)"></mat-slide-toggle>
-          Vegan
-        </p> -->
-        <hr />
-        <h4 routerLink="/recipes/to-do">Recipes to Try</h4>
-        <h4 (click)="logout()"><a>Logout</a></h4>
+        <div class="tabs">
+          <ng-container *ngFor="let item of navItems">
+            <h4
+              *ngIf="
+                (isMobile && !item.hideMobile) || (!isMobile && !item.tabItem)
+              "
+            >
+              <a [routerLink]="item.link" (click)="navAction(item.action)">{{
+                item.text
+              }}</a>
+            </h4>
+          </ng-container>
+        </div>
       </div>
     </div>
   </div>
 
-  <div class="nav-list" *ngIf="!isMobile">
-    <ng-container>
+  <!-- tabs -->
+  <div class="tab-list" *ngIf="!isMobile">
+    <ng-container *ngFor="let item of navItems">
       <div
-        *ngFor="let item of navItems"
+        *ngIf="item.tabItem"
         class="menu-tab {{ item.class }}"
         routerLinkActive="active"
         [routerLink]="item.link"
@@ -54,3 +67,13 @@
   </div>
   <!-- <app-main-nav></app-main-nav> -->
 </header>
+
+<!-- mobile logout -->
+<h4
+  *ngIf="isMobile"
+  class="logout"
+  [ngClass]="{ popped: headerExpanded }"
+  (click)="logout()"
+>
+  <a>Logout</a>
+</h4>

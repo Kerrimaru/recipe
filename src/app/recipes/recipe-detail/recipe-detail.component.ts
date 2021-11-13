@@ -86,7 +86,7 @@ export class RecipeDetailComponent implements OnInit, AfterViewInit, OnDestroy {
   checkScroll(event) {
     const offset = window.scrollY;
     this.scrollDirection = this.previousOffset < offset ? "down" : "up";
-    console.log("scroll ev: ", event);
+    // console.log("scroll ev: ", event);
     if (!this.ingredientListRef) {
       console.log("no ing ref");
       return;
@@ -96,7 +96,7 @@ export class RecipeDetailComponent implements OnInit, AfterViewInit, OnDestroy {
     if (halfway < window.scrollY) {
       this.ingredientsInViewport = false;
     } else {
-      this.ingredientsInViewport = true;
+      // this.ingredientsInViewport = true;
     }
     const methodEl = this.methodRef["last"].nativeElement;
 

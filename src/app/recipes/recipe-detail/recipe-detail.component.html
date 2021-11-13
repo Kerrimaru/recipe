@@ -140,17 +140,22 @@
     matTooltip="Scroll up to ingredients"
     matTooltipShowDelay="300"
   >
-    <img
+    <!-- <img
       (click)="showIngredients()"
       src="assets/images/icons/ingredients.png"
+    /> -->
+    <img
+      (click)="showIngredients()"
+      src="assets/images/icons/white-shroom.png"
     />
+    <!-- <img class="return-up" src="assets/images/icons/arrow-up.png" /> -->
     <!-- <img (click)="showIngredients()" src="assets/images/icons/veg.png" /> -->
   </div>
   <div class="return-method" *ngIf="!!returnScrollPoint">
     <img
       (click)="returnToMethod()"
       src="assets/images/icons/down.png"
-      [style.opacity]="opacity + '%'"
+      [style.opacity]="opacity / 100"
     />
   </div>
   <!-- <div class="scroll-to">
