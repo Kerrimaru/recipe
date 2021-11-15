@@ -1,11 +1,19 @@
 <div class="auth-container" [ngClass]="{ 'auth-dialog': isSignup }">
-  <img *ngIf="!isSignup" class="hole-logo" src="assets/images/logos/hole-logo.png" />
+  <img
+    *ngIf="!isSignup"
+    class="hole-logo"
+    src="assets/images/logos/hole-logo.png"
+  />
   <div class="form-container">
     <div class="loading" [ngClass]="{ show: loading }">
       <app-loading></app-loading>
     </div>
 
-    <form #authForm="ngForm" (ngSubmit)="onSubmit(authForm)" [ngClass]="{ hidden: loading }">
+    <form
+      #authForm="ngForm"
+      (ngSubmit)="onSubmit(authForm)"
+      [ngClass]="{ hidden: loading }"
+    >
       <div class="form-group">
         <input
           type="email"
@@ -43,29 +51,32 @@
         />
       </div>
 
-      <div class="actions" [ngClass]="{ 'auth-actions': !isSignup }">
-        <button type="submit" id="auth-submit">
-          {{ isLogin ? 'Sign in' : 'Sign up' }}
+      <div class="actions">
+        <button type="submit" id="auth-submit" class="btn-primary">
+          {{ isLogin ? "Sign in" : "Sign up" }}
         </button>
 
-        <div class="other-opts" *ngIf="!isSignup">
+        <ng-container *ngIf="!isSignup">
           <p [style.opacity]="isLogin ? 1 : 0">Don't have an account?</p>
-          <div>
-            <p>
-              <span id="mobile-toggle" class="other-actions" (click)="toggleLogin()">
-                Go to
-                <b>{{ !isLogin ? 'login' : 'Sign up' }}</b>
-              </span>
-              <ng-container>
-                <span class="mf-or">or</span>
-                <span class="other-actions" (click)="signInGuest()">
-                  <b>Sign in</b>
-                  as a guest
-                </span>
-              </ng-container>
-            </p>
-          </div>
-        </div>
+          <button
+            id="mobile-toggle"
+            class="toggle btn-small"
+            (click)="toggleLogin()"
+            type="button"
+          >
+            Go to {{ !isLogin ? "login" : "Sign up" }}
+          </button>
+
+          <p style="margin: 5px">or</p>
+          <button
+            type="button"
+            id="auth-submit"
+            class="btn-secondary btn-small"
+            (click)="signInGuest()"
+          >
+            Enter as Guest
+          </button>
+        </ng-container>
       </div>
     </form>
   </div>

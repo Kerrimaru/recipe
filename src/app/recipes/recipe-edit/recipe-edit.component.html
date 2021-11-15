@@ -19,7 +19,7 @@
       <div class="tags">
         <div
           *ngFor="let tag of tags"
-          class="tag"
+          class="tag click-bounce"
           [class.selected]="tag | arrayIncludes: recipe.tags"
           (click)="toggleTag(tag, $event.target)"
         >
@@ -79,7 +79,7 @@
                 (paste)="onPaste($event, i)"
               />
 
-              <!-- <button type="button" class="btn btn-secondary" (click)="onRemoveIngredient(i)">Delete</button> -->
+              <!-- <button type="button" class="btn-secondary" (click)="onRemoveIngredient(i)">Delete</button> -->
               <img
                 src="/assets/images/icons/delete-icon-3.png"
                 class="delete-icon"
@@ -158,13 +158,13 @@
   </div>
 
   <div class="actions">
-    <button type="button" class="btn btn-danger show" (click)="onCancel()">
+    <button type="button" class="btn-danger show" (click)="onCancel()">
       Cancel
     </button>
     <button
       [ngClass]="{ hide: !recipeForm.dirty }"
       type="submit"
-      class="btn btn-primary"
+      class="btn-primary"
       (click)="onSubmit()"
       [matTooltip]="
         readOnly

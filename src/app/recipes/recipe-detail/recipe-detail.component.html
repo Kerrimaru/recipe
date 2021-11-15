@@ -135,7 +135,7 @@
   </div>
 
   <div
-    class="ingredients-recall"
+    class="ingredients-recall click-bounce"
     [ngClass]="{ 'show-scroll': !ingredientsInViewport }"
     matTooltip="Scroll up to ingredients"
     matTooltipShowDelay="300"
@@ -168,11 +168,9 @@
     *ngIf="showDelete"
     type="button"
     (click)="deleteRecipe()"
-    class="btn btn-danger"
+    class="btn-danger"
   >
     Delete
   </button>
-  <button type="button" (click)="editRecipe()" class="btn btn-primary">
-    Edit
-  </button>
+  <button type="button" (click)="editRecipe()" class="btn-primary">Edit</button>
 </div>
