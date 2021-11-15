@@ -1,6 +1,6 @@
 <div class="app-layout">
-  <app-header></app-header>
-  <div class="main-content">
+  <app-header (navExpanded)="navExpanded = $event"></app-header>
+  <div class="main-content" [ngStyle]="{ 'z-index': navExpanded ? -1 : 0 }">
     <router-outlet></router-outlet>
   </div>
 </div>
