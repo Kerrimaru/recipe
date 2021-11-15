@@ -1,11 +1,13 @@
 <div class="dates-container">
-  <h6>{{ dates.length ? 'Add another date' : 'Have you made this recipe?' }}</h6>
+  <h6>
+    {{ dates.length ? "Add another date" : "Have you made this recipe?" }}
+  </h6>
   <div class="date-actions">
-    <button class="btn btn-primary today" (click)="addDateEmitter.emit()">
+    <button class="btn-primary today" (click)="addDateEmitter.emit()">
       <span>Today</span>
       <img src="assets/images/icons/today.png" />
     </button>
-    <button class="btn btn-primary date-select" (click)="picker.open()">
+    <button class="btn-primary date-select" (click)="picker.open()">
       <span>Select</span>
       <img src="assets/images/icons/tomorrow.png" />
       <input

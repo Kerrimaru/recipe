@@ -57,6 +57,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     { text: "Logout", action: "logout", tabItem: false, hideMobile: true },
   ];
 
+  @Output() navExpanded = new EventEmitter<boolean>();
+
   private userSub: Subscription;
   // @Output() featureSelected = new EventEmitter<string>();
 
@@ -64,6 +66,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   onClick(element: HTMLElement) {
     if (this.headerExpanded && element.id !== "nav-open") {
       this.headerExpanded = false;
+      this.navExpanded.emit(false);
     }
   }
 
@@ -114,6 +117,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   logout() {
     this.headerExpanded = false;
+    this.navExpanded.emit(false);
     this.collapse = false;
     this.authService.logout();
   }
@@ -123,6 +127,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       return;
     }
     this.headerExpanded = !this.headerExpanded;
+    this.navExpanded.emit(this.headerExpanded);
   }
 
   toggleFilter(filter: string, enabled: boolean) {

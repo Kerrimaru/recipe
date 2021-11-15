@@ -13,7 +13,15 @@
 .auth-container {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+}
+
+.auth-container:not(.auth-dialog) {
   height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0%;
+  right: 0%;
 }
 
 .hole-logo {
@@ -55,32 +63,30 @@
   width: 100%;
   flex-direction: column;
   align-items: center;
-  button#auth-submit {
-    border: 1px solid #333333;
-    color: #333333;
-    width: 230px;
-    padding: 4px;
-    height: auto;
-    font-size: 18px;
-    margin: 20px auto;
-    background: none;
+  button {
     transition: all 0.5s ease-in-out;
-    &:hover {
-      opacity: 1;
-    }
   }
-  &.auth-actions button#auth-submit:hover {
-    background-color: #c29f38;
+  .btn-primary {
+    width: 230px;
+    margin: 20px auto;
+  }
+  .btn-small {
+    font-size: 13px;
+    width: 175px;
+  }
+  .toggle {
+    border-color: #efecec;
+  }
+  .toggle:hover {
+    background-color: #efecec;
   }
 }
-
 .actions p {
-  display: block;
-  text-align: center;
-  margin: auto;
-  margin-top: 20px;
   font-style: italic;
-  color: lightgray;
+  color: #d4d4d4;
+  b {
+    color: #011c29;
+  }
 }
 
 #login-toggle {
@@ -88,40 +94,6 @@
   font-style: italic;
 }
 
-div.other-opts {
-  margin-top: 20px;
-  p {
-    margin-top: 10px;
-  }
-}
-span.other-actions {
-  cursor: pointer;
-  transition: all 0.5s;
-  color: #382e2e;
-  font-style: normal;
-  &:hover {
-    color: #c29f38;
-  }
-}
-.mf-or {
-  margin: 0px 7px 0px 4px;
-  font-size: 14px;
-}
-
-// isSignup
-.auth-dialog {
-  height: auto;
-  .form-container {
-    overflow: hidden;
-    input {
-      color: #ffffff;
-      border-bottom: 1px solid #ffffff;
-    }
-    .actions button#auth-submit {
-      margin-bottom: 0;
-      margin-top: 40px;
-      border: 1px solid #ffffff;
-      color: #ffffff;
-    }
-  }
+.auth-dialog button#auth-submit {
+  margin-bottom: 0;
 }

@@ -29,7 +29,7 @@
             [ngClass]="ingExpanded ? 'show' : 'hide'"
             *ngIf="recipe.ingredients?.length"
           >
-            <li *ngFor="let ing of recipe.ingredients" class="list-group-item">
+            <li *ngFor="let ing of recipe.ingredients" class="ingredient">
               {{ ing }}
             </li>
           </ul>
@@ -135,9 +135,24 @@
   </div>
 
   <div
-    class="ingredients-recall"
+    *ngIf="isMobile"
+    class="ingredients-reminder"
+    [ngClass]="{ 'show-reminder': showIngredientsReminder }"
+  >
+    <div *ngIf="recipe?.ingredients?.length">
+      <p
+        *ngFor="let ing of recipe.ingredients"
+        class="reminder-item ingredient"
+      >
+        {{ ing }}
+      </p>
+    </div>
+  </div>
+
+  <div
+    class="ingredients-recall click-bounce"
     [ngClass]="{ 'show-scroll': !ingredientsInViewport }"
-    matTooltip="Scroll up to ingredients"
+    [matTooltip]="isMobile ? '' : 'Scroll up to ingredients'"
     matTooltipShowDelay="300"
   >
     <!-- <img
@@ -147,11 +162,15 @@
     <img
       (click)="showIngredients()"
       src="assets/images/icons/white-shroom.png"
+      appLongpress
+      [disabled]="!isMobile"
+      (pressEndEmitter)="onPress(false)"
+      (pressStartEmitter)="onPress(true)"
     />
     <!-- <img class="return-up" src="assets/images/icons/arrow-up.png" /> -->
     <!-- <img (click)="showIngredients()" src="assets/images/icons/veg.png" /> -->
   </div>
-  <div class="return-method" *ngIf="!!returnScrollPoint">
+  <div class="return-method click-bounce" *ngIf="!!returnScrollPoint">
     <img
       (click)="returnToMethod()"
       src="assets/images/icons/down.png"
@@ -168,11 +187,9 @@
     *ngIf="showDelete"
     type="button"
     (click)="deleteRecipe()"
-    class="btn btn-danger"
+    class="btn-danger"
   >
     Delete
   </button>
-  <button type="button" (click)="editRecipe()" class="btn btn-primary">
-    Edit
-  </button>
+  <button type="button" (click)="editRecipe()" class="btn-primary">Edit</button>
 </div>
