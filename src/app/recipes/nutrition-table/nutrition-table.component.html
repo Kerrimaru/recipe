@@ -1,40 +1,14 @@
-<!-- <div class="nutrition-info-v1">
-  <h2>Nutritional info</h2>
-  <small>per person</small>
-  <table>
-    <ng-container *ngFor="let v of nutritionValues">
-      <tr>
-        <th>{{ v.name }}</th>
-        <td *ngIf="editable">
-          <input [placeholder]="v.units" [(ngModel)]="v.amount" (ngModelChange)="changeEmitter.emit(nutritionValues)" />
-        </td>
-        <td *ngIf="!editable" [style.text-align]="v.amount > 0 ? 'right' : 'center'" [style.padding-right.px]="7">
-          {{ v.amount > 0 ? v.amount + v.units : editable ? null : '-' }}
-        </td>
-      </tr>
-    </ng-container>
-  </table>
-</div> -->
-<!-- 
-            [value]="v.amount > 0 ? v.amount + v.units : editable ? null : '-'" -->
-<div class="nutrition-info-v2">
-  <!-- <p>
-    Nutritional info
-    <small>per person</small>
-  </p> -->
-
-  <div class="values-container">
-    <div *ngFor="let v of nutritionValues" class="value">
-      <p class="title">{{ v.name }}</p>
-      <input
-        *ngIf="editable"
-        [placeholder]="v.units"
-        [(ngModel)]="v.amount"
-        (ngModelChange)="changeEmitter.emit(nutritionValues)"
-      />
-      <p class="val-amount" *ngIf="!editable">
-        {{ v.amount > 0 ? v.amount + v.units : '-' }}
-      </p>
-    </div>
+<div class="nutrition-info" [ngClass]="{ editable: editable }">
+  <div *ngFor="let v of nutritionValues" class="value">
+    <p class="title">{{ v.name }}</p>
+    <input
+      *ngIf="editable"
+      [placeholder]="v.units"
+      [(ngModel)]="v.amount"
+      (ngModelChange)="changeEmitter.emit(nutritionValues)"
+    />
+    <p class="val-amount" *ngIf="!editable">
+      {{ v.amount > 0 ? v.amount + v.units : "-" }}
+    </p>
   </div>
 </div>

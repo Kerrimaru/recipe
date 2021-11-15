@@ -50,6 +50,9 @@ export class RecipeDetailComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ingExpanded = true;
   methExpanded = true;
+  mobileWidth = 820;
+  isMobile: boolean;
+  showIngredientsReminder = false;
 
   datesMade: any[] = [];
   dateInput: any;
@@ -67,11 +70,13 @@ export class RecipeDetailComponent implements OnInit, AfterViewInit, OnDestroy {
   opacity = 100;
   scrollDirection: string;
   previousOffset: number;
+  message: string;
 
   // @ViewChild("recipeRef", { static: false }) recipeElRef: ElementRef;
   // @ViewChild("activeNoteRef") activeNoteRef;
   @ViewChildren("ingredientListRef") ingredientListRef: ElementRef;
   @ViewChildren("methodRef") methodRef: ElementRef;
+  @ViewChild("ingButton") button: ElementRef;
 
   constructor(
     private recipeService: RecipeService,
@@ -81,6 +86,12 @@ export class RecipeDetailComponent implements OnInit, AfterViewInit, OnDestroy {
     private settingsService: UserSettingsService,
     private dialog: DialogService
   ) {}
+
+  @HostListener("window:resize", ["$event"])
+  onResize(event) {
+    const width = event.target.innerWidth;
+    this.isMobile = width < this.mobileWidth;
+  }
 
   @HostListener("window:scroll", ["$event"])
   checkScroll(event) {
@@ -110,6 +121,7 @@ export class RecipeDetailComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.isMobile = window.innerWidth < this.mobileWidth;
     this.user = this.authService.user.getValue();
     this.readOnly = this.authService.readOnly.getValue();
 
@@ -297,13 +309,14 @@ export class RecipeDetailComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   showIngredients() {
-    const isMobile = false;
+    const isMobile = window.innerWidth < 820;
     if (isMobile) {
       // swoop in from the side
+      return;
     } else {
       this.returnScrollPoint = window.scrollY;
       this.opacity = 100;
-      console.log("op: ", this.opacity, " scroll: ", this.returnScrollPoint);
+      // console.log("op: ", this.opacity, " scroll: ", this.returnScrollPoint);
 
       this.ingredientListRef["last"].nativeElement.scrollIntoView({
         behavior: "smooth",
@@ -324,6 +337,13 @@ export class RecipeDetailComponent implements OnInit, AfterViewInit, OnDestroy {
       left: 0,
       behavior: "smooth",
     });
-    this.returnScrollPoint = null;
+    setTimeout(() => {
+      this.returnScrollPoint = null;
+    }, 500);
+  }
+
+  onPress(pressing: boolean) {
+    this.showIngredientsReminder = pressing;
+    // this.showIngredientsReminder = true;
   }
 }

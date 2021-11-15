@@ -13,14 +13,22 @@
   </div>
 
   <div class="recipe-list" *ngIf="columns.length && !loading">
-    <div *ngFor="let col of columns" class="custom-col {{ col.column }}" [style.width.%]="100 / columnCount">
+    <div
+      *ngFor="let col of columns"
+      class="custom-col {{ col.column }}"
+      [style.width.%]="100 / columnCount"
+    >
       <ng-container *ngFor="let recipeIndex of col.indexes; index as subIndex">
         <app-recipe-item
-          *ngIf="subIndex < scrollShow"
+          *ngIf="subIndex < scrollShow && !!recipes[recipeIndex]"
           class="recipe-item index-{{ recipeIndex }}"
           [recipe]="recipes[recipeIndex]"
           [showFavouriteIcon]="filter !== 'favourites'"
-          [isFavourite]="filter !== 'favourites' ? (recipes[recipeIndex].key | favourite: favouritesArr) : null"
+          [isFavourite]="
+            filter !== 'favourites'
+              ? (recipes[recipeIndex].key | favourite: favouritesArr)
+              : null
+          "
           (favouriteEmitter)="favourite(recipes[recipeIndex])"
           (imgLoadEmitter)="onImageLoad($event, recipeIndex)"
         ></app-recipe-item>
@@ -42,8 +50,13 @@
     </ng-container> -->
   </div>
 
-  <div class="scroll-top" [ngStyle]="{ opacity: maxScroll ? 1 : 0 }">
-    <span *ngIf="maxScroll" (click)="scroll()" class="material-icons">keyboard_arrow_up</span>
+  <div
+    class="scroll-top click-bounce"
+    [ngStyle]="{ opacity: maxScroll ? 1 : 0 }"
+  >
+    <span *ngIf="maxScroll" (click)="scroll()" class="material-icons"
+      >keyboard_arrow_up</span
+    >
   </div>
 
   <div class="empty" *ngIf="!recipes.length && !loading">
@@ -51,13 +64,17 @@
     <ng-container *ngIf="!readOnly">
       <h4>There's nothing here yet!</h4>
       <h4>Why not try something new, you might find a favourite?</h4>
-      <button *ngIf="filter !== null && allRecipes.length" (click)="randomRecipe()" class="spin-btn">
+      <button
+        *ngIf="filter !== null && allRecipes.length"
+        (click)="randomRecipe()"
+        class="spin-btn"
+      >
         Get inspired
       </button>
     </ng-container>
     <ng-container *ngIf="readOnly">
       <h4>There's more to see!</h4>
-      <button (click)="signup()" class="signup-btn">create an account</button>
+      <button (click)="signup()" class="btn-primary">create an account</button>
       <p>for full access</p>
     </ng-container>
   </div>

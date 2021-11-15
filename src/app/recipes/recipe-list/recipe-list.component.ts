@@ -255,6 +255,7 @@ export class RecipeListComponent implements OnInit, OnDestroy {
   }
 
   signup() {
+    console.log("click signup");
     const dialogRef = this.dialog.show(
       AuthComponent,
       { signup: true },

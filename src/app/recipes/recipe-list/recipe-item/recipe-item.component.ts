@@ -1,11 +1,11 @@
-import { EventEmitter, HostListener, Output } from '@angular/core';
-import { Component, OnInit, Input } from '@angular/core';
-import { Recipe } from '../../recipe.model';
+import { EventEmitter, HostListener, Output } from "@angular/core";
+import { Component, OnInit, Input } from "@angular/core";
+import { Recipe } from "../../recipe.model";
 
 @Component({
-  selector: 'app-recipe-item',
-  templateUrl: './recipe-item.component.html',
-  styleUrls: ['./recipe-item.component.scss'],
+  selector: "app-recipe-item",
+  templateUrl: "./recipe-item.component.html",
+  styleUrls: ["./recipe-item.component.scss"],
 })
 export class RecipeItemComponent implements OnInit {
   constructor() {}
@@ -24,7 +24,7 @@ export class RecipeItemComponent implements OnInit {
   width: number = window.innerWidth;
   mobileWidth = 760;
 
-  @HostListener('window:resize', ['$event'])
+  @HostListener("window:resize", ["$event"])
   onResize(event) {
     this.width = event.target.innerWidth;
     this.isMobile = this.width < this.mobileWidth;
@@ -32,7 +32,7 @@ export class RecipeItemComponent implements OnInit {
 
   ngOnInit(): void {
     this.isMobile = this.width < this.mobileWidth;
-    // console.log('recipe: ', this.recipe);
+    console.log("recipe: ", this.recipe);
 
     const oneWeek = 1000 * 60 * 60 * 24 * 7; // milliseconds * seconds * minutes * hours * days
     this.isNew = this.recipe.created > Date.now() - oneWeek;
