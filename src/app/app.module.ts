@@ -1,5 +1,5 @@
 import { BrowserModule } from "@angular/platform-browser";
-import { NgModule } from "@angular/core";
+import { NgModule, Injectable } from "@angular/core";
 import { HttpClientModule } from "@angular/common/http";
 import { DragDropModule } from "@angular/cdk/drag-drop";
 import { AngularFireModule } from "@angular/fire";
@@ -23,6 +23,7 @@ import { HeaderComponent } from "./header/header.component";
 import { MainNavComponent } from "./main-nav/main-nav.component";
 import { AngularFireStorageModule, BUCKET } from "@angular/fire/storage";
 
+@Injectable()
 export class MyHammerConfig extends HammerGestureConfig {
   buildHammer(element: HTMLElement) {
     const mc = new Hammer(element, {
