@@ -32,6 +32,7 @@
     "@ckeditor/ckeditor5-build-classic": "^22.0.0",
     "angularfire2": "^5.4.2",
     "firebase": "^9.5.0",
+    "hammerjs": "^2.0.8",
     "http-server": "^14.0.0",
     "lottie-web": "^5.7.5",
     "masonry-layout": "^4.2.2",
