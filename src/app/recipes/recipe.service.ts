@@ -3,9 +3,12 @@ import { EventEmitter, Injectable } from "@angular/core";
 // import { Ingredient } from '../shared/ingredient.model';
 import { Subject, Observable, of, BehaviorSubject } from "rxjs";
 // import { DataStorageService } from '../shared/data-storage.service';
-import { AngularFireDatabase, AngularFireList } from "@angular/fire/database";
+import {
+  AngularFireDatabase,
+  AngularFireList,
+} from "@angular/fire/compat/database";
 import { finalize, map, tap } from "rxjs/operators";
-import { AngularFireStorage } from "@angular/fire/storage";
+import { AngularFireStorage } from "@angular/fire/compat/storage";
 import * as uuid from "uuid";
 
 @Injectable({ providedIn: "root" })

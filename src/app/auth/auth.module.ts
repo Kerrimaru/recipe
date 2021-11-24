@@ -1,14 +1,14 @@
-import { NgModule } from '@angular/core';
-import { SharedModule } from '../shared/shared.module';
-import { AuthComponent } from './auth.component';
-import { RouterModule } from '@angular/router';
-import { canActivate } from '@angular/fire/auth-guard';
-import { map } from 'rxjs/operators';
+import { NgModule } from "@angular/core";
+import { SharedModule } from "../shared/shared.module";
+import { AuthComponent } from "./auth.component";
+import { RouterModule } from "@angular/router";
+import { canActivate } from "@angular/fire/compat/auth-guard";
+import { map } from "rxjs/operators";
 
 const redirectUnauthToLogin = () =>
   map((user) => {
     if (user) {
-      return [''];
+      return [""];
     } else {
       return true;
     }
@@ -18,7 +18,13 @@ const redirectUnauthToLogin = () =>
   declarations: [AuthComponent],
   imports: [
     SharedModule,
-    RouterModule.forChild([{ path: '', component: AuthComponent, ...canActivate(redirectUnauthToLogin) }]),
+    RouterModule.forChild([
+      {
+        path: "",
+        component: AuthComponent,
+        ...canActivate(redirectUnauthToLogin),
+      },
+    ]),
   ],
 })
 export class AuthModule {}

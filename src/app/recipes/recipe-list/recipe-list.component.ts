@@ -4,8 +4,8 @@ import { RecipeService } from "../recipe.service";
 import { Router, ActivatedRoute } from "@angular/router";
 import { Subscription, BehaviorSubject } from "rxjs";
 import { DataStorageService } from "src/app/shared/data-storage.service";
-import { AngularFireDatabase } from "@angular/fire/database";
-import { AngularFireAuth } from "@angular/fire/auth";
+import { AngularFireDatabase } from "@angular/fire/compat/database";
+import { AngularFireAuth } from "@angular/fire/compat/auth";
 import { UserSettingsService } from "src/app/settings/user-settings.service";
 import { AuthService } from "src/app/auth/auth.service";
 import { DialogService } from "src/app/shared/dialog/dialog.service";
@@ -96,7 +96,7 @@ export class RecipeListComponent implements OnInit, OnDestroy {
     if (notify) {
       let title = "Welcome";
       let message: string[];
-      let actions: any = [{ text: "view recipes" }];
+      let actions: any = [{ text: "view recipes", primary: true }];
       if (notify === "guest") {
         title += ", Guest!";
         message = [
