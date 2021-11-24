@@ -2,8 +2,8 @@ import { BrowserModule } from "@angular/platform-browser";
 import { NgModule, Injectable } from "@angular/core";
 import { HttpClientModule } from "@angular/common/http";
 import { DragDropModule } from "@angular/cdk/drag-drop";
-import { AngularFireModule } from "@angular/fire";
-import { AngularFireDatabaseModule } from "@angular/fire/database";
+import { AngularFireModule } from "@angular/fire/compat";
+import { AngularFireDatabaseModule } from "@angular/fire/compat/database";
 import { environment } from "../environments/environment";
 import { AppRoutingModule } from "./app-routing.module";
 import { SharedModule } from "./shared/shared.module";
@@ -21,7 +21,7 @@ import * as Hammer from "hammerjs";
 import { AppComponent } from "./app.component";
 import { HeaderComponent } from "./header/header.component";
 import { MainNavComponent } from "./main-nav/main-nav.component";
-import { AngularFireStorageModule, BUCKET } from "@angular/fire/storage";
+import { AngularFireStorageModule, BUCKET } from "@angular/fire/compat/storage";
 
 @Injectable()
 export class MyHammerConfig extends HammerGestureConfig {

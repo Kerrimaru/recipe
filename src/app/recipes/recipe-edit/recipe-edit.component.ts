@@ -9,7 +9,7 @@ import { AuthService } from "src/app/auth/auth.service";
 import { Observable, of } from "rxjs";
 import { TagsConst } from "src/app/shared/constants/tags.const";
 import { __assign } from "tslib";
-import { AngularFireStorage } from "@angular/fire/storage";
+import { AngularFireStorage } from "@angular/fire/compat/storage";
 import * as uuid from "uuid";
 import { finalize } from "rxjs/operators";
 
