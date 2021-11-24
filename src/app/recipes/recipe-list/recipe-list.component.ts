@@ -96,7 +96,7 @@ export class RecipeListComponent implements OnInit, OnDestroy {
     if (notify) {
       let title = "Welcome";
       let message: string[];
-      let actions: any = [{ text: "view recipes" }];
+      let actions: any = [{ text: "view recipes", primary: true }];
       if (notify === "guest") {
         title += ", Guest!";
         message = [
