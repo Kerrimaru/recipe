@@ -19,6 +19,7 @@
       "dom"
     ]
   },
+  "allowSyntheticDefaultImports": true,
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,
     "strictInjectionParameters": true
