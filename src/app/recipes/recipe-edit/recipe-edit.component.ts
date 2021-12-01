@@ -107,15 +107,13 @@ export class RecipeEditComponent implements OnInit {
     this.onAddIngredient();
   }
 
-  toggleTag(tag: string, elRef: HTMLElement) {
+  toggleTag(tag: string) {
     this.markDirty();
     const selected = this.recipe.tags.indexOf(tag);
     if (selected >= 0) {
-      elRef.classList.remove("selected");
       this.recipe.tags.splice(selected, 1);
     } else {
       this.recipe.tags.push(tag);
-      elRef.classList.add("selected");
     }
   }
 

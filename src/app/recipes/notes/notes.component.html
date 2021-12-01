@@ -1,22 +1,36 @@
 <div class="note-section">
   <!-- new notes input -->
-  <div class="new-note-cont" *ngIf="currentUserId">
+  <div class="new-note-cont" [ngClass]="{ disabled: !currentUserId }">
     <label for="note-input">
-      <span class="material-icons custom-note" matTooltip="add a note" matTooltipShowDelay="500">note_add</span>
+      <span
+        class="material-icons custom-note"
+        matTooltip="add a note"
+        matTooltipShowDelay="500"
+        >note_add</span
+      >
     </label>
     <div
       tabindex="1"
       (keydown.enter)="$event.target.blur()"
-      contenteditable
+      [attr.contenteditable]="currentUserId"
       id="note-input"
       placeholder="add a note"
-      (blur)="saveNewNote($event.target.innerHTML); $event.target.innerHTML = null"
+      (blur)="
+        saveNewNote($event.target.innerHTML); $event.target.innerHTML = null
+      "
     ></div>
     <i>press enter or click away to save</i>
   </div>
 
   <!-- only show for guest users -->
-  <div *ngIf="!notes.length && !currentUserId"><p>No one has commented yet!</p></div>
+  <div *ngIf="!currentUserId">
+    <p [style.cursor]="'pointer'" (click)="signupEmitter.emit()">
+      Sign up to add notes
+    </p>
+  </div>
+  <div *ngIf="!notes.length && !currentUserId">
+    <p>No one has commented yet!</p>
+  </div>
 
   <!-- main notes -->
   <div class="note-list">
@@ -30,19 +44,32 @@
       <div
         class="note-bubble"
         [class.active]="editNoteIndex === i"
-        (click)="note.show && editNoteIndex === i ? (note.show = note.show) : (note.show = !note.show)"
+        (click)="
+          note.show && editNoteIndex === i
+            ? (note.show = note.show)
+            : (note.show = !note.show)
+        "
       >
         <div
-          class="note-edit-input"
           [tabindex]="i"
           (keydown.enter)="updateNote($event.target.innerHTML, note.id)"
-          [innerHTML]="note.note"
           #activeNoteRef
-        ></div>
+        >
+          <p class="note-content" [innerHTML]="note.note"></p>
+        </div>
       </div>
       <div class="note-info">
         <div class="commenter" [style.opacity]="editNoteIndex === i ? 0 : 1">
-          <p>{{ note.userId === currentUserId ? 'You' : note.userName ? note.userName : 'Anonymous' }} commented</p>
+          <p>
+            {{
+              note.userId === currentUserId
+                ? "You"
+                : note.userName
+                ? note.userName
+                : "Anonymous"
+            }}
+            commented
+          </p>
           <p>on {{ note.date | date }}</p>
         </div>
         <div class="note-actions" *ngIf="note.userId === currentUserId">
@@ -65,7 +92,11 @@
             edit
           </span>
           <span
-            (click)="editNoteIndex === i ? cancelEdit(activeNoteRef, note.note) : deleteEmitter.emit(note.id)"
+            (click)="
+              editNoteIndex === i
+                ? cancelEdit(activeNoteRef, note.note)
+                : deleteEmitter.emit(note.id)
+            "
             class="material-icons remove"
             [matTooltip]="editNoteIndex === i ? 'Cancel' : 'Delete note'"
             matTooltipShowDelay="400"

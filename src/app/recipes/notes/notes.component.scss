@@ -10,6 +10,8 @@
   background-color: #add8e64a;
   border-radius: 5px;
   padding: 7px 10px;
+  font-family: Poppins;
+  cursor: text;
   + i {
     opacity: 0;
   }
@@ -28,8 +30,11 @@
   }
 }
 
-.show .note-info {
-  display: flex;
+.new-note-cont.disabled {
+  cursor: not-allowed;
+  #note-input {
+    pointer-events: none;
+  }
 }
 
 .new-note-cont {
@@ -163,4 +168,8 @@ i {
   #note-input {
     margin-right: 0;
   }
+}
+
+p.note-content {
+  margin: 0;
 }

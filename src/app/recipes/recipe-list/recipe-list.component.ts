@@ -94,36 +94,14 @@ export class RecipeListComponent implements OnInit, OnDestroy {
     });
     const notify = this.route.snapshot.queryParams["notify"];
     if (notify) {
-      let title = "Welcome";
-      let message: string[];
-      let actions: any = [{ text: "view recipes", primary: true }];
-      if (notify === "guest") {
-        title += ", Guest!";
-        message = [
-          "As a guest, feel free to explore! You will be able to preview the site, but with limited functionality.",
-          "You can view recipes, but cannot:",
-          "add new recipes<br> favourite or bookmark recipes<br> add comments or add dates",
-          "and any changes made will not be saved.",
-        ];
-      } else {
-        const testy = history.state.data;
-        if (!!testy && !!testy.name) {
-          title += ", " + testy.name;
-        }
-
-        message = [
-          "Thanks for signing up! Get started by",
-          "browsing recipes, or add your own straight away!",
-        ];
-        actions.push({ text: "add new recipe", go: "new", secondary: true });
+      const testy = history.state.data;
+      let name = "";
+      if (!!testy && !!testy.name) {
+        name = testy.name;
       }
-      this.dialog
-        .alert({ title: title, lines: message, actions: actions })
-        .subscribe((res) => {
-          if (res === "new") {
-            this.router.navigate(["recipes", "new"]);
-          }
-        });
+      console.log("testy: ", testy);
+      console.log("name: ", name);
+      this.showWelcome(notify, name);
     }
 
     this.favsSub = this.settingsService.favs$.subscribe((res) => {
@@ -142,6 +120,43 @@ export class RecipeListComponent implements OnInit, OnDestroy {
       this.columns = this.populateColumns(this.recipes);
       this.loading = false;
     });
+  }
+
+  showWelcome(messageType: string, userName?: string) {
+    let title = "Welcome";
+    let message: string[];
+    let actions: any = [{ text: "view recipes", primary: true }];
+    if (messageType === "guest") {
+      title += ", Guest!";
+      message = [
+        "As a guest, feel free to explore! You will be able to preview the site, but with limited functionality.",
+        "You can view recipes, but cannot:",
+        "add new recipes<br> favourite or bookmark recipes<br> add comments or add dates",
+        "and any changes made will not be saved.",
+      ];
+    } else {
+      if (userName) {
+        title += ", " + userName;
+        // } else {
+        //   const testy = history.state.data;
+        //   if (!!testy && !!testy.name) {
+        //     title += ", " + testy.name;
+        //   }
+      }
+
+      message = [
+        "Thanks for signing up! Get started by",
+        "browsing recipes, or add your own straight away!",
+      ];
+      actions.push({ text: "add new recipe", go: "new", secondary: true });
+    }
+    this.dialog
+      .alert({ title: title, lines: message, actions: actions })
+      .subscribe((res) => {
+        if (res === "new") {
+          this.router.navigate(["recipes", "new"]);
+        }
+      });
   }
 
   runSearch() {
@@ -264,12 +279,13 @@ export class RecipeListComponent implements OnInit, OnDestroy {
     const onClose = dialogRef.afterClosed();
     onClose.subscribe((userName) => {
       if (!!userName) {
-        this.recipeService.fetchRecipes().subscribe((res) => {
-          // shouldnt need to do this? investigate
-          this.allRecipes = res;
-          this.recipes = res.reverse();
-        });
-        // show welcome message
+        // this.recipeService.fetchRecipes().subscribe((res) => {
+        //   // shouldnt need to do this? investigate
+        //   this.allRecipes = res;
+        //   this.recipes = res.reverse();
+        // });
+        this.showWelcome("signedup", userName);
+        // to do: show welcome message
       }
     });
   }

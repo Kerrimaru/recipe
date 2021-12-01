@@ -35,7 +35,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   isMobile = false;
   headerExpanded = false;
   width: number = window.innerWidth;
-  scrollHeight = 160;
+  // scrollHeight = 160;
+  scrollHeight = 130;
   mobileWidth = 820;
   collapse = false;
 
@@ -80,10 +81,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
   checkScroll(event: Event) {
     if (window.pageYOffset >= 16) {
       this.collapse = true;
-      this.scrollHeight = 160 - window.pageYOffset;
+      // this.scrollHeight = 160 - window.pageYOffset;
+      this.scrollHeight = 130 - window.pageYOffset;
     } else {
       this.collapse = false;
-      this.scrollHeight = 160;
+      // this.scrollHeight = 160;
+      this.scrollHeight = 130;
     }
   }
 

@@ -29,7 +29,10 @@ const routes: Routes = [
     path: "login",
     ...canActivate(redirectLoggedInToRecipes),
     loadChildren: () =>
-      import("./auth/auth.module").then((module) => module.AuthModule),
+      // import("./auth/auth.module").then((module) => module.AuthModule),
+      import("./login-landing/login-landing.module").then(
+        (module) => module.LoginLandingModule
+      ),
   },
 ];
 

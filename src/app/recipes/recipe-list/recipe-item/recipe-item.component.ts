@@ -32,7 +32,7 @@ export class RecipeItemComponent implements OnInit {
 
   ngOnInit(): void {
     this.isMobile = this.width < this.mobileWidth;
-    console.log("recipe: ", this.recipe);
+    // console.log("recipe: ", this.recipe);
 
     const oneWeek = 1000 * 60 * 60 * 24 * 7; // milliseconds * seconds * minutes * hours * days
     this.isNew = this.recipe.created > Date.now() - oneWeek;

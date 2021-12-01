@@ -7,7 +7,7 @@ import { AngularFireDatabaseModule } from "@angular/fire/compat/database";
 import { environment } from "../environments/environment";
 import { AppRoutingModule } from "./app-routing.module";
 import { SharedModule } from "./shared/shared.module";
-import { CoreModule } from "./core.module";
+// import { CoreModule } from "./core.module";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { ServiceWorkerModule } from "@angular/service-worker";
 import { HammerModule } from "@angular/platform-browser";
@@ -43,7 +43,7 @@ export class MyHammerConfig extends HammerGestureConfig {
     AppRoutingModule,
     HttpClientModule,
     SharedModule,
-    CoreModule,
+    // CoreModule,
     DragDropModule,
     BrowserAnimationsModule,
     HammerModule,

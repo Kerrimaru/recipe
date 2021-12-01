@@ -19,6 +19,7 @@ import { map } from "rxjs/operators";
 import { DialogService } from "src/app/shared/dialog/dialog.service";
 import { Observable, Subscription } from "rxjs";
 import { User } from "src/app/auth/user.model";
+import { AuthComponent } from "src/app/auth/auth.component";
 
 interface Note {
   id: string;
@@ -246,11 +247,26 @@ export class RecipeDetailComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  onDateChange(event?) {
+  parseDateAction(action: String | Date) {
+    if (typeof action !== "string") {
+      return this.addDate(action);
+    }
+    switch (action) {
+      case "signup":
+        return this.openSignupDialog();
+      case "today":
+        return this.addDate();
+      default:
+        return this.deleteDate(action);
+    }
+  }
+
+  addDate(date?: any) {
     if (this.readOnly) {
       return;
     }
-    const timestamp = event ? event.getTime() : new Date().getTime();
+
+    const timestamp = date ? date.getTime() : new Date().getTime();
     this.dateInput = null;
     this.recipeService.setUserDateMade(
       this.user.id,
@@ -259,14 +275,25 @@ export class RecipeDetailComponent implements OnInit, AfterViewInit, OnDestroy {
     );
   }
 
-  deleteDate(e) {
+  deleteDate(id: string) {
     // this confirm is really annoying and ugly
     this.showConfirm("date").subscribe((res) => {
-      this.recipeService.deleteUserDateMade(
-        this.user.id,
-        this.recipe.key,
-        e.id
-      );
+      this.recipeService.deleteUserDateMade(this.user.id, this.recipe.key, id);
+    });
+  }
+
+  openSignupDialog() {
+    const dialogRef = this.dialog.show(
+      AuthComponent,
+      { signup: true },
+      { panelClass: "auth-dialog" }
+    );
+    const onClose = dialogRef.afterClosed();
+    onClose.subscribe((userName) => {
+      if (!!userName) {
+        this.readOnly = false;
+        // to do: show welcome message
+      }
     });
   }
 

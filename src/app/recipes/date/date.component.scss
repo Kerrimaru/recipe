@@ -1,8 +1,9 @@
 .dates-container {
-  h6 {
-    font-size: 13px;
+  p {
     margin: 0;
-    font-style: italic;
+  }
+  .date-item {
+    font-size: 13px;
   }
 }
 
@@ -23,7 +24,7 @@
     img.date-select {
       height: 15px;
     }
-    &:hover img {
+    button:not(:disabled):hover img {
       transform: scale(1.1);
       transition: ease-in-out 0.2s;
     }
@@ -36,6 +37,13 @@
 }
 
 .dates-list {
+  margin-top: 25px;
+  background-color: #add8e64a;
+  padding: 10px;
+  border-radius: 7px;
+  p {
+    margin: 5px 0;
+  }
   div {
     padding: 0 10px;
   }

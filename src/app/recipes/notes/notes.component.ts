@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 
 interface Note {
   id: string;
@@ -10,9 +10,9 @@ interface Note {
 }
 
 @Component({
-  selector: 'app-notes',
-  templateUrl: './notes.component.html',
-  styleUrls: ['./notes.component.scss'],
+  selector: "app-notes",
+  templateUrl: "./notes.component.html",
+  styleUrls: ["./notes.component.scss"],
 })
 export class NotesComponent implements OnInit {
   constructor() {}
@@ -22,6 +22,7 @@ export class NotesComponent implements OnInit {
 
   @Output() deleteEmitter = new EventEmitter<string>();
   @Output() saveEmitter = new EventEmitter<any>();
+  @Output() signupEmitter = new EventEmitter<any>();
 
   editNoteIndex: number;
 
@@ -30,9 +31,9 @@ export class NotesComponent implements OnInit {
   editNote(index: number, ref?: HTMLElement) {
     this.editNoteIndex = index;
     if (ref) {
-      ref.contentEditable = 'true';
+      ref.contentEditable = "true";
       ref.focus();
-      document.execCommand('selectAll', false, null);
+      document.execCommand("selectAll", false, null);
       document.getSelection().collapseToEnd();
     }
   }

@@ -1,0 +1,11 @@
+<div
+  class="tag"
+  [ngClass]="{
+    disabled: disabled,
+    selected: selected,
+    'click-bounce': !disabled
+  }"
+  (click)="toggle()"
+>
+  {{ tag }}
+</div>

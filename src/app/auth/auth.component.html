@@ -1,23 +1,21 @@
-<div class="auth-container" [ngClass]="{ 'auth-dialog': isSignup }">
-  <img
-    *ngIf="!isSignup"
-    class="hole-logo"
-    src="assets/images/logos/hole-logo.png"
-  />
-  <div class="form-container">
-    <div class="loading" [ngClass]="{ show: loading }">
-      <app-loading></app-loading>
-    </div>
+<div class="auth-form" [ngClass]="{ 'auth-dialog': isSignup }">
+  <div class="loading" [ngClass]="{ show: loading }">
+    <app-loading></app-loading>
+  </div>
 
-    <form
-      #authForm="ngForm"
-      (ngSubmit)="onSubmit(authForm)"
-      [ngClass]="{ hidden: loading }"
-    >
+  <form
+    #authForm="ngForm"
+    (ngSubmit)="onSubmit(authForm)"
+    [ngClass]="{ hidden: loading }"
+  >
+    <div class="form-inputs">
       <div class="form-group">
+        <!-- <div class="form-field-visible" id="emailView">
+        {{ authForm.value.email }}
+      </div> -->
         <input
+          [ngClass]="{ reverse: !isDialog }"
           type="email"
-          class="form-control"
           id="email"
           ngModel
           name="email"
@@ -25,11 +23,14 @@
           email
           [placeholder]="isLogin ? 'Email' : 'What\'s your email?'"
         />
+        <!-- <p class="form-field-visible" id="emailView" (click)="emailInput.focus()">
+        {{ authForm.value.email }}
+      </p> -->
       </div>
       <div class="form-group">
         <input
+          [ngClass]="{ reverse: !isDialog }"
           type="password"
-          class="form-control"
           id="password"
           ngModel
           name="password"
@@ -39,10 +40,11 @@
         />
       </div>
 
-      <div [style.opacity]="isLogin ? 0 : 1" class="form-group">
+      <!-- <div [style.opacity]="isLogin ? 0 : 1" class="form-group"> -->
+      <div *ngIf="!isLogin" class="form-group">
         <input
+          [ngClass]="{ reverse: !isDialog }"
           type="name"
-          class="form-control"
           id="name"
           ngModel
           name="name"
@@ -50,34 +52,36 @@
           [required]="!isLogin"
         />
       </div>
+    </div>
 
-      <div class="actions">
-        <button type="submit" id="auth-submit" class="btn-primary">
-          {{ isLogin ? "Sign in" : "Sign up" }}
-        </button>
+    <div class="actions">
+      <button type="submit" class="btn-primary auth-submit">
+        {{ isLogin ? "Sign in" : "Sign up" }}
+      </button>
+    </div>
+    <hr style="width: 25%; border-color: #918e8a" />
+    <div *ngIf="!isSignup" class="actions secondary-actions">
+      <p>
+        {{ isLogin ? "Don't have an account?" : "Already signed up?" }}
+      </p>
+      <p
+        id="mobile-toggle"
+        class="toggle"
+        (click)="toggleLogin()"
+        style="text-decoration: underline"
+      >
+        Go to {{ !isLogin ? "login" : "signup" }}
+      </p>
 
-        <ng-container *ngIf="!isSignup">
-          <p [style.opacity]="isLogin ? 1 : 0">Don't have an account?</p>
-          <button
-            id="mobile-toggle"
-            class="toggle btn-small"
-            (click)="toggleLogin()"
-            type="button"
-          >
-            Go to {{ !isLogin ? "login" : "Sign up" }}
-          </button>
-
-          <p style="margin: 5px">or</p>
-          <button
-            type="button"
-            id="auth-submit"
-            class="btn-secondary btn-small"
-            (click)="signInGuest()"
-          >
-            Enter as Guest
-          </button>
-        </ng-container>
-      </div>
-    </form>
-  </div>
+      <p style="margin: 5px">or</p>
+      <button
+        type="button"
+        class=""
+        class="btn-secondary btn-small"
+        (click)="signInGuest()"
+      >
+        Enter as guest
+      </button>
+    </div>
+  </form>
 </div>
