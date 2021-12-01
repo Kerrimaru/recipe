@@ -1,36 +1,34 @@
+import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { SharedModule } from "../shared/shared.module";
+import { AuthComponent } from "../auth/auth.component";
 import { RouterModule } from "@angular/router";
 import { canActivate } from "@angular/fire/compat/auth-guard";
 import { map } from "rxjs/operators";
-import { IntroComponent } from "./intro.component";
-import { AuthModule } from "../auth/auth.module";
-import { AuthComponent } from "../auth/auth.component";
+import { LoginLandingComponent } from "./login-landing.component";
 
 const redirectUnauthToLogin = () =>
   map((user) => {
-    // console.log('user in routing: ', user);
     if (user) {
       return [""];
     } else {
       return true;
     }
-    // return !user ? ['login'] : [''];
   });
 
 @NgModule({
-  declarations: [IntroComponent, AuthComponent],
-  // imports: [SharedModule, RouterModule.forChild([{ path: 'login', component: AuthComponent }])],
+  declarations: [AuthComponent, LoginLandingComponent],
   imports: [
+    CommonModule,
     SharedModule,
-    AuthModule,
     RouterModule.forChild([
       {
         path: "",
-        component: IntroComponent,
+        // component: AuthComponent,
+        component: LoginLandingComponent,
         ...canActivate(redirectUnauthToLogin),
       },
     ]),
   ],
 })
-export class IntroModule {}
+export class LoginLandingModule {}

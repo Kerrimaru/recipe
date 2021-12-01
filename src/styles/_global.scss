@@ -2,11 +2,12 @@ html,
 body {
   height: 100%;
 }
+
 body {
   cursor: default;
   margin: 0;
   margin: auto;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+  // font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
 .actions {
@@ -36,6 +37,13 @@ h5,
 h6 {
   font-family: "Rosario";
   letter-spacing: 1.2px;
+}
+
+body,
+li,
+p,
+input {
+  font-family: Poppins;
 }
 
 .ck-editor__editable_inline {
@@ -70,15 +78,12 @@ button {
   &:disabled {
     cursor: not-allowed;
   }
-  &:hover {
-    // box-shadow: inset 0 0 100px 100px rgba(255, 255, 255, 0.3);
-  }
 }
 
 .btn-primary {
   background-color: #add8e6;
   border-color: #add8e6;
-  &:hover {
+  &:not(:disabled):hover {
     background-color: #c6e4ed;
     border-color: #c6e4ed;
   }
@@ -141,4 +146,52 @@ div:focus {
 .click-bounce:active {
   transform: scale(90%);
   transition: all 0.1s;
+}
+
+// recipe detail - method
+.desc p {
+  font-size: 16px;
+  line-height: 1.5;
+  font-family: Poppins;
+}
+
+@media (max-width: 800px) {
+  .desc p {
+    font-size: 20px !important;
+  }
+  p,
+  li,
+  div,
+  body {
+    font-size: 16px !important;
+  }
+  button {
+    font-size: 14px !important;
+  }
+}
+
+.auth-form input:-webkit-autofill,
+.auth-form input:-webkit-autofill:hover,
+.auth-form input:-webkit-autofill:focus,
+.auth-form input:-webkit-autofill:active {
+  box-shadow: 0 0 0 0px white inset !important;
+  transition: background-color 5000s;
+  background-color: #3330 !important;
+}
+
+/* Change Autocomplete styles in Chrome*/
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus input:-webkit-autofill,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  &.reverse {
+    -webkit-text-fill-color: #fff;
+    -webkit-box-shadow: 0 0 0px 0px #000 inset;
+    transition: background-color 5000s ease-in-out 0s;
+    caret-color: #fff;
+  }
 }

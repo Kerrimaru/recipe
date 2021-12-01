@@ -1,0 +1,22 @@
+.tag {
+  margin: 5px;
+  padding: 4px 12px;
+  display: inline-block;
+  border-radius: 20px;
+  font-size: 14px;
+  border: 1px solid #e0e0e0;
+  background-color: #e0e0e0;
+  transition: 0.3s all;
+  &:hover:not(.selected) {
+    background-color: #c6c6c6;
+    border-color: #c6c6c6;
+  }
+  &.selected {
+    background-color: #add8e6;
+    border-color: #add8e6;
+  }
+}
+
+.tag:not(.disabled) {
+  cursor: pointer;
+}

@@ -17,14 +17,12 @@
       <hr />
 
       <div class="tags">
-        <div
+        <app-tag
           *ngFor="let tag of tags"
-          class="tag click-bounce"
-          [class.selected]="tag | arrayIncludes: recipe.tags"
-          (click)="toggleTag(tag, $event.target)"
-        >
-          {{ tag }}
-        </div>
+          [tag]="tag"
+          [selected]="tag | arrayIncludes: recipe.tags"
+          (toggleTagEmitter)="toggleTag(tag)"
+        ></app-tag>
       </div>
 
       <div class="ing-img-cont">

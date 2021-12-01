@@ -1,8 +1,7 @@
 <header
   class="app-nav"
-  *ngIf="isAuth"
   [ngClass]="{ collapse: collapse }"
-  [style.height.px]="isMobile ? 80 : scrollHeight"
+  [style.height.px]="isMobile || !isAuth ? 80 : scrollHeight"
 >
   <div class="app-header">
     <a routerLink="/" class="main-header">
@@ -11,6 +10,7 @@
     </a>
 
     <div
+      *ngIf="isAuth"
       class="account-actions"
       [ngClass]="{ expanded: headerExpanded, mobile: isMobile }"
     >
@@ -51,7 +51,7 @@
   </div>
 
   <!-- tabs -->
-  <div class="tab-list" *ngIf="!isMobile">
+  <div class="tab-list" *ngIf="!isMobile && isAuth">
     <ng-container *ngFor="let item of navItems">
       <div
         *ngIf="item.tabItem"

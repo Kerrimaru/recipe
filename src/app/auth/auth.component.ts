@@ -21,9 +21,9 @@ export class AuthComponent implements OnInit {
   isLogin = true;
   loading = false;
   isSignup: boolean; // if only signup, no login offered
+  isDialog = !!this.dialog.dialogData;
 
   ngOnInit() {
-    console.log("auth: ", this.dialog);
     if (this.dialog.dialogData) {
       this.isSignup = this.dialog.dialogData.signup;
       this.isLogin = false;
@@ -35,6 +35,7 @@ export class AuthComponent implements OnInit {
   }
 
   onSubmit(form: NgForm) {
+    console.log("form: ", form);
     if (!form.valid) {
       return this.openSnackBar("Check your details");
     }
@@ -63,11 +64,12 @@ export class AuthComponent implements OnInit {
 
       if (this.dialog.dialogData) {
         this.dialog.close(name);
+      } else {
+        this.router.navigate(["/recipes"], {
+          queryParams: params,
+          state: { data: data },
+        });
       }
-      this.router.navigate(["/recipes"], {
-        queryParams: params,
-        state: { data: data },
-      });
     });
   }
 
