@@ -17,19 +17,6 @@
         {{ diet }}
       </div>
     </div>
-    <!-- <div class="theme">
-      <h4>Theme</h4>
-      {{ selectedTheme }}
-      <img src="/assets/images/palettes/theme-{{ selectedTheme }}.jpeg" class="theme-preview" />
-      <mat-form-field>
-        <mat-select [(ngModel)]="selectedTheme" name="theme" (selectionChange)="selectTheme(selectedTheme)">
-          <mat-option *ngFor="let theme of themeOptions" [value]="theme.name">
-            {{ theme.name | titlecase }} |
-            <img src="/assets/images/palettes/palette-{{ theme.name }}.png" class="theme-icon" />
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div> -->
   </form>
   <!-- <div class="actions">
     <button class="one">One / Primary</button>
@@ -38,4 +25,18 @@
     <button class="four">Four</button>
     <button class="btn-primary">Save / Five</button>
   </div> -->
+</div>
+
+<div class="stats">
+  <h2>
+    You've made {{ recDatesList.length }} different recipes, and
+    {{ totalDates }} meals altogether!
+  </h2>
+  <div>
+    <h3>Of these recipes you've made:</h3>
+    <div *ngFor="let rec of recDatesList">
+      <h3>{{ rec.title }}</h3>
+      <p *ngFor="let date of rec.dates">{{ date | date }}</p>
+    </div>
+  </div>
 </div>

@@ -6,6 +6,7 @@ import { Subject, Observable, of, BehaviorSubject } from "rxjs";
 import {
   AngularFireDatabase,
   AngularFireList,
+  snapshotChanges,
 } from "@angular/fire/compat/database";
 import { finalize, map, tap } from "rxjs/operators";
 import { AngularFireStorage } from "@angular/fire/compat/storage";
@@ -44,9 +45,17 @@ export class RecipeService {
   }
 
   getRecipeByKey(key: string): Recipe {
-    if (this.recipes) {
+    console.log("key: ", key, " recipes: ", this.recipes);
+    if (this.recipes.length) {
       const rec = this.recipes.find((r) => r.key === key);
       return rec;
+    } else {
+      this.fetchRecipes().subscribe((res) => {
+        console.log("res: ", res);
+        if (res) {
+          this.getRecipeByKey(key);
+        }
+      });
     }
   }
 
@@ -150,9 +159,74 @@ export class RecipeService {
     return this.fb.list(`recipeNotes/${key}`);
   }
 
-  getUserDates(userId: string, recipeKey: string) {
-    return this.fb.list(`userDateMade/${userId}/${recipeKey}`);
+  getUserDates(userId: string, recipeKey?: string) {
+    if (recipeKey) {
+      return this.fb.list(`userDateMade/${userId}/${recipeKey}`);
+    }
+    // else {
+    // return;
+    // return this.fb.database.ref("userDateMade").child(userId).once("value");
+
+    // const recList = this.fb.database.ref(`userDateMade/${userId}`);
+    // // recList.\
+    // console.log("reslist: ", recList);
+    // // const dates =
+    // const ref = this.fb.database.ref(`userDateMade/${userId}`);
+    // console.log("ref: ", ref);
+    // ref.once("value")
+    // .then((snapshot) => {
+    //   snapshotChanges
+    //   console.log("snap val: ", snapshot.val());
+    //   const recList = snapshot.val();
+    //   recList.array.forEach((element) => {
+    //     console.log("eleemtn ", element);
+    //   });
+    //   return snapshot.val();
+    // });
+    // // console.log("ref: ", ref);
+    // // console.log("object: ", this.fb.object(`userDateMade/${userId}`));
+    // return this.fb.list(`userDateMade/${userId}`);
+    // }
   }
+
+  getRecipesMadeSnap(userId: string) {
+    return this.fb.database
+      .ref("userDateMade")
+      .child(userId)
+      .once("value")
+      .then((snapshot) => {
+        let newArr = [];
+        for (const [key, value] of Object.entries(snapshot.val())) {
+          const rec = {
+            id: key,
+            dates: value,
+            title: this.getRecipeByKey(key).name,
+          };
+          newArr.push(rec);
+        }
+        // console.log("newarr: ", newArr);
+        // console.log("snap : ", snapshot.val());
+        newArr.map((rec) => {
+          const datesArr = [];
+          for (const [key, value] of Object.entries(rec.dates)) {
+            datesArr.push(value);
+          }
+          return (rec.dates = datesArr);
+        });
+
+        return newArr;
+      });
+  }
+
+  getAllRecipeDatesSnap(userId: string, recipeId: string) {
+    return;
+  }
+
+  // getRecipesDates(userId: string) {
+  //   const ref = this.fb.database.ref(`userDateMade/${userId}`);
+  //   ref.
+
+  // }
 
   setUserDateMade(userId: string, recipeId: string, date: string) {
     this.fb.database
