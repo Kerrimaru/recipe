@@ -27,21 +27,25 @@ import { MatDialogModule } from "@angular/material/dialog";
 import { AuthDialogComponent } from "./dialog/auth-dialog/auth-dialog.component";
 import { LongpressDirective } from "./directives/longpress.directive";
 import { TagComponent } from "./components/tag/tag.component";
+import { RecentPipe } from "./pipes/recent.pipe";
 
 @NgModule({
   declarations: [
     LoadingComponent,
-    DropdownDirective,
-    TitlePipe,
-    RecipeFilterPipe,
-    ArrayIncludesPipe,
-    ShowOnScrollDirective,
-    FavouritesPipe,
-    LottieDirective,
-    LongpressDirective,
     AlertComponent,
     AuthDialogComponent,
     TagComponent,
+
+    TitlePipe,
+    RecipeFilterPipe,
+    ArrayIncludesPipe,
+    RecentPipe,
+    FavouritesPipe,
+
+    DropdownDirective,
+    ShowOnScrollDirective,
+    LottieDirective,
+    LongpressDirective,
   ],
   imports: [
     CommonModule,
@@ -69,6 +73,7 @@ import { TagComponent } from "./components/tag/tag.component";
     RecipeFilterPipe,
     ArrayIncludesPipe,
     FavouritesPipe,
+    RecentPipe,
 
     CommonModule,
     FormsModule,

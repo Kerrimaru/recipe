@@ -5,6 +5,10 @@ import { AuthService } from "../auth/auth.service";
 import { User, UserSettings } from "../auth/user.model";
 import { RecipeService } from "../recipes/recipe.service";
 import { UserSettingsService } from "./user-settings.service";
+import { NgxChartsModule } from "@swimlane/ngx-charts";
+import { Recipe } from "../recipes/recipe.model";
+import { Router } from "@angular/router";
+// import { single } from "./data";
 
 // component not yet in use
 @Component({
@@ -21,17 +25,57 @@ export class SettingsComponent implements OnInit, OnDestroy {
   recDatesList = [];
   recDatesSub: Subscription;
   totalDates: any;
+  selectedRecipe: any;
 
   dietOptions = ["Vegan", "Vegetarian", "All"];
-  mode = "light"; // can be light or dark
-
+  darkMode = false;
   selectedDiet: string;
+  // options
+  gradient = false;
+  showLegend = true;
+  showLabels = false;
+  isDoughnut = true;
+  legendPosition: string = "right"; // below | right
+
+  colorScheme = {
+    domain: [
+      "#ADD8E6",
+      "#ADE6CE",
+      "#ADB2E6",
+      "#E6BBAD",
+      "#E6ADD8",
+      "#D8E6AD",
+      "#E6ADB2",
+      "#B5CCE4",
+      "#D8ADE6",
+      "#BBE6AD",
+    ],
+  };
 
   constructor(
     private authService: AuthService,
     private settingsService: UserSettingsService,
+    private router: Router,
     private recipeService: RecipeService
   ) {}
+
+  onSelect(data): void {
+    console.log("Item clicked", JSON.parse(JSON.stringify(data)));
+    console.log("data: ", data);
+    this.selectedRecipe = this.findRecipeByName(data);
+  }
+
+  findRecipeByName(name: string) {
+    return this.recDatesList.find((r) => r.name === name);
+  }
+
+  onActivate(data): void {
+    // console.log("Activate", JSON.parse(JSON.stringify(data)));
+  }
+
+  onDeactivate(data): void {
+    // console.log("Deactivate", JSON.parse(JSON.stringify(data)));
+  }
 
   ngOnInit(): void {
     this.userSub = this.authService.user.subscribe((user) => {
@@ -39,7 +83,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
         this.user = user;
 
         this.initForms();
-        console.log("this: ", this);
+        // console.log("this: ", this);
         this.getDates();
         // this.isAuth = !!user;
       }
@@ -48,22 +92,9 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
   getDates() {
     this.recipeService.getRecipesMadeSnap(this.user.id).then((list) => {
-      this.recDatesList = list;
-      this.totalDates = list
-        .map((r) => {
-          return r.dates.length;
-        })
-        .reduce((a, b) => a + b);
-      // .map((rec) => {
-      // rec.title = this.getRecipeName(rec.id);
-      // return rec;
-      // });
+      this.recDatesList = list.sort((a, b) => b.value - a.value);
+      this.totalDates = list.map((r) => r.value).reduce((a, b) => a + b);
     });
-  }
-
-  getRecipeName(recipeKey: string) {
-    console.log("rec key: ", recipeKey);
-    return this.recipeService.getRecipeByKey(recipeKey).name;
   }
 
   private initForms() {
@@ -74,8 +105,13 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
     this.userSettingsForm = new FormGroup({
       selectedDiet: new FormControl("", Validators.required),
-      theme: new FormControl("", Validators.required),
+      dark: new FormControl(this.darkMode, Validators.required),
+      // theme: new FormControl("", Validators.required),
     });
+  }
+
+  goToRecipe(id) {
+    this.router.navigate(["recipes", id]);
   }
 
   onChange(e) {

@@ -10,13 +10,14 @@
         <span>{{ user?.email }}</span>
       </h4>
     </div>
-    <div class="filters">
+    <!-- <mat-slide-toggle formControlName="darkMode"></mat-slide-toggle> -->
+    <!-- <div class="filters">
       <h4>Filters</h4>
       <div *ngFor="let diet of dietOptions">
         <input type="checkbox" [name]="diet" (change)="onChange($event)" />
         {{ diet }}
       </div>
-    </div>
+    </div> -->
   </form>
   <!-- <div class="actions">
     <button class="one">One / Primary</button>
@@ -32,11 +33,53 @@
     You've made {{ recDatesList.length }} different recipes, and
     {{ totalDates }} meals altogether!
   </h2>
-  <div>
-    <h3>Of these recipes you've made:</h3>
-    <div *ngFor="let rec of recDatesList">
-      <h3>{{ rec.title }}</h3>
-      <p *ngFor="let date of rec.dates">{{ date | date }}</p>
+
+  <div class="chart-container">
+    <div class="date-chart">
+      <ngx-charts-pie-chart
+        [scheme]="'cool'"
+        [results]="recDatesList"
+        [gradient]="gradient"
+        [legend]="showLegend"
+        [legendPosition]="legendPosition"
+        [labels]="showLabels"
+        [doughnut]="isDoughnut"
+        [arcWidth]="0.4"
+        (select)="onSelect($event)"
+        (activate)="onActivate($event)"
+        (deactivate)="onDeactivate($event)"
+      >
+      </ngx-charts-pie-chart>
+    </div>
+
+    <div *ngIf="selectedRecipe" class="recipe-preview recipe-card">
+      {{ selectedRecipe.name }}
+      <img [src]="selectedRecipe.image" />
+      <button type="button" class="btn" (click)="goToRecipe(selectedRecipe.id)">
+        Go to recipe
+      </button>
     </div>
   </div>
+
+  <div class="recipes-infrequent" *ngIf="recDatesList.length">
+    <h2>You haven't made these in a while</h2>
+    <div
+      *ngFor="let recipe of recDatesList | recent: 'dates':90"
+      class="recipe-preview recipe-card"
+    >
+      {{ recipe.name }}
+      <img [src]="recipe.image" />
+      <button type="button" class="btn" (click)="goToRecipe(recipe.id)">
+        Go to recipe
+      </button>
+    </div>
+  </div>
+
+  <!-- <div>
+    <h3>Of these recipes you've made:</h3>
+    <div *ngFor="let rec of recDatesList">
+      <h3>{{ rec.name }}</h3>
+      <p *ngFor="let date of rec.dates">{{ date | date }}</p>
+    </div>
+  </div> -->
 </div>

@@ -28,3 +28,29 @@ form {
   background-color: var(--color-4);
   border-color: var(--color-4);
 }
+.chart-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.date-chart {
+  width: 40%;
+  height: 350px;
+}
+
+.recipe-preview {
+  margin-right: 130px;
+  max-width: 40%;
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+  img {
+    max-height: 350px;
+    width: fit-content;
+  }
+  button {
+    margin-top: 16px;
+    display: block;
+    width: 185px;
+  }
+}
