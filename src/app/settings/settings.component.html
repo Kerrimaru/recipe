@@ -38,7 +38,7 @@
     <div class="date-chart">
       <ngx-charts-pie-chart
         [scheme]="'cool'"
-        [results]="recDatesList"
+        [results]="recDatesList | slice: 0:2"
         [gradient]="gradient"
         [legend]="showLegend"
         [legendPosition]="legendPosition"
@@ -64,7 +64,7 @@
   <div class="recipes-infrequent" *ngIf="recDatesList.length">
     <h2>You haven't made these in a while</h2>
     <div
-      *ngFor="let recipe of recDatesList | recent: 'dates':90"
+      *ngFor="let recipe of recDatesList | recent: 'dates':90 | slice: 0:10"
       class="recipe-preview recipe-card"
     >
       {{ recipe.name }}
