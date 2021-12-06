@@ -26,7 +26,7 @@ export class LongpressDirective implements OnInit {
     }
     this.pressing = true;
     event.preventDefault();
-    console.log("press: ", event);
+    // console.log("press: ", event);
     this.pressStartEmitter.emit();
   }
 
@@ -39,10 +39,8 @@ export class LongpressDirective implements OnInit {
     }
     this.pressing = false;
     this.pressEndEmitter.emit();
-    console.log("release: ", event);
+    // console.log("release: ", event);
   }
 
-  ngOnInit() {
-    console.log("this: ", this);
-  }
+  ngOnInit() {}
 }

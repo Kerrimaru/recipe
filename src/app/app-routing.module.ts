@@ -5,6 +5,7 @@ import {
   redirectUnauthorizedTo,
   redirectLoggedInTo,
 } from "@angular/fire/compat/auth-guard";
+import { RecipesResolverService } from "./recipes/recipes-resolver.service";
 
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(["login"]);
 const redirectLoggedInToRecipes = () => redirectLoggedInTo(["recipes"]);
@@ -20,6 +21,7 @@ const routes: Routes = [
   },
   {
     path: "settings",
+    resolve: { recipes: RecipesResolverService },
     loadChildren: () =>
       import("./settings/settings.module").then(
         (module) => module.SettingsModule

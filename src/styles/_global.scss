@@ -195,3 +195,8 @@ select:-webkit-autofill:focus {
     caret-color: #fff;
   }
 }
+
+.chart-legend div {
+  min-width: 200px;
+  position: absolute;
+}
