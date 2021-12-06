@@ -1,12 +1,12 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { tap } from 'rxjs/operators';
-import { BehaviorSubject, of, Observable } from 'rxjs';
-import { User } from './user.model';
-import { Router } from '@angular/router';
-import { AngularFireAuth } from '@angular/fire/auth';
-import { RecipeService } from '../recipes/recipe.service';
-import { UserSettingsService } from '../settings/user-settings.service';
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { tap } from "rxjs/operators";
+import { BehaviorSubject, of, Observable } from "rxjs";
+import { User } from "./user.model";
+import { Router } from "@angular/router";
+import { AngularFireAuth } from "@angular/fire/compat/auth";
+import { RecipeService } from "../recipes/recipe.service";
+import { UserSettingsService } from "../settings/user-settings.service";
 
 export interface AuthResponseData {
   idToken: string;
@@ -18,7 +18,7 @@ export interface AuthResponseData {
   registered?: boolean;
 }
 
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: "root" })
 export class AuthService {
   constructor(
     private http: HttpClient,
@@ -35,14 +35,16 @@ export class AuthService {
   private tokenExpirationCountdown: any;
 
   firebaseLogin(email: string, password: string) {
-    return this.firebaseAuth.signInWithEmailAndPassword(email, password).catch((error) => {
-      console.error(error);
-      if (error.code === 'auth/user-not-found') {
-        return 'goSignup';
-      } else {
-        return this.mapError(error);
-      }
-    });
+    return this.firebaseAuth
+      .signInWithEmailAndPassword(email, password)
+      .catch((error) => {
+        console.error(error);
+        if (error.code === "auth/user-not-found") {
+          return "goSignup";
+        } else {
+          return this.mapError(error);
+        }
+      });
     // this.mapError(error));
   }
 
@@ -63,9 +65,18 @@ export class AuthService {
   autoLogin(user) {
     this.handleAuth(user.email, user.uid, user.displayName, user.refreshToken)
       .pipe(
-        tap((res) => (this.settingsRef = this.settingsService.fetchUserSettings(res.id))),
-        tap((res) => (this.settingsRef = this.settingsService.fetchFavsList(res.id))),
-        tap((res) => (this.settingsRef = this.settingsService.fetchToDoList(res.id))),
+        tap(
+          (res) =>
+            (this.settingsRef = this.settingsService.fetchUserSettings(res.id))
+        ),
+        tap(
+          (res) =>
+            (this.settingsRef = this.settingsService.fetchFavsList(res.id))
+        ),
+        tap(
+          (res) =>
+            (this.settingsRef = this.settingsService.fetchToDoList(res.id))
+        ),
         tap(() => {
           const readOnly = this.readOnly.getValue();
           return this.recipeService.fetchRecipes(readOnly ? 30 : null);
@@ -78,7 +89,12 @@ export class AuthService {
     return user.updateProfile({ displayName: name });
   }
 
-  handleAuth(email: string, id: string, name: string, token: string): Observable<any> {
+  handleAuth(
+    email: string,
+    id: string,
+    name: string,
+    token: string
+  ): Observable<any> {
     const user = new User(email, id, name, token);
     this.readOnly.next(!email);
     this.user.next(user);
@@ -90,7 +106,7 @@ export class AuthService {
       .signInAnonymously()
       .then((res) => {
         this.readOnly.next(true);
-        return 'success';
+        return "success";
       })
       .catch((error) => {
         // var errorCode = error.code;
@@ -103,8 +119,8 @@ export class AuthService {
     this.readOnly.next(null);
     this.user.next(null);
     this.firebaseAuth.signOut().then((res) => {
-      this.router.navigate(['/login']);
-      localStorage.removeItem('userData');
+      this.router.navigate(["/login"]);
+      localStorage.removeItem("userData");
       if (this.tokenExpirationCountdown) {
         clearTimeout(this.tokenExpirationCountdown);
       }
@@ -119,7 +135,7 @@ export class AuthService {
   }
 
   private mapError(error): string {
-    let errorMsg = 'An unkown error occurred';
+    let errorMsg = "An unkown error occurred";
     if (!error.code) {
       // (!error.error || !error.error.error) {
       return errorMsg;
@@ -129,17 +145,19 @@ export class AuthService {
     switch (
       error.code // (error.error.error.message) {
     ) {
-      case 'auth/email-already-in-use': // 'EMAIL_EXISTS':
-        errorMsg = 'Account already exists! Please sign in';
+      case "auth/email-already-in-use": // 'EMAIL_EXISTS':
+        errorMsg = "Account already exists! Please sign in";
         break;
-      case 'auth/user-not-found': // 'EMAIL_NOT_FOUND':
-        errorMsg = 'Account does not exist! Please add your name to create an account';
+      case "auth/user-not-found": // 'EMAIL_NOT_FOUND':
+        errorMsg =
+          "Account does not exist! Please add your name to create an account";
         break;
-      case 'auth/wrong-password': // 'INVALID_PASSWORD':
-        errorMsg = 'Wrong password';
+      case "auth/wrong-password": // 'INVALID_PASSWORD':
+        errorMsg = "Wrong password";
         break;
-      case 'auth/too-many-requests': // 'USER_DISABLED':
-        errorMsg = 'Too many login attempts! This account has been temporarily disabled';
+      case "auth/too-many-requests": // 'USER_DISABLED':
+        errorMsg =
+          "Too many login attempts! This account has been temporarily disabled";
         break;
     }
     return errorMsg;

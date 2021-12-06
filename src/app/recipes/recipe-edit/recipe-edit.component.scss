@@ -1,4 +1,4 @@
-@import '../../../styles/variables';
+@import "../../../styles/variables";
 
 .edit-container {
   position: relative;
@@ -11,7 +11,7 @@ textarea.ng-invalid.ng-touched {
 
 h2 {
   // font-family: 'BodoniItal';
-  font-family: 'Rosario';
+  font-family: "Rosario";
   // font-style: italic;
   font-weight: bold;
   margin-bottom: 3px;
@@ -26,7 +26,7 @@ small {
   // font-weight: bold;
   letter-spacing: 1.2px;
   font-style: italic;
-  font-family: 'Rosario';
+  font-family: "Rosario";
 }
 
 .recipe-header {
@@ -101,7 +101,7 @@ img.preview {
   padding: 4px 10px;
   input {
     width: 85%;
-    font-family: 'Rosario';
+    font-family: "Rosario";
   }
 }
 
@@ -112,8 +112,8 @@ img.preview {
   cursor: grabbing;
   input {
     background: white;
-    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14),
-      0 3px 14px 2px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+      0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
   }
   img {
     opacity: 0;
@@ -242,15 +242,11 @@ img.preview {
   align-items: center;
 }
 .viewport-sizing {
-  // font-size: 5vw;
   text-align: center;
   p {
     margin: auto;
     margin: auto;
-    /* overflow: visible; */
-    /* text-align: center; */
     opacity: 0.9;
-    /* line-height: 1.4; */
     margin-top: 7px;
   }
 }
@@ -261,29 +257,7 @@ img.preview {
 
 .tags {
   text-align: center;
-  // margin: 0px auto 15px auto;
   margin: 30px auto 25px auto;
-}
-
-.tag {
-  margin: 5px;
-  border: 1px solid #e0e0e0;
-  background-color: #e0e0e0;
-  padding: 4px 12px;
-  cursor: pointer;
-  // text-transform: uppercase;
-  display: inline-block;
-  border-radius: 20px;
-  font-size: 14px;
-  transition: 0.3s all;
-  &:hover {
-    background-color: #c6c6c6;
-    border-color: #c6c6c6;
-  }
-  &.selected {
-    background-color: #add8e6;
-    border-color: #add8e6;
-  }
 }
 
 .nutrition {

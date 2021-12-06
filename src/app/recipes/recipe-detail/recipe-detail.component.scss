@@ -129,6 +129,9 @@ section {
 
 .desc {
   text-align: left;
+  p {
+    font-size: 16px;
+  }
 }
 
 .img-container {
@@ -304,8 +307,12 @@ mat-accordion .mat-expansion-panel:not(.mat-expanded),
   }
   .tags-ing-list {
     order: 0;
+    // max-width: 80%;
+    // width: unset;
+  }
+  .list-group {
     max-width: 80%;
-    width: unset;
+    margin: auto;
   }
   .img-container {
     order: -1;

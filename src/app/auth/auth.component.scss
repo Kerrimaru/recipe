@@ -10,29 +10,11 @@
   }
 }
 
-.auth-container {
+.auth-form {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-}
-
-.auth-container:not(.auth-dialog) {
-  height: 100vh;
-  position: absolute;
-  top: 0;
-  left: 0%;
-  right: 0%;
-}
-
-.hole-logo {
-  display: block;
-  margin: auto;
-  width: 15vw;
-  max-width: 140px;
-}
-
-.form-container {
-  padding: 30px;
+  width: 400px;
   form {
     display: flex;
     flex-direction: column;
@@ -45,6 +27,8 @@
     text-align: center;
     display: block;
     margin: 15px auto 0;
+    position: relative;
+    height: 42px;
     input {
       max-width: 340px;
       width: 80%;
@@ -53,47 +37,87 @@
       border-bottom: 1px solid #918e8a;
       text-align: center;
       background-color: transparent;
+      letter-spacing: 1.2px;
     }
   }
 }
 
+.form-inputs {
+  height: 192px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.auth-form:not(.auth-dialog) input {
+  color: #ffffff;
+}
+
+.auth-form {
+  padding: 32px;
+}
+
 // actions
 .actions {
-  margin: 14px auto;
+  margin: 32px auto 24px;
   width: 100%;
   flex-direction: column;
   align-items: center;
-  button {
-    transition: all 0.5s ease-in-out;
-  }
-  .btn-primary {
-    width: 230px;
-    margin: 20px auto;
-  }
-  .btn-small {
-    font-size: 13px;
-    width: 175px;
-  }
-  .toggle {
-    border-color: #efecec;
-  }
-  .toggle:hover {
-    background-color: #efecec;
-  }
-}
-.actions p {
-  font-style: italic;
-  color: #d4d4d4;
-  b {
-    color: #011c29;
+  p {
+    font-family: Poppins;
+    font-size: 14px;
+    color: #d4d4d4;
+    margin: 5px;
+    b {
+      color: #011c29;
+    }
   }
 }
 
-#login-toggle {
+button {
+  transition: all 0.5s ease-in-out;
+}
+.btn-primary {
+  width: 230px;
+}
+.btn-small {
+  height: 28px;
   font-size: 12px;
-  font-style: italic;
+  width: 145px;
+}
+.toggle {
+  // border-color: #efecec;
+  cursor: pointer;
+  margin: 0px;
 }
 
-.auth-dialog button#auth-submit {
+.secondary-actions {
+  margin: 16px auto 0;
+}
+
+.auth-dialog button.auth-submit {
   margin-bottom: 0;
+}
+
+@media (max-width: 800px) {
+  .auth-form {
+    width: 100vw;
+    padding: 0;
+  }
+  .input {
+    font-size: 18px;
+  }
+  .actions {
+    .btn-primary {
+      font-size: 16px !important;
+      height: 40px;
+    }
+    .btn-small {
+      height: 32px;
+      width: 168px;
+    }
+  }
+  .secondary-actions p {
+    margin: 10px;
+  }
 }

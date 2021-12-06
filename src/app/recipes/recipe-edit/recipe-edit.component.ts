@@ -9,7 +9,7 @@ import { AuthService } from "src/app/auth/auth.service";
 import { Observable, of } from "rxjs";
 import { TagsConst } from "src/app/shared/constants/tags.const";
 import { __assign } from "tslib";
-import { AngularFireStorage } from "@angular/fire/storage";
+import { AngularFireStorage } from "@angular/fire/compat/storage";
 import * as uuid from "uuid";
 import { finalize } from "rxjs/operators";
 
@@ -107,15 +107,13 @@ export class RecipeEditComponent implements OnInit {
     this.onAddIngredient();
   }
 
-  toggleTag(tag: string, elRef: HTMLElement) {
+  toggleTag(tag: string) {
     this.markDirty();
     const selected = this.recipe.tags.indexOf(tag);
     if (selected >= 0) {
-      elRef.classList.remove("selected");
       this.recipe.tags.splice(selected, 1);
     } else {
       this.recipe.tags.push(tag);
-      elRef.classList.add("selected");
     }
   }
 

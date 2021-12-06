@@ -1,0 +1,34 @@
+.login-container {
+  background-image: url("/assets/images/login/bruna-branco-med.jpg");
+  background-size: cover;
+  height: 100vh;
+  min-height: -webkit-fill-available;
+  min-height: -webkit-fill-available;
+  width: 100vw;
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.auth-container {
+  margin-top: 80px;
+  padding: 24px 80px;
+  backdrop-filter: brightness(0.16);
+  border-radius: 10px;
+}
+
+@media (max-width: 800px) {
+  .auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    position: absolute;
+    backdrop-filter: brightness(0.5);
+    overflow: hidden;
+  }
+}

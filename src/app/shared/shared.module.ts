@@ -1,5 +1,5 @@
 import { NgModule, ModuleWithProviders } from "@angular/core";
-import { LoadingComponent } from "./loading/loading.component";
+import { LoadingComponent } from "./components/loading/loading.component";
 import { CommonModule } from "@angular/common";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
@@ -26,20 +26,26 @@ import { AlertComponent } from "./dialog/alert/alert.component";
 import { MatDialogModule } from "@angular/material/dialog";
 import { AuthDialogComponent } from "./dialog/auth-dialog/auth-dialog.component";
 import { LongpressDirective } from "./directives/longpress.directive";
+import { TagComponent } from "./components/tag/tag.component";
+import { RecentPipe } from "./pipes/recent.pipe";
 
 @NgModule({
   declarations: [
     LoadingComponent,
-    DropdownDirective,
+    AlertComponent,
+    AuthDialogComponent,
+    TagComponent,
+
     TitlePipe,
     RecipeFilterPipe,
     ArrayIncludesPipe,
-    ShowOnScrollDirective,
+    RecentPipe,
     FavouritesPipe,
+
+    DropdownDirective,
+    ShowOnScrollDirective,
     LottieDirective,
     LongpressDirective,
-    AlertComponent,
-    AuthDialogComponent,
   ],
   imports: [
     CommonModule,
@@ -56,7 +62,19 @@ import { LongpressDirective } from "./directives/longpress.directive";
   ],
   exports: [
     LoadingComponent,
+    TagComponent,
+
     DropdownDirective,
+    ShowOnScrollDirective,
+    LongpressDirective,
+    LottieDirective,
+
+    TitlePipe,
+    RecipeFilterPipe,
+    ArrayIncludesPipe,
+    FavouritesPipe,
+    RecentPipe,
+
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
@@ -64,17 +82,10 @@ import { LongpressDirective } from "./directives/longpress.directive";
     MatTabsModule,
     MatFormFieldModule,
     MatSelectModule,
-    TitlePipe,
-    RecipeFilterPipe,
-    ArrayIncludesPipe,
-    ShowOnScrollDirective,
-    FavouritesPipe,
     MatDatepickerModule,
     MatNativeDateModule,
     MatRippleModule,
     MatInputModule,
-    LottieDirective,
-    LongpressDirective,
     MatSlideToggleModule,
     MatExpansionModule,
     MatSnackBarModule,
@@ -82,7 +93,7 @@ import { LongpressDirective } from "./directives/longpress.directive";
   ],
 })
 export class SharedModule {
-  static forRoot(): ModuleWithProviders {
+  static forRoot(): ModuleWithProviders<SharedModule> {
     return {
       ngModule: SharedModule,
       providers: [

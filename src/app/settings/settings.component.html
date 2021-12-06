@@ -10,25 +10,13 @@
         <span>{{ user?.email }}</span>
       </h4>
     </div>
-    <div class="filters">
+    <!-- <mat-slide-toggle formControlName="darkMode"></mat-slide-toggle> -->
+    <!-- <div class="filters">
       <h4>Filters</h4>
       <div *ngFor="let diet of dietOptions">
         <input type="checkbox" [name]="diet" (change)="onChange($event)" />
         {{ diet }}
       </div>
-    </div>
-    <!-- <div class="theme">
-      <h4>Theme</h4>
-      {{ selectedTheme }}
-      <img src="/assets/images/palettes/theme-{{ selectedTheme }}.jpeg" class="theme-preview" />
-      <mat-form-field>
-        <mat-select [(ngModel)]="selectedTheme" name="theme" (selectionChange)="selectTheme(selectedTheme)">
-          <mat-option *ngFor="let theme of themeOptions" [value]="theme.name">
-            {{ theme.name | titlecase }} |
-            <img src="/assets/images/palettes/palette-{{ theme.name }}.png" class="theme-icon" />
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
     </div> -->
   </form>
   <!-- <div class="actions">
@@ -37,5 +25,61 @@
     <button class="three">Three</button>
     <button class="four">Four</button>
     <button class="btn-primary">Save / Five</button>
+  </div> -->
+</div>
+
+<div class="stats">
+  <h2>
+    You've made {{ recDatesList.length }} different recipes, and
+    {{ totalDates }} meals altogether!
+  </h2>
+
+  <div class="chart-container">
+    <div class="date-chart">
+      <ngx-charts-pie-chart
+        [scheme]="'cool'"
+        [results]="recDatesList"
+        [gradient]="gradient"
+        [legend]="showLegend"
+        [legendPosition]="legendPosition"
+        [labels]="showLabels"
+        [doughnut]="isDoughnut"
+        [arcWidth]="0.4"
+        (select)="onSelect($event)"
+        (activate)="onActivate($event)"
+        (deactivate)="onDeactivate($event)"
+      >
+      </ngx-charts-pie-chart>
+    </div>
+
+    <div *ngIf="selectedRecipe" class="recipe-preview recipe-card">
+      {{ selectedRecipe.name }}
+      <img [src]="selectedRecipe.image" />
+      <button type="button" class="btn" (click)="goToRecipe(selectedRecipe.id)">
+        Go to recipe
+      </button>
+    </div>
+  </div>
+
+  <div class="recipes-infrequent" *ngIf="recDatesList.length">
+    <h2>You haven't made these in a while</h2>
+    <div
+      *ngFor="let recipe of recDatesList | recent: 'dates':90"
+      class="recipe-preview recipe-card"
+    >
+      {{ recipe.name }}
+      <img [src]="recipe.image" />
+      <button type="button" class="btn" (click)="goToRecipe(recipe.id)">
+        Go to recipe
+      </button>
+    </div>
+  </div>
+
+  <!-- <div>
+    <h3>Of these recipes you've made:</h3>
+    <div *ngFor="let rec of recDatesList">
+      <h3>{{ rec.name }}</h3>
+      <p *ngFor="let date of rec.dates">{{ date | date }}</p>
+    </div>
   </div> -->
 </div>

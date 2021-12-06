@@ -13,7 +13,12 @@
   <section class="recipe-main-content">
     <div class="tags-ing-list">
       <div class="tags-list">
-        <div *ngFor="let tag of recipe.tags" class="tag">{{ tag }}</div>
+        <app-tag
+          *ngFor="let tag of recipe.tags"
+          [tag]="tag"
+          [selected]="true"
+          [disabled]="true"
+        ></app-tag>
       </div>
 
       <div #ingredientListRef>
@@ -101,26 +106,31 @@
           [currentUserId]="readOnly ? null : user.id"
           (deleteEmitter)="onDeleteNote($event)"
           (saveEmitter)="onNoteSave($event)"
+          (signupEmitter)="openSignupDialog()"
         ></app-notes>
       </mat-expansion-panel>
 
       <mat-expansion-panel>
         <mat-expansion-panel-header>
-          <mat-panel-title>Dates</mat-panel-title>
+          <mat-panel-title
+            >Dates<span *ngIf="datesMade.length" [style.margin-left.px]="3">
+              ({{ datesMade.length }})</span
+            ></mat-panel-title
+          >
           <mat-panel-description>
             <span class="material-icons">event</span>
           </mat-panel-description>
         </mat-expansion-panel-header>
         <app-date
           [dates]="datesMade"
-          (addDateEmitter)="onDateChange($event)"
-          (deleteDateEmitter)="deleteDate($event)"
+          [disabled]="readOnly"
+          (actionEmitter)="parseDateAction($event)"
         ></app-date>
       </mat-expansion-panel>
 
       <mat-expansion-panel expanded>
         <mat-expansion-panel-header>
-          <mat-panel-title>Nutrition</mat-panel-title>
+          <mat-panel-title>Nutrition per serving</mat-panel-title>
           <mat-panel-description>
             <span class="material-icons">spa</span>
           </mat-panel-description>

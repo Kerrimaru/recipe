@@ -1,14 +1,14 @@
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { AngularFireAuth } from '@angular/fire/auth';
-import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
+import { Injectable } from "@angular/core";
+import { Observable } from "rxjs";
+import { AngularFireAuth } from "@angular/fire/compat/auth";
+import { HttpClient } from "@angular/common/http";
+import { Router } from "@angular/router";
 
 // not in use
 @Injectable()
 export class FirebaseAuthService {
-  private authState: Observable<firebase.User>;
-  private currentUser: firebase.User = null;
+  private authState: Observable<firebase.default.User>;
+  private currentUser: firebase.default.User = null;
 
   constructor(
     public afAuth: AngularFireAuth,
@@ -22,10 +22,10 @@ export class FirebaseAuthService {
       (user) => {
         if (user) {
           this.currentUser = user;
-          localStorage.setItem('userData', JSON.stringify(user));
+          localStorage.setItem("userData", JSON.stringify(user));
           // this.localStorage.storeSimple('userData', user)
           // this.openSnackBar('Successfully authenticated');
-          this.router.navigate(['home']);
+          this.router.navigate(["home"]);
         } else {
           this.currentUser = null;
         }

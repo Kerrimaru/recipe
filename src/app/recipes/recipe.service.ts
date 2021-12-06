@@ -3,9 +3,13 @@ import { EventEmitter, Injectable } from "@angular/core";
 // import { Ingredient } from '../shared/ingredient.model';
 import { Subject, Observable, of, BehaviorSubject } from "rxjs";
 // import { DataStorageService } from '../shared/data-storage.service';
-import { AngularFireDatabase, AngularFireList } from "@angular/fire/database";
+import {
+  AngularFireDatabase,
+  AngularFireList,
+  snapshotChanges,
+} from "@angular/fire/compat/database";
 import { finalize, map, tap } from "rxjs/operators";
-import { AngularFireStorage } from "@angular/fire/storage";
+import { AngularFireStorage } from "@angular/fire/compat/storage";
 import * as uuid from "uuid";
 
 @Injectable({ providedIn: "root" })
@@ -41,9 +45,17 @@ export class RecipeService {
   }
 
   getRecipeByKey(key: string): Recipe {
-    if (this.recipes) {
+    // console.log("key: ", key, " recipes: ", this.recipes);
+    if (this.recipes.length) {
       const rec = this.recipes.find((r) => r.key === key);
       return rec;
+    } else {
+      this.fetchRecipes().subscribe((res) => {
+        // console.log("res: ", res);
+        if (res) {
+          this.getRecipeByKey(key);
+        }
+      });
     }
   }
 
@@ -147,8 +159,38 @@ export class RecipeService {
     return this.fb.list(`recipeNotes/${key}`);
   }
 
-  getUserDates(userId: string, recipeKey: string) {
-    return this.fb.list(`userDateMade/${userId}/${recipeKey}`);
+  getUserDates(userId: string, recipeKey?: string) {
+    if (recipeKey) {
+      return this.fb.list(`userDateMade/${userId}/${recipeKey}`);
+    }
+  }
+
+  getRecipesMadeSnap(userId: string) {
+    return this.fb.database
+      .ref("userDateMade")
+      .child(userId)
+      .once("value")
+      .then((snapshot) => {
+        let recipeDates = [];
+        for (const [key, value] of Object.entries(snapshot.val())) {
+          const recipe = this.getRecipeByKey(key);
+          const datesArr = [];
+          for (const [key, date] of Object.entries(value)) {
+            datesArr.push(date);
+          }
+          const recItem = {
+            id: key,
+            dates: datesArr,
+            name: recipe.name,
+            image: recipe.imagePath,
+            ingredients: recipe.ingredients,
+            value: datesArr.length,
+          };
+          recipeDates.push(recItem);
+        }
+
+        return recipeDates;
+      });
   }
 
   setUserDateMade(userId: string, recipeId: string, date: string) {
