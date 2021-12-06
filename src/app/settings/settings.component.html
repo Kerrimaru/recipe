@@ -1,4 +1,4 @@
-<div class="settings-cont">
+<div class="app-settings">
   <form>
     <div class="user-details">
       <h4>
@@ -26,60 +26,84 @@
     <button class="four">Four</button>
     <button class="btn-primary">Save / Five</button>
   </div> -->
-</div>
 
-<div class="stats">
-  <h2>
-    You've made {{ recDatesList.length }} different recipes, and
-    {{ totalDates }} meals altogether!
-  </h2>
+  <div class="stats">
+    <h2>
+      You've made {{ recDatesList.length }} different recipes, and
+      {{ totalDates }} meals altogether!
+    </h2>
 
-  <div class="chart-container">
-    <div class="date-chart">
-      <ngx-charts-pie-chart
-        [scheme]="'cool'"
-        [results]="recDatesList | slice: 0:2"
-        [gradient]="gradient"
-        [legend]="showLegend"
-        [legendPosition]="legendPosition"
-        [labels]="showLabels"
-        [doughnut]="isDoughnut"
-        [arcWidth]="0.4"
-        (select)="onSelect($event)"
-        (activate)="onActivate($event)"
-        (deactivate)="onDeactivate($event)"
-      >
-      </ngx-charts-pie-chart>
+    <div class="chart-container">
+      <div class="outer-char-cont">
+        <div class="date-chart">
+          <ngx-charts-pie-chart
+            [legendTitle]="'Your top 10'"
+            [scheme]="'cool'"
+            [results]="topRecipes"
+            [gradient]="gradient"
+            [legend]="showLegend"
+            [legendPosition]="legendPosition"
+            [labels]="showLabels"
+            [doughnut]="isDoughnut"
+            [tooltipText]="tooltipText"
+            [arcWidth]="0.4"
+            (select)="onSelect($event)"
+            (activate)="onActivate($event)"
+            (deactivate)="onDeactivate($event)"
+          >
+            <!-- <ng-template #tooltipTemplate let-model="model">
+          This is the single point tooltip template
+          <pre>{{model|json}}</pre>
+        </ng-template> -->
+          </ngx-charts-pie-chart>
+        </div>
+      </div>
+
+      <div class="selected-cont">
+        <div
+          *ngIf="selectedRecipe"
+          class="recipe-preview card"
+          (click)="goToRecipe(selectedRecipe.id)"
+        >
+          <img [src]="selectedRecipe.image" />
+          <div class="details">
+            <h4>{{ selectedRecipe.name }}</h4>
+            <p
+              *ngFor="let date of selectedRecipe.dates | minMax"
+              class="last-made"
+            >
+              {{ date | date }}
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div *ngIf="selectedRecipe" class="recipe-preview recipe-card">
-      {{ selectedRecipe.name }}
-      <img [src]="selectedRecipe.image" />
-      <button type="button" class="btn" (click)="goToRecipe(selectedRecipe.id)">
-        Go to recipe
-      </button>
+    <div class="recipes-infrequent" *ngIf="recDatesList.length">
+      <h2>You haven't made these in a while</h2>
+      <div class="list">
+        <div
+          class="recipe-preview card"
+          *ngFor="let recipe of infrequentList"
+          (click)="goToRecipe(recipe.id)"
+        >
+          <img [src]="recipe.image" />
+          <div class="details">
+            <h4>{{ recipe.name }}</h4>
+            <p *ngFor="let date of recipe.dates | minMax" class="last-made">
+              {{ date | date }}
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
 
-  <div class="recipes-infrequent" *ngIf="recDatesList.length">
-    <h2>You haven't made these in a while</h2>
-    <div
-      *ngFor="let recipe of recDatesList | recent: 'dates':90 | slice: 0:10"
-      class="recipe-preview recipe-card"
-    >
-      {{ recipe.name }}
-      <img [src]="recipe.image" />
-      <button type="button" class="btn" (click)="goToRecipe(recipe.id)">
-        Go to recipe
-      </button>
-    </div>
-  </div>
-
-  <!-- <div>
+    <!-- <div>
     <h3>Of these recipes you've made:</h3>
     <div *ngFor="let rec of recDatesList">
       <h3>{{ rec.name }}</h3>
       <p *ngFor="let date of rec.dates">{{ date | date }}</p>
     </div>
   </div> -->
+  </div>
 </div>

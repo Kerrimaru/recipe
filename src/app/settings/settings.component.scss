@@ -1,3 +1,7 @@
+.app-settings {
+  padding: 0 50px;
+}
+
 .theme-icon {
   height: 35px;
 }
@@ -29,28 +33,103 @@ form {
   border-color: var(--color-4);
 }
 .chart-container {
+  min-height: 380px;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}
+
+.outer-char-cont {
+  width: calc(40% + 200px);
 }
 
 .date-chart {
-  width: 40%;
+  width: calc(100% - 200px);
   height: 350px;
 }
 
+.selected-cont {
+  min-width: 40%;
+}
 .recipe-preview {
-  margin-right: 130px;
-  max-width: 40%;
+  display: inline-flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  transition: 0.3s;
+  cursor: pointer;
+  border-radius: 8px;
+  margin: 16px;
+  width: 350px;
+  div {
+    margin: 16px;
+  }
+  h4 {
+    margin: 4px;
+  }
+  .last-made {
+    position: absolute;
+    background-color: whitesmoke;
+    opacity: 0.8;
+    border-radius: 50%;
+    top: 8px;
+    right: 8px;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    font-size: 14px;
+    line-height: 1.2;
+    margin: 0;
+  }
+  img {
+    height: 260px;
+    width: 350px;
+    object-fit: cover;
+    border-radius: 8px 8px 0 0;
+  }
+}
+.card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+}
+
+.details {
   display: flex;
   flex-direction: column;
-  width: fit-content;
-  img {
-    max-height: 350px;
-    width: fit-content;
+  align-items: center;
+  flex-grow: 1;
+  justify-content: space-between;
+}
+
+.recipes-infrequent .list {
+  overflow-x: scroll;
+  display: flex;
+}
+
+.tooltip-name {
+  font-size: 14px;
+  color: red;
+}
+
+@media (max-width: 800px) {
+  .app-settings {
+    padding: 0 10px;
   }
-  button {
-    margin-top: 16px;
-    display: block;
-    width: 185px;
+  .date-chart {
+    width: 100% !important;
+  }
+  .outer-char-cont {
+    width: unset !important;
+  }
+  .card,
+  .card img {
+    width: 300px;
+  }
+  .selected-rec {
+    max-width: unset;
   }
 }

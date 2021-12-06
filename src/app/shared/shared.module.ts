@@ -28,6 +28,7 @@ import { AuthDialogComponent } from "./dialog/auth-dialog/auth-dialog.component"
 import { LongpressDirective } from "./directives/longpress.directive";
 import { TagComponent } from "./components/tag/tag.component";
 import { RecentPipe } from "./pipes/recent.pipe";
+import { MinMaxPipe } from "./pipes/min-max.pipe";
 
 @NgModule({
   declarations: [
@@ -41,11 +42,13 @@ import { RecentPipe } from "./pipes/recent.pipe";
     ArrayIncludesPipe,
     RecentPipe,
     FavouritesPipe,
+    MinMaxPipe,
 
     DropdownDirective,
     ShowOnScrollDirective,
     LottieDirective,
     LongpressDirective,
+    MinMaxPipe,
   ],
   imports: [
     CommonModule,
@@ -74,6 +77,7 @@ import { RecentPipe } from "./pipes/recent.pipe";
     ArrayIncludesPipe,
     FavouritesPipe,
     RecentPipe,
+    MinMaxPipe,
 
     CommonModule,
     FormsModule,
@@ -101,6 +105,8 @@ export class SharedModule {
         RecipeFilterPipe,
         ArrayIncludesPipe,
         FavouritesPipe,
+        RecentPipe,
+        MinMaxPipe,
       ],
     };
   }

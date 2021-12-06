@@ -1,20 +1,26 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, HostListener, OnDestroy, OnInit } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { map, Subscription } from "rxjs";
+import { Subscription } from "rxjs";
 import { AuthService } from "../auth/auth.service";
 import { User, UserSettings } from "../auth/user.model";
 import { RecipeService } from "../recipes/recipe.service";
 import { UserSettingsService } from "./user-settings.service";
-import { NgxChartsModule } from "@swimlane/ngx-charts";
-import { Recipe } from "../recipes/recipe.model";
+// import { NgxChartsModule } from "@swimlane/ngx-charts";
 import { Router } from "@angular/router";
-// import { single } from "./data";
+import { RecentPipe } from "../shared/pipes/recent.pipe";
 
-// component not yet in use
+export interface RecipePreview {
+  name: string;
+  id: string;
+  image: string;
+  value: number;
+  dates: number[];
+}
 @Component({
   selector: "app-settings",
   templateUrl: "./settings.component.html",
   styleUrls: ["./settings.component.scss"],
+  providers: [RecentPipe],
 })
 export class SettingsComponent implements OnInit, OnDestroy {
   accountDetailsForm: FormGroup;
@@ -22,10 +28,12 @@ export class SettingsComponent implements OnInit, OnDestroy {
   userSettings: UserSettings;
   user: User;
   userSub: Subscription;
-  recDatesList = [];
+  recDatesList: RecipePreview[] = [];
   recDatesSub: Subscription;
-  totalDates: any;
-  selectedRecipe: any;
+  totalDates: number;
+  selectedRecipe: RecipePreview;
+  infrequentList: RecipePreview[] = [];
+  topRecipes: RecipePreview[] = [];
 
   dietOptions = ["Vegan", "Vegetarian", "All"];
   darkMode = false;
@@ -56,13 +64,18 @@ export class SettingsComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private settingsService: UserSettingsService,
     private router: Router,
-    private recipeService: RecipeService
+    private recipeService: RecipeService,
+    private recent: RecentPipe
   ) {}
 
-  onSelect(data): void {
-    console.log("Item clicked", JSON.parse(JSON.stringify(data)));
-    console.log("data: ", data);
-    this.selectedRecipe = this.findRecipeByName(data);
+  @HostListener("window:resize", ["$event"])
+  onResize(event) {
+    this.showLegend = event.target.innerWidth > 800;
+  }
+
+  onSelect(data: string | RecipePreview): void {
+    let name = typeof data === "string" ? data : data.name;
+    this.selectedRecipe = this.findRecipeByName(name);
   }
 
   findRecipeByName(name: string) {
@@ -71,6 +84,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
   onActivate(data): void {
     // console.log("Activate", JSON.parse(JSON.stringify(data)));
+    // let name = typeof data === "string" ? data : data.name;
+    this.selectedRecipe = this.findRecipeByName(data.value.name);
   }
 
   onDeactivate(data): void {
@@ -78,6 +93,10 @@ export class SettingsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    if (window.innerWidth < 800) {
+      // this.legendPosition = "below";
+      this.showLegend = false;
+    }
     this.userSub = this.authService.user.subscribe((user) => {
       if (user) {
         this.user = user;
@@ -90,10 +109,31 @@ export class SettingsComponent implements OnInit, OnDestroy {
     });
   }
 
+  sample(array: RecipePreview[], limit: number) {
+    if (array.length <= limit) {
+      return array;
+    }
+    const sample = [];
+    const indexes = [];
+    while (sample.length < limit) {
+      var index = Math.floor(Math.random() * array.length);
+      if (indexes.indexOf(index) === -1) {
+        sample.push(array[index]);
+        indexes.push(index);
+      }
+    }
+    return sample;
+  }
+
   getDates() {
     this.recipeService.getRecipesMadeSnap(this.user.id).then((list) => {
       this.recDatesList = list.sort((a, b) => b.value - a.value);
+      this.topRecipes = this.recDatesList.slice(0, 10);
       this.totalDates = list.map((r) => r.value).reduce((a, b) => a + b);
+      this.infrequentList = this.sample(
+        this.recent.transform(this.recDatesList, "dates", 90),
+        10
+      );
     });
   }
 
@@ -129,5 +169,14 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
   saveTest() {
     this.settingsService.saveChanges(this.user.id);
+  }
+
+  tooltipText({ data }) {
+    return `
+        <h4 class="tooltip-title">${data.name}</h4>
+        <span class="tooltip-text">You've made this <br>${data.value} time${
+      data.value > 1 ? "s" : ""
+    }</span>
+      `;
   }
 }
