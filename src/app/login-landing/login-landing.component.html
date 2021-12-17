@@ -1,3 +1,17 @@
-<div class="login-container">
-  <div class="auth-container"><app-auth></app-auth></div>
+<div
+  class="login-container"
+  [style.background-image]="'url(/assets/images/login/' + bgImage + ')'"
+>
+  <div class="auth-container">
+    <div class="title">
+      <!-- <img
+        _ngcontent-aml-c69=""
+        src="assets/images/logos/hole-logo.png"
+        class="logo"
+      /> -->
+      <h1>Recipe Hole</h1>
+    </div>
+
+    <app-auth></app-auth>
+  </div>
 </div>

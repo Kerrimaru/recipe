@@ -23,6 +23,10 @@ p {
   text-align: center;
 }
 
+.value p {
+  font-family: Poppins;
+}
+
 .editable {
   &.nutrition-info {
     width: 319px;

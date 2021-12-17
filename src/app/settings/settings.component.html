@@ -1,33 +1,28 @@
 <div class="app-settings">
-  <form>
-    <div class="user-details">
-      <h4>
-        Name
-        <span>{{ user?.name }}</span>
-      </h4>
-      <h4>
-        Email
-        <span>{{ user?.email }}</span>
-      </h4>
-    </div>
-    <!-- <mat-slide-toggle formControlName="darkMode"></mat-slide-toggle> -->
-    <!-- <div class="filters">
+  <section>
+    <form>
+      <div class="user-details">
+        <h4>
+          Name
+          <span>{{ user?.name }}</span>
+        </h4>
+        <h4>
+          Email
+          <span>{{ user?.email }}</span>
+        </h4>
+      </div>
+      <!-- <mat-slide-toggle formControlName="darkMode"></mat-slide-toggle> -->
+      <!-- <div class="filters">
       <h4>Filters</h4>
       <div *ngFor="let diet of dietOptions">
         <input type="checkbox" [name]="diet" (change)="onChange($event)" />
         {{ diet }}
       </div>
     </div> -->
-  </form>
-  <!-- <div class="actions">
-    <button class="one">One / Primary</button>
-    <button class="btn-secondary">Cancel / Secondary</button>
-    <button class="three">Three</button>
-    <button class="four">Four</button>
-    <button class="btn-primary">Save / Five</button>
-  </div> -->
+    </form>
+  </section>
 
-  <div class="stats">
+  <section>
     <h2>
       You've made {{ recDatesList.length }} different recipes, and
       {{ totalDates }} meals altogether!
@@ -51,10 +46,6 @@
             (activate)="onActivate($event)"
             (deactivate)="onDeactivate($event)"
           >
-            <!-- <ng-template #tooltipTemplate let-model="model">
-          This is the single point tooltip template
-          <pre>{{model|json}}</pre>
-        </ng-template> -->
           </ngx-charts-pie-chart>
         </div>
       </div>
@@ -68,42 +59,55 @@
           <img [src]="selectedRecipe.image" />
           <div class="details">
             <h4>{{ selectedRecipe.name }}</h4>
-            <p
-              *ngFor="let date of selectedRecipe.dates | minMax"
-              class="last-made"
-            >
-              {{ date | date }}
+            <p class="last-made" style="font-size: 20px; font-weight: bold">
+              {{ selectedRecipe.value }}x
             </p>
           </div>
         </div>
       </div>
     </div>
+  </section>
 
-    <div class="recipes-infrequent" *ngIf="recDatesList.length">
-      <h2>You haven't made these in a while</h2>
-      <div class="list">
-        <div
-          class="recipe-preview card"
-          *ngFor="let recipe of infrequentList"
-          (click)="goToRecipe(recipe.id)"
-        >
-          <img [src]="recipe.image" />
-          <div class="details">
-            <h4>{{ recipe.name }}</h4>
-            <p *ngFor="let date of recipe.dates | minMax" class="last-made">
-              {{ date | date }}
-            </p>
-          </div>
+  <section class="scroll-horizon" *ngIf="recDatesList.length">
+    <h2>You haven't made these in a while</h2>
+
+    <div class="list" #scrollRef (scroll)="onScroll($event, scrollRef)">
+      <div
+        class="recipe-preview card"
+        *ngFor="let recipe of infrequentList"
+        (click)="goToRecipe(recipe.id)"
+      >
+        <img [src]="recipe.image" />
+        <div class="details">
+          <h4>{{ recipe.name }}</h4>
+          <p *ngFor="let date of recipe.dates | minMax" class="last-made">
+            {{ date | date }}
+          </p>
         </div>
       </div>
     </div>
+    <!--  (mouseenter)="scroll('left', $event, scrollRef)" (mouseleave)="stopScroll()" -->
+    <div
+      class="arrow-left arrow"
+      *ngIf="showLeft"
+      (click)="scrollNext('-', scrollRef)"
+    >
+      <
+    </div>
+    <div
+      class="arrow-right arrow"
+      *ngIf="showRight"
+      (click)="scrollNext('', scrollRef)"
+    >
+      >
+    </div>
+  </section>
 
-    <!-- <div>
+  <!-- <div>
     <h3>Of these recipes you've made:</h3>
     <div *ngFor="let rec of recDatesList">
       <h3>{{ rec.name }}</h3>
       <p *ngFor="let date of rec.dates">{{ date | date }}</p>
     </div>
   </div> -->
-  </div>
 </div>

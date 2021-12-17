@@ -1,5 +1,6 @@
 .login-container {
-  background-image: url("/assets/images/login/bruna-branco-med.jpg");
+  // background-image: url("/assets/images/login/bruna-branco.jpg");
+  // background-image: url("/assets/images/login/nadine-primeau.jpg");
   background-size: cover;
   height: 100vh;
   min-height: -webkit-fill-available;
@@ -14,15 +15,30 @@
 }
 
 .auth-container {
-  margin-top: 80px;
-  padding: 24px 80px;
+  padding: 44px 72px;
   backdrop-filter: brightness(0.16);
   border-radius: 10px;
+}
+
+.title {
+  display: flex;
+  color: #d9d9d9;
+  justify-content: center;
+  h1 {
+    margin: 0;
+    font-size: 40px;
+    font-weight: 100;
+    letter-spacing: 4px;
+  }
+  img {
+    width: 45px;
+  }
 }
 
 @media (max-width: 800px) {
   .auth-container {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100vh;

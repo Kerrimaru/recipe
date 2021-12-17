@@ -49,6 +49,7 @@ export class RecipeListComponent implements OnInit, OnDestroy {
   columns = [];
   columnCount = 1;
   scrollShow = 5;
+  gridWidth = "1fr";
 
   @HostListener("window:scroll", ["$event"])
   checkScroll(event) {
@@ -68,6 +69,7 @@ export class RecipeListComponent implements OnInit, OnDestroy {
   onResize(event) {
     const prevCount = this.columnCount;
     this.columnCount = this.setColumnCount(event.target.innerWidth);
+
     if (prevCount !== this.columnCount) {
       this.columns = this.populateColumns(this.allRecipes);
     }
@@ -188,12 +190,16 @@ export class RecipeListComponent implements OnInit, OnDestroy {
 
   setColumnCount(width) {
     if (width < 600) {
+      this.gridWidth = "1fr";
       return 1;
     } else if (width < 800) {
+      this.gridWidth = "1fr 1fr";
       return 2;
     } else if (width < 1000) {
+      this.gridWidth = "1fr 1fr 1fr";
       return 3;
     } else {
+      this.gridWidth = "1fr 1fr 1fr 1fr";
       return 4;
     }
   }

@@ -12,7 +12,11 @@
     <span class="material-icons" (click)="searchOn = true">search</span>
   </div>
 
-  <div class="recipe-list" *ngIf="columns.length && !loading">
+  <div
+    class="recipe-list"
+    *ngIf="columns.length && !loading"
+    [style.grid-template-columns]="gridWidth"
+  >
     <div
       *ngFor="let col of columns"
       class="custom-col {{ col.column }}"
