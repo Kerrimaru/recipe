@@ -28,7 +28,7 @@
     display: block;
     margin: 15px auto 0;
     position: relative;
-    height: 42px;
+    height: 40px;
     input {
       max-width: 340px;
       width: 80%;
@@ -37,6 +37,9 @@
       border-bottom: 1px solid #918e8a;
       text-align: center;
       background-color: transparent;
+      // border-radius: 5px;
+      // background-color: #f7f7f7;
+      // backdrop-filter: opacity(0.5);
       letter-spacing: 1.2px;
     }
   }
@@ -50,11 +53,8 @@
 }
 
 .auth-form:not(.auth-dialog) input {
-  color: #ffffff;
-}
-
-.auth-form {
-  padding: 32px;
+  color: #d9d9d9;
+  color: #333;
 }
 
 // actions
@@ -64,7 +64,9 @@
   flex-direction: column;
   align-items: center;
   p {
-    font-family: Poppins;
+    // font-family: Poppins;
+    // font-family: Nunito;
+    // font-family: RedHat;
     font-size: 14px;
     color: #d4d4d4;
     margin: 5px;
@@ -75,13 +77,14 @@
 }
 
 button {
-  transition: all 0.5s ease-in-out;
+  transition: all 0.25s ease-in-out;
 }
 .btn-primary {
   width: 230px;
+  height: 40px;
 }
 .btn-small {
-  height: 28px;
+  height: 32px;
   font-size: 12px;
   width: 145px;
 }
@@ -95,6 +98,10 @@ button {
   margin: 16px auto 0;
 }
 
+.auth-form.auth-dialog {
+  padding: 32px;
+}
+
 .auth-dialog button.auth-submit {
   margin-bottom: 0;
 }
@@ -102,7 +109,6 @@ button {
 @media (max-width: 800px) {
   .auth-form {
     width: 100vw;
-    padding: 0;
   }
   .input {
     font-size: 18px;
@@ -110,10 +116,8 @@ button {
   .actions {
     .btn-primary {
       font-size: 16px !important;
-      height: 40px;
     }
     .btn-small {
-      height: 32px;
       width: 168px;
     }
   }

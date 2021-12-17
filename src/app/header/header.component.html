@@ -1,4 +1,5 @@
 <header
+  *ngIf="isAuth"
   class="app-nav"
   [ngClass]="{ collapse: collapse }"
   [style.height.px]="isMobile || !isAuth ? 80 : scrollHeight"
