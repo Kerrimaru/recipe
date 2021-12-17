@@ -29,6 +29,8 @@ h2 {
 .ingredient {
   margin: 0;
   padding: 7px 14px;
+  font-weight: bold;
+  letter-spacing: 1px;
   &:nth-child(even) {
     background-color: #add8e64a;
   }
@@ -100,16 +102,6 @@ h2 {
     letter-spacing: 2.5px;
     font-size: 38px;
   }
-}
-
-.tag {
-  margin: 5px;
-  border: 1px solid #add8e6;
-  background-color: #add8e6;
-  padding: 4px 12px;
-  display: inline-block;
-  border-radius: 20px;
-  font-size: 14px;
 }
 
 .recipe-main-content mat-expansion-panel {

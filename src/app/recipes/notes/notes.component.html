@@ -12,7 +12,7 @@
     <div
       tabindex="1"
       (keydown.enter)="$event.target.blur()"
-      [attr.contenteditable]="currentUserId"
+      [attr.contenteditable]="!!currentUserId"
       id="note-input"
       placeholder="add a note"
       (blur)="

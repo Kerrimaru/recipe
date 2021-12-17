@@ -43,7 +43,8 @@ body,
 li,
 p,
 input {
-  font-family: Poppins;
+  // font-family: Poppins;
+  font-family: RedHat;
 }
 
 .ck-editor__editable_inline {
@@ -72,7 +73,7 @@ button {
   background-color: #ffffff;
   font-family: "Rosario";
   letter-spacing: 1.3px;
-  text-transform: uppercase;
+  text-transform: none;
   font-weight: bold;
   cursor: pointer;
   &:disabled {
@@ -150,9 +151,9 @@ div:focus {
 
 // recipe detail - method
 .desc p {
-  font-size: 16px;
+  font-size: 18px;
   line-height: 1.5;
-  font-family: Poppins;
+  font-family: RedHat;
 }
 
 @media (max-width: 800px) {

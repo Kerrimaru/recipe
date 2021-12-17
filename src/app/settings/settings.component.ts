@@ -1,4 +1,11 @@
-import { Component, HostListener, OnDestroy, OnInit } from "@angular/core";
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { Subscription } from "rxjs";
 import { AuthService } from "../auth/auth.service";
@@ -34,6 +41,9 @@ export class SettingsComponent implements OnInit, OnDestroy {
   selectedRecipe: RecipePreview;
   infrequentList: RecipePreview[] = [];
   topRecipes: RecipePreview[] = [];
+  isScrolling = false;
+  showLeft = false;
+  showRight = false;
 
   dietOptions = ["Vegan", "Vegetarian", "All"];
   darkMode = false;
@@ -59,6 +69,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
       "#BBE6AD",
     ],
   };
+
+  // @ViewChild("scroll") scrollList: any;
 
   constructor(
     private authService: AuthService,
@@ -102,7 +114,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
         this.user = user;
 
         this.initForms();
-        // console.log("this: ", this);
         this.getDates();
         // this.isAuth = !!user;
       }
@@ -129,6 +140,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     this.recipeService.getRecipesMadeSnap(this.user.id).then((list) => {
       this.recDatesList = list.sort((a, b) => b.value - a.value);
       this.topRecipes = this.recDatesList.slice(0, 10);
+      this.selectedRecipe = this.topRecipes[0];
       this.totalDates = list.map((r) => r.value).reduce((a, b) => a + b);
       this.infrequentList = this.sample(
         this.recent.transform(this.recDatesList, "dates", 90),
@@ -178,5 +190,53 @@ export class SettingsComponent implements OnInit, OnDestroy {
       data.value > 1 ? "s" : ""
     }</span>
       `;
+  }
+
+  scroll(direct, e?: MouseEvent, el?: any) {
+    this.isScrolling = true;
+    console.log("scroll ", direct, " e: ", e);
+    // console.log("target: ", e.target);
+    console.log("el: ", el);
+    do {
+      el.scrollLeft += 1;
+    } while (this.isScrolling);
+    // el.scrollLeft += 1;
+    // setTimeout(() => {
+    //   this.scroll("left", null, el);
+    // }, 100);
+    // e.nativeElement.scrollLeft = 100;
+    // console.log("scrolllist: ", this.scrollList);
+    // this.scrollList.nativeElement.scrollLeft = 100;
+  }
+
+  stopScroll() {
+    console.log("mouse stop scroll leave");
+    this.isScrolling = false;
+  }
+
+  scrollNext(direction: string, elRef: HTMLElement) {
+    // console.log("offsetWidth: ", elRef.offsetWidth);
+    // console.log("offsetLeft: ", elRef.offsetLeft);
+
+    const scrollBy = direction + 358;
+
+    elRef.scrollBy({ top: 0, left: parseInt(scrollBy), behavior: "smooth" });
+    console.log("scrollWidth: ", elRef.scrollWidth);
+    console.log("scrollLeft: ", elRef.scrollLeft);
+    console.log(
+      "scrollLeft + offsetWidth: ",
+      elRef.scrollLeft + elRef.offsetWidth
+    );
+  }
+
+  onScroll(e, elRef?: HTMLElement) {
+    console.log("scroll detected ", e);
+    console.log("scrollLeft: ", elRef.scrollLeft);
+    this.showLeft = elRef.scrollLeft > 0;
+    this.showRight = elRef.scrollLeft + elRef.offsetWidth < elRef.scrollWidth;
+    console.log(
+      "scrollLeft + offsetWidth: ",
+      elRef.scrollLeft + elRef.offsetWidth
+    );
   }
 }
