@@ -55,7 +55,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     { text: "Add a recipe", link: "/recipes/new", tabItem: true },
     { text: "My favourites", link: "/recipes/favourites", tabItem: true },
     { text: "Recipes to Try", link: "/recipes/to-do", tabItem: false },
-    { text: "Settings", link: "/settings", tabItem: false },
+    { text: "Account", link: "/account", tabItem: false },
     { text: "Logout", action: "logout", tabItem: false, hideMobile: true },
   ];
 

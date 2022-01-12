@@ -70,11 +70,6 @@
 </header>
 
 <!-- mobile logout -->
-<h4
-  *ngIf="isMobile"
-  class="logout"
-  [ngClass]="{ popped: headerExpanded }"
-  (click)="logout()"
->
+<h4 class="logout" [ngClass]="{ popped: headerExpanded }" (click)="logout()">
   <a>Logout</a>
 </h4>
