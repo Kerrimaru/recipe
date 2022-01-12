@@ -1,0 +1,36 @@
+<!-- <div *ngFor="let date of dates" class="date-chip">
+  <p>{{ date.date | date }}</p>
+  <p *ngIf="date.name">{{ date.name }}</p>
+</div> -->
+
+<div class="list-container">
+  <div *ngFor="let year of sections | keyvalue: desc" class="year">
+    <h3>{{ year.key }}</h3>
+    <div class="month-container">
+      <div
+        class="month"
+        *ngFor="let month of year.value | keyvalue: originalOrder | reverse"
+      >
+        <h4>{{ month.key | month }}</h4>
+        <div class="dates-container">
+          <div class="date" *ngFor="let date of month.value.dates">
+            <div class="rec-date">{{ date.date | date: "d" }}</div>
+            <p class="rec-title">{{ date.name }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- <div class="array-test">
+    <div *ngFor="let year of secArray" class="year">
+      <h3>{{ year.year }}</h3>
+      <h3>{{ year.key }}</h3>
+      <div *ngFor="let month of year.months" class="month">
+        <h4>{{ month.month | month }}</h4>
+        <p *ngFor="let date of month.dates">
+          {{ date.date | date: "d" }} <span>{{ date.name }}</span>
+        </p>
+      </div>
+    </div>
+  </div> -->
+</div>

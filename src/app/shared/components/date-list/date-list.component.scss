@@ -1,0 +1,61 @@
+.list-container {
+  //   display: flex;
+  //   flex-direction: column;
+}
+
+.month-container,
+.dates-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.month-container {
+  justify-content: space-between;
+}
+
+.month {
+  margin: 0 0 24px 16px;
+  //   border: 1px solid black;
+  width: 45%;
+}
+
+h3 {
+  font-size: 36px;
+  margin: 10px 0px;
+}
+
+h4 {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 10px 0px;
+}
+
+.dates-container {
+  margin-left: 8px;
+  justify-content: space-between;
+  div {
+    display: flex;
+    align-items: center;
+  }
+  p {
+    max-width: 200px;
+    margin: 0;
+  }
+}
+
+.rec-date {
+  background-color: lightblue;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  justify-content: center;
+  font-weight: bold;
+  margin-right: 8px;
+  flex-grow: 0;
+}
+
+.date {
+  padding: 10px 8px;
+  line-height: 1;
+  width: 50%;
+}
