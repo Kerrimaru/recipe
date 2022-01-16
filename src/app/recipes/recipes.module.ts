@@ -14,6 +14,7 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { NutritionTableComponent } from './nutrition-table/nutrition-table.component';
 import { NotesComponent } from './notes/notes.component';
 import { DateComponent } from './date/date.component';
+import { NoteComponent } from './note/note.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { DateComponent } from './date/date.component';
     NotesComponent,
 
     DateComponent,
+     NoteComponent,
     // TagSelectorComponent,
   ],
   imports: [RecipesRoutingModule, SharedModule, DragDropModule, MatSliderModule, CKEditorModule],

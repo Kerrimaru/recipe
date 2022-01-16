@@ -160,14 +160,17 @@ div:focus {
   .desc p {
     font-size: 20px !important;
   }
+  button {
+    font-size: 14px !important;
+  }
+}
+
+@media (max-width: 600px) {
   p,
   li,
   div,
   body {
     font-size: 16px !important;
-  }
-  button {
-    font-size: 14px !important;
   }
 }
 
