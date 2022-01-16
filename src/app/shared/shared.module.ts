@@ -29,6 +29,9 @@ import { LongpressDirective } from "./directives/longpress.directive";
 import { TagComponent } from "./components/tag/tag.component";
 import { RecentPipe } from "./pipes/recent.pipe";
 import { MinMaxPipe } from "./pipes/min-max.pipe";
+import { DateListComponent } from "./components/date-list/date-list.component";
+import { MonthPipe } from "./pipes/month.pipe";
+import { ReversePipe } from "./pipes/reverse.pipe";
 
 @NgModule({
   declarations: [
@@ -36,6 +39,7 @@ import { MinMaxPipe } from "./pipes/min-max.pipe";
     AlertComponent,
     AuthDialogComponent,
     TagComponent,
+    DateListComponent,
 
     TitlePipe,
     RecipeFilterPipe,
@@ -48,7 +52,8 @@ import { MinMaxPipe } from "./pipes/min-max.pipe";
     ShowOnScrollDirective,
     LottieDirective,
     LongpressDirective,
-    MinMaxPipe,
+    MonthPipe,
+    ReversePipe,
   ],
   imports: [
     CommonModule,
@@ -66,6 +71,7 @@ import { MinMaxPipe } from "./pipes/min-max.pipe";
   exports: [
     LoadingComponent,
     TagComponent,
+    DateListComponent,
 
     DropdownDirective,
     ShowOnScrollDirective,
@@ -78,6 +84,8 @@ import { MinMaxPipe } from "./pipes/min-max.pipe";
     FavouritesPipe,
     RecentPipe,
     MinMaxPipe,
+    MonthPipe,
+    ReversePipe,
 
     CommonModule,
     FormsModule,

@@ -1,0 +1,58 @@
+<div
+  class="note-container"
+  [class.my-note]="!readOnly"
+  [class.friend-note]="readOnly"
+>
+  <div class="note-bubble" [class.active]="editMode" (click)="selectNote()">
+    <textarea
+      #noteEdit
+      *ngIf="editMode"
+      class="note-content"
+      [(ngModel)]="noteText"
+      [disabled]="!editMode"
+      (keydown.enter)="updateNote()"
+    ></textarea>
+    <p [ngClass]="{ 'auto-size': editMode, 'note-content': !editMode }">
+      {{ noteText }}
+    </p>
+  </div>
+
+  <div class="note-info" [style.display]="showDetails ? 'block' : 'none'">
+    <div class="commenter" [style.opacity]="editMode ? 0 : 1">
+      <p>
+        {{ author }}
+        commented
+      </p>
+      <p>on {{ note.date | date }}</p>
+    </div>
+
+    <div class="note-actions" *ngIf="!readOnly">
+      <span
+        *ngIf="editMode"
+        class="material-icons"
+        matTooltip="Save changes"
+        matTooltipShowDelay="400"
+        (click)="updateNote()"
+      >
+        check
+      </span>
+      <span
+        *ngIf="!editMode"
+        (click)="activateEdit()"
+        class="material-icons remove"
+        [matTooltip]="'Edit note'"
+        matTooltipShowDelay="400"
+      >
+        edit
+      </span>
+      <span
+        (click)="editMode ? cancelEdit() : deleteNoteEmitter.emit(note.id)"
+        class="material-icons remove"
+        [matTooltip]="editMode ? 'Cancel' : 'Delete note'"
+        matTooltipShowDelay="400"
+      >
+        clear
+      </span>
+    </div>
+  </div>
+</div>

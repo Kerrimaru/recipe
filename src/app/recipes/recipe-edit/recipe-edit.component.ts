@@ -71,9 +71,9 @@ export class RecipeEditComponent implements OnInit {
         this.recipe.tags = [];
       }
 
-      if (!this.recipe.nutrition) {
-        this.recipe.nutrition = [...NutritionConst];
-      }
+      // if (!this.recipe.nutrition) {
+      //   this.recipe.nutrition = [...NutritionConst];
+      // }
 
       // this.prepTime = this.recipe.time || null;
       this.recipeImgUrl = this.recipe.imagePath;

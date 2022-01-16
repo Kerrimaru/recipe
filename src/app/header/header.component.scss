@@ -2,7 +2,7 @@
 .app-nav {
   z-index: 1;
   width: 100vw;
-  position: sticky;
+  position: fixed;
   overflow: hidden;
   font-family: "BenchNine";
   flex-direction: column;
@@ -23,13 +23,13 @@
   transition: 0.4s all;
   padding-top: 26px;
   //
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid #151c28;
   padding-top: 0px;
   padding: 0 48px;
 }
 
 .collapse {
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid #151c28;
   .tab-list {
     font-size: 14px;
     position: absolute;
@@ -121,9 +121,6 @@ a {
   // transform: matrix(1.25, 0, 0, 1.25, 0, -2);
   .grow {
     opacity: 1;
-    -webkit-animation: increase 3s;
-    -moz-animation: increase 3s;
-    -o-animation: increase 3s;
     animation: increase 3s;
     animation-fill-mode: forwards;
   }
@@ -154,11 +151,14 @@ a {
 .account-actions {
   z-index: 100;
   position: fixed;
-  width: 33px;
+  width: 83px;
   height: 47px;
   top: 20px;
-  right: 50px;
+  right: 0;
   border: 1px solid transparent;
+  .dropdown-nav {
+    margin-right: 50px;
+  }
   span {
     transition: 0.5s all;
     background-color: transparent;
@@ -238,10 +238,10 @@ a {
   width: 220px;
   top: -19px;
   position: absolute;
-  right: -240px;
+  right: -221px;
   background-color: #ffffff;
   height: 100vh;
-  border-left: 1px solid #000000;
+  border-left: 1px solid #151c28;
   transition: 0.5s;
   z-index: 10;
   overflow-y: none;
@@ -254,7 +254,7 @@ a {
     }
   }
   .details {
-    background-color: #000000;
+    background-color: #151c28;
     padding-bottom: 18px;
     padding-left: 20px;
   }
@@ -302,11 +302,7 @@ a {
 
   .account-actions {
     top: 18px;
-    right: 18px;
-    .active {
-      background-color: #ffffff;
-      transform: none;
-    }
+    width: 50px;
     h4 {
       font-size: 20px;
     }

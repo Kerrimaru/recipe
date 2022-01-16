@@ -20,7 +20,7 @@ const routes: Routes = [
       import("./recipes/recipes.module").then((module) => module.RecipesModule),
   },
   {
-    path: "settings",
+    path: "account",
     resolve: { recipes: RecipesResolverService },
     loadChildren: () =>
       import("./settings/settings.module").then(
