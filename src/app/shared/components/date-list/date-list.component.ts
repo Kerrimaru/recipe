@@ -76,9 +76,9 @@ export class DateListComponent implements OnInit {
       }
     });
 
-    console.log("obj: ", obj);
+    // console.log("obj: ", obj);
     this.sections = obj;
-    console.log("sections: ", this.sections);
+    // console.log("sections: ", this.sections);
   }
 
   // Preserve original property order

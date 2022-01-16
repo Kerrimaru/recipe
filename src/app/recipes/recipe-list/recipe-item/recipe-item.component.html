@@ -2,33 +2,42 @@
   class="recipe-item"
   (swipe)="swipe($event.type)"
   [ngClass]="{ flipped: flipped }"
-  [routerLink]="flipped ? null : ['/recipes', recipe.key]"
 >
-  <img [src]="recipe.imagePath" alt="{{ recipe.name }}" class="recipe-img" (load)="imgLoadEmitter.emit($event)" />
-  <div *ngIf="isNew && !flipped" class="new-recipe-cont">
-    <!-- <div class="ribbon ribbon-top-left"><span>ribbon</span></div> -->
+  <a [routerLink]="flipped ? null : ['/recipes', recipe.key]">
+    <img
+      [src]="recipe.imagePath"
+      alt="{{ recipe.name }}"
+      class="recipe-img"
+      (load)="imgLoadEmitter.emit($event)"
+    />
+    <div *ngIf="isNew && !flipped" class="new-recipe-cont">
+      <!-- <div class="ribbon ribbon-top-left"><span>ribbon</span></div> -->
 
-    <img src="assets/images/icons/new-plate.png" alt="'new recipe added'" class="new-icon" />
-    <p>new!</p>
-  </div>
-
-  <div class="rec-inner">
-    <div class="rec-front" routerLinkActive="active" (click)="scroll()">
-      <h4 class="title">{{ recipe.name | title }}</h4>
+      <img
+        src="assets/images/icons/new-plate.png"
+        alt="'new recipe added'"
+        class="new-icon"
+      />
+      <p>new!</p>
     </div>
-    <div class="recipe-back" *ngIf="isMobile && flipped">
-      <ul>
-        <li *ngFor="let ing of recipe.ingredients" class="ingredient">
-          <label>
-            <input type="checkbox" />
-            {{ ing }}
-          </label>
-        </li>
-      </ul>
-    </div>
-  </div>
 
-  <!-- <div class="heart-click-anchor" (click)="favourite()">
+    <div class="rec-inner">
+      <div class="rec-front" routerLinkActive="active" (click)="scroll()">
+        <h4 class="title">{{ recipe.name | title }}</h4>
+      </div>
+      <div class="recipe-back" *ngIf="isMobile && flipped">
+        <ul>
+          <li *ngFor="let ing of recipe.ingredients" class="ingredient">
+            <label>
+              <input type="checkbox" />
+              {{ ing }}
+            </label>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- <div class="heart-click-anchor" (click)="favourite()">
     <span class="material-icons" [ngClass]="{ 'is-favourite': isFavourite }">favorite</span>
     <div class="favourite" *ngIf="showFavouriteIcon" [routerLink]="recipe.key">
       <span class="material-icons" [ngClass]="{ 'is-favourite': isFavourite }">favorite</span>
@@ -41,21 +50,24 @@
       ></div>
     </div>
   </div> -->
-  <div class="favourite-container">
-    <div
-      *ngIf="showFavouriteIcon && !flipped"
-      class="fav-lottie"
-      [appLottie]="'heart-like'"
-      [autoplay]="false"
-      [startFrame]="isFavourite ? 105 : 150"
-      [play]="isFavourite ? [60, 110] : [140, 150]"
-      [viewbox]="'150 200 400 200'"
-    ></div>
+    <div class="favourite-container">
+      <div
+        *ngIf="showFavouriteIcon && !flipped"
+        class="fav-lottie"
+        [appLottie]="'heart-like'"
+        [autoplay]="false"
+        [startFrame]="isFavourite ? 105 : 150"
+        [play]="isFavourite ? [60, 110] : [140, 150]"
+        [viewbox]="'150 200 400 200'"
+      ></div>
 
-    <div class="fav-anchor" (click)="favourite($event)">
-      <span class="material-icons" [ngClass]="{ 'is-favourite': isFavourite }">favorite</span>
+      <div class="fav-anchor" (click)="favourite($event)">
+        <span class="material-icons" [ngClass]="{ 'is-favourite': isFavourite }"
+          >favorite</span
+        >
+      </div>
     </div>
-  </div>
+  </a>
 </div>
 
 <!-- viewbox: -380 220 800 600 -->
