@@ -34,77 +34,13 @@
 
   <!-- main notes -->
   <div class="note-list">
-    <div
-      class="note-container"
+    <app-note
       *ngFor="let note of notes; index as i"
-      [class.my-note]="note.userId === currentUserId"
-      [class.friend-note]="note.userId !== currentUserId"
-      [class.show]="note.show"
-    >
-      <div
-        class="note-bubble"
-        [class.active]="editNoteIndex === i"
-        (click)="
-          note.show && editNoteIndex === i
-            ? (note.show = note.show)
-            : (note.show = !note.show)
-        "
-      >
-        <div
-          [tabindex]="i"
-          (keydown.enter)="updateNote($event.target.innerHTML, note.id)"
-          #activeNoteRef
-        >
-          <p class="note-content" [innerHTML]="note.note"></p>
-        </div>
-      </div>
-      <div class="note-info">
-        <div class="commenter" [style.opacity]="editNoteIndex === i ? 0 : 1">
-          <p>
-            {{
-              note.userId === currentUserId
-                ? "You"
-                : note.userName
-                ? note.userName
-                : "Anonymous"
-            }}
-            commented
-          </p>
-          <p>on {{ note.date | date }}</p>
-        </div>
-        <div class="note-actions" *ngIf="note.userId === currentUserId">
-          <span
-            *ngIf="editNoteIndex === i"
-            class="material-icons"
-            matTooltip="Save changes"
-            matTooltipShowDelay="400"
-            (click)="updateNote(activeNoteRef.innerHTML, note.id)"
-          >
-            check
-          </span>
-          <span
-            *ngIf="editNoteIndex !== i"
-            (click)="editNote(i, activeNoteRef)"
-            class="material-icons remove"
-            [matTooltip]="'Edit note'"
-            matTooltipShowDelay="400"
-          >
-            edit
-          </span>
-          <span
-            (click)="
-              editNoteIndex === i
-                ? cancelEdit(activeNoteRef, note.note)
-                : deleteEmitter.emit(note.id)
-            "
-            class="material-icons remove"
-            [matTooltip]="editNoteIndex === i ? 'Cancel' : 'Delete note'"
-            matTooltipShowDelay="400"
-          >
-            clear
-          </span>
-        </div>
-      </div>
-    </div>
+      [note]="note"
+      [author]="note.userId === currentUserId ? 'You' : note.userName"
+      [readOnly]="note.userId !== currentUserId"
+      (deleteNoteEmitter)="deleteEmitter.emit($event)"
+      (updateNoteEmitter)="updateNote($event)"
+    ></app-note>
   </div>
 </div>

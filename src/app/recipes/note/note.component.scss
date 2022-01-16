@@ -1,0 +1,114 @@
+.note-container {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.note-info {
+  padding: 4px 7px;
+  p {
+    margin: 0;
+    font-size: 10px;
+    line-height: 1;
+    font-style: italic;
+  }
+}
+
+.note-bubble {
+  position: relative;
+  margin: 6px 0px 10px 0px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  width: fit-content;
+  max-width: 100%;
+  word-break: break-word;
+  cursor: pointer;
+}
+
+// speech bubble triangle
+.note-bubble:after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  width: 0;
+  height: 0;
+  border: 9px solid transparent;
+  border-bottom: 0;
+  margin-left: -4.5px;
+  margin-bottom: -9px;
+}
+
+.my-note {
+  .note-bubble {
+    background-color: #add8e6;
+    min-width: 20px;
+  }
+  .active {
+    cursor: text;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    background-color: #add8e64a;
+  }
+  .note-bubble:after {
+    border-top-color: #add8e6;
+    border-left: 0;
+    left: 25px;
+  }
+  .active:after {
+    border-top-color: #add8e64a;
+  }
+}
+
+.friend-note {
+  text-align: right;
+  .note-bubble {
+    border-color: #cceab5;
+    background-color: #cceab5;
+    align-self: flex-end;
+  }
+  .note-bubble:after {
+    right: 25px;
+    border-top-color: #cceab5;
+    border-top-color: #cceab5;
+    border-right: 0;
+  }
+  .note-info {
+    justify-content: flex-end;
+    left: unset;
+    right: -50px;
+  }
+}
+
+.note-actions span {
+  margin: 0 4.5px;
+  cursor: pointer;
+}
+
+.note-actions,
+i {
+  transition: 0.25s all ease-in-out;
+}
+
+p.note-content {
+  margin: 0;
+}
+
+.note-bubble textarea {
+  border: none;
+  padding: 0;
+  background-color: unset;
+  width: calc(100% - 20px);
+  resize: none;
+  font-family: RedHat;
+  font-size: 14px;
+  min-height: 100%;
+  position: absolute;
+  top: 5px;
+  left: 10px;
+  line-height: 1.43;
+}
+
+.auto-size {
+  opacity: 0;
+  margin: 0;
+}

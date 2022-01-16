@@ -37,10 +37,12 @@ export class SettingsComponent implements OnInit, OnDestroy {
   userSub: Subscription;
   recDatesList: RecipePreview[] = [];
   recDatesSub: Subscription;
+  dateRecipeList: any[] = [];
   totalDates: number;
   selectedRecipe: RecipePreview;
   infrequentList: RecipePreview[] = [];
   topRecipes: RecipePreview[] = [];
+
   isScrolling = false;
   showLeft = false;
   showRight = false;
@@ -138,6 +140,19 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
   getDates() {
     this.recipeService.getRecipesMadeSnap(this.user.id).then((list) => {
+      list.forEach((rec) => {
+        rec.dates.forEach((d) => {
+          this.dateRecipeList.push({
+            date: d,
+            recId: rec.id,
+            name: rec.name,
+          });
+        });
+      });
+      this.dateRecipeList.sort((a, b) => {
+        return b.date - a.date;
+      });
+
       this.recDatesList = list.sort((a, b) => b.value - a.value);
       this.topRecipes = this.recDatesList.slice(0, 10);
       this.selectedRecipe = this.topRecipes[0];
@@ -162,9 +177,9 @@ export class SettingsComponent implements OnInit, OnDestroy {
     });
   }
 
-  goToRecipe(id) {
-    this.router.navigate(["recipes", id]);
-  }
+  // goToRecipe(id) {
+  //   this.router.navigate(["recipes", id]);
+  // }
 
   onChange(e) {
     // this.isChecked = !this.isChecked;
@@ -194,9 +209,9 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
   scroll(direct, e?: MouseEvent, el?: any) {
     this.isScrolling = true;
-    console.log("scroll ", direct, " e: ", e);
+    // console.log("scroll ", direct, " e: ", e);
     // console.log("target: ", e.target);
-    console.log("el: ", el);
+    // console.log("el: ", el);
     do {
       el.scrollLeft += 1;
     } while (this.isScrolling);
@@ -210,7 +225,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
   }
 
   stopScroll() {
-    console.log("mouse stop scroll leave");
     this.isScrolling = false;
   }
 
@@ -221,22 +235,10 @@ export class SettingsComponent implements OnInit, OnDestroy {
     const scrollBy = direction + 358;
 
     elRef.scrollBy({ top: 0, left: parseInt(scrollBy), behavior: "smooth" });
-    console.log("scrollWidth: ", elRef.scrollWidth);
-    console.log("scrollLeft: ", elRef.scrollLeft);
-    console.log(
-      "scrollLeft + offsetWidth: ",
-      elRef.scrollLeft + elRef.offsetWidth
-    );
   }
 
   onScroll(e, elRef?: HTMLElement) {
-    console.log("scroll detected ", e);
-    console.log("scrollLeft: ", elRef.scrollLeft);
     this.showLeft = elRef.scrollLeft > 0;
     this.showRight = elRef.scrollLeft + elRef.offsetWidth < elRef.scrollWidth;
-    console.log(
-      "scrollLeft + offsetWidth: ",
-      elRef.scrollLeft + elRef.offsetWidth
-    );
   }
 }

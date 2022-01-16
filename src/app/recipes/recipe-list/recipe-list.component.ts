@@ -49,7 +49,7 @@ export class RecipeListComponent implements OnInit, OnDestroy {
   columns = [];
   columnCount = 1;
   scrollShow = 5;
-  gridWidth = "1fr";
+  // gridWidth = "1fr";
 
   @HostListener("window:scroll", ["$event"])
   checkScroll(event) {
@@ -101,8 +101,8 @@ export class RecipeListComponent implements OnInit, OnDestroy {
       if (!!testy && !!testy.name) {
         name = testy.name;
       }
-      console.log("testy: ", testy);
-      console.log("name: ", name);
+      // console.log("testy: ", testy);
+      // console.log("name: ", name);
       this.showWelcome(notify, name);
     }
 
@@ -190,16 +190,16 @@ export class RecipeListComponent implements OnInit, OnDestroy {
 
   setColumnCount(width) {
     if (width < 600) {
-      this.gridWidth = "1fr";
+      // this.gridWidth = "1fr";
       return 1;
     } else if (width < 800) {
-      this.gridWidth = "1fr 1fr";
+      // this.gridWidth = "1fr 1fr";
       return 2;
     } else if (width < 1000) {
-      this.gridWidth = "1fr 1fr 1fr";
+      // this.gridWidth = "1fr 1fr 1fr";
       return 3;
     } else {
-      this.gridWidth = "1fr 1fr 1fr 1fr";
+      // this.gridWidth = "1fr 1fr 1fr 1fr";
       return 4;
     }
   }
@@ -207,7 +207,6 @@ export class RecipeListComponent implements OnInit, OnDestroy {
   loadMore() {}
 
   onImageLoad(event, index) {
-    // console.log('event: ', event, ' index: ', index);
     // this.loadedCount++;
     // if (this.loadedCount === this.offset) {
     //   this.offset += 2;
