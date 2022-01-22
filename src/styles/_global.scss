@@ -166,10 +166,10 @@ div:focus {
 }
 
 @media (max-width: 600px) {
-  p,
-  li,
-  div,
-  body {
+  p:not(.mobile-sm),
+  li:not(.mobile-sm),
+  div:not(.mobile-sm),
+  body:not(.mobile-sm) {
     font-size: 16px !important;
   }
 }
