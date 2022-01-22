@@ -58,6 +58,11 @@
     </div>
   </section>
 
+  <section class="history" *ngIf="dateRecipeList.length">
+    <h2>Your recipe history</h2>
+    <app-date-list [dates]="dateRecipeList"></app-date-list>
+  </section>
+
   <section class="scroll-horizon" *ngIf="recDatesList.length">
     <h2>You haven't made these in a while</h2>
 
@@ -67,8 +72,11 @@
           <img [src]="recipe.image" />
           <div class="details">
             <h4>{{ recipe.name }}</h4>
-            <p *ngFor="let date of recipe.dates | minMax" class="last-made">
-              {{ date | date }}
+            <p
+              *ngFor="let date of recipe.dates | minMax"
+              class="last-made mobile-sm"
+            >
+              {{ date | date: "d MMM y" }}
             </p>
           </div>
         </a>
@@ -87,8 +95,8 @@
     ></div>
   </section>
 
-  <section class="history" *ngIf="dateRecipeList.length">
+  <!-- <section class="history" *ngIf="dateRecipeList.length">
     <h2>Your recipe history</h2>
     <app-date-list [dates]="dateRecipeList"></app-date-list>
-  </section>
+  </section> -->
 </div>
