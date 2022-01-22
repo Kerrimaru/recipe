@@ -1,5 +1,5 @@
 .app-settings {
-  // padding: 0 50px;
+  background-color: #f3f6f7;
 }
 
 section:not(.scroll-horizon) {
@@ -9,6 +9,10 @@ section:not(.scroll-horizon) {
 section.scroll-horizon {
   padding: 40px 0;
   background-color: #f3f6f7;
+  background-color: #011820;
+  background-color: #013d52;
+  position: relative;
+  color: #e4edf1;
   .list {
     overflow-x: scroll;
     display: flex;
@@ -38,10 +42,12 @@ section.scroll-horizon {
   .arrow-right {
     right: 12px;
   }
-  position: relative;
   h2,
   .list {
     padding: 0 50px;
+  }
+  .details h4 {
+    color: #e4edf1;
   }
 }
 
@@ -100,6 +106,7 @@ form {
   h4 {
     margin: 0px;
     font-size: 22px;
+    font-size: 18px;
   }
   .last-made {
     position: absolute;
@@ -117,6 +124,7 @@ form {
     line-height: 1.2;
     margin: 0;
     justify-content: center;
+    font-weight: bold;
   }
   img {
     height: 260px;
@@ -142,8 +150,14 @@ form {
   .arrow {
     display: none;
   }
-  .app-settings {
+  section:not(.scroll-horizon) {
     padding: 0 10px;
+  }
+  section.scroll-horizon {
+    h2,
+    .list {
+      padding: 0 10px;
+    }
   }
   .date-chart {
     width: 100% !important;
@@ -157,5 +171,13 @@ form {
   }
   .selected-rec {
     max-width: unset;
+  }
+}
+
+section.history {
+  padding-bottom: 50px;
+  h2 {
+    margin-bottom: 36px;
+    margin-bottom: 24px;
   }
 }
