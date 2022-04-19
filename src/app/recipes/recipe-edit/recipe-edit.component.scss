@@ -4,6 +4,10 @@
   position: relative;
 }
 
+.show-sm {
+  display: none;
+}
+
 input.ng-invalid.ng-touched,
 textarea.ng-invalid.ng-touched {
   border: 1px solid red;
@@ -268,4 +272,34 @@ img.preview {
 
 .time {
   margin-bottom: 25px;
+}
+
+@media (max-width: 800px) {
+  h2 {
+    text-align: left;
+    margin-bottom: 16px;
+  }
+  .tags {
+    text-align: left;
+  }
+  .show-sm {
+    display: block;
+  }
+  .edit-container {
+    padding: 8px;
+    margin-bottom: 50px;
+  }
+  .ing-img-cont {
+    flex-direction: column;
+  }
+  .column {
+    width: 100%;
+  }
+
+  div.actions {
+    background-color: #fff;
+    width: 100%;
+    justify-content: end;
+    border-top: 1px solid black;
+  }
 }
