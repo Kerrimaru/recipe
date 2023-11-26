@@ -6,6 +6,7 @@ import { RouterModule } from "@angular/router";
 import { canActivate } from "@angular/fire/compat/auth-guard";
 import { map } from "rxjs/operators";
 import { LoginLandingComponent } from "./login-landing.component";
+import { GoogleAuthComponent } from "../auth/google-auth/google-auth.component";
 
 const redirectUnauthToLogin = () =>
   map((user) => {
@@ -17,7 +18,7 @@ const redirectUnauthToLogin = () =>
   });
 
 @NgModule({
-  declarations: [AuthComponent, LoginLandingComponent],
+  declarations: [AuthComponent, LoginLandingComponent, GoogleAuthComponent],
   imports: [
     CommonModule,
     SharedModule,

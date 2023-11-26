@@ -10,9 +10,6 @@
   >
     <div class="form-inputs">
       <div class="form-group">
-        <!-- <div class="form-field-visible" id="emailView">
-        {{ authForm.value.email }}
-      </div> -->
         <input
           [ngClass]="{ reverse: !isDialog }"
           type="email"
@@ -23,9 +20,6 @@
           email
           [placeholder]="isLogin ? 'Email' : 'What\'s your email?'"
         />
-        <!-- <p class="form-field-visible" id="emailView" (click)="emailInput.focus()">
-        {{ authForm.value.email }}
-      </p> -->
       </div>
       <div class="form-group">
         <input
@@ -40,7 +34,6 @@
         />
       </div>
 
-      <!-- <div [style.opacity]="isLogin ? 0 : 1" class="form-group"> -->
       <div *ngIf="!isLogin" class="form-group">
         <input
           [ngClass]="{ reverse: !isDialog }"
@@ -58,12 +51,12 @@
       <button type="submit" class="btn-primary auth-submit">
         {{ isLogin ? "Sign in" : "Sign up" }}
       </button>
+      <div class="google">
+        <p>or</p>
+        <app-google-auth (googleSigninEmitter)="googleAuth()"></app-google-auth>
+      </div>
     </div>
-    <hr style="width: 25%; border-color: #918e8a" />
     <div *ngIf="!isSignup" class="actions secondary-actions">
-      <p>
-        {{ isLogin ? "Don't have an account?" : "Already signed up?" }}
-      </p>
       <p
         id="mobile-toggle"
         class="toggle"
@@ -73,7 +66,7 @@
         Go to {{ !isLogin ? "login" : "signup" }}
       </p>
 
-      <p style="margin: 5px">or</p>
+      <!-- <p style="margin: 5px">or</p>
       <button
         type="button"
         class=""
@@ -81,7 +74,7 @@
         (click)="signInGuest()"
       >
         Enter as guest
-      </button>
+      </button> -->
     </div>
   </form>
 </div>

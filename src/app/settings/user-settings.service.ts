@@ -38,15 +38,12 @@ export class UserSettingsService {
   // toDo$ = new BehaviorSubject<string[]>([]);
 
   toggleFavourite(recipeKey: string) {
-    // console.log('fav ref: ', this.favsRef);
     this.favourites.includes(recipeKey)
       ? this.favsRef.child(recipeKey).remove()
       : this.favsRef.child(recipeKey).set(true);
   }
 
   toggleToDo(recipeKey: string) {
-    // console.log('to do ref: ', this.toDoRef);
-    // console.log('to do ids: ', this.toDoIds);
     this.toDoIds.includes(recipeKey)
       ? this.toDoRef.child(recipeKey).remove()
       : this.toDoRef.child(recipeKey).set(true);
@@ -77,18 +74,13 @@ export class UserSettingsService {
   // }
 
   fetchUserSettings(userId) {
-    // console.log('fecth user setting');
     this.userSettingsRef = this.fb.database.ref(`userSettings/${userId}`);
     this.userSettingsRef.once("value").then((snapshot) => {
-      // console.log('fecth user setting');
       this.userSettings = snapshot.val();
-      // this.getFavourites(userId);
-      // return this.fetchFavsList(userId);
     });
   }
 
   fetchFavsList(userId): Subscription {
-    // console.log('fecth fav list');
     this.favsRef = this.fb.database.ref(`userSettings/${userId}/favourites`);
     this.favouritesList = this.fb.list(`userSettings/${userId}/favourites`);
     return this.favouritesList
@@ -100,14 +92,12 @@ export class UserSettingsService {
         take(1)
       )
       .subscribe((res) => {
-        // console.log('fecth fav list');
         this.favourites = res;
         this.favs$.next(res);
       });
   }
 
   fetchToDoList(userId): Subscription {
-    // console.log('fecth to do list');
     this.toDoRef = this.fb.database.ref(`userSettings/${userId}/toDo`);
     this.toDoList = this.fb.list(`userSettings/${userId}/toDo`);
     return this.toDoList
@@ -119,7 +109,6 @@ export class UserSettingsService {
         take(1)
       )
       .subscribe((res) => {
-        // console.log('fecth to dos ', res);
         this.toDoIds = res;
         this.toDo$.next(res);
       });

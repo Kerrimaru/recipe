@@ -32,29 +32,19 @@
     input {
       max-width: 340px;
       width: 80%;
-      border-radius: 0;
+      border-radius: 5px;
       border: none;
       border-bottom: 1px solid #918e8a;
       text-align: center;
-      background-color: transparent;
-      // border-radius: 5px;
-      // background-color: #f7f7f7;
-      // backdrop-filter: opacity(0.5);
       letter-spacing: 1.2px;
     }
   }
 }
 
 .form-inputs {
-  height: 192px;
   display: flex;
   flex-direction: column;
   justify-content: center;
-}
-
-.auth-form:not(.auth-dialog) input {
-  color: #d9d9d9;
-  color: #333;
 }
 
 // actions
@@ -64,12 +54,8 @@
   flex-direction: column;
   align-items: center;
   p {
-    // font-family: Poppins;
-    // font-family: Nunito;
-    // font-family: RedHat;
     font-size: 14px;
     color: #d4d4d4;
-    margin: 5px;
     b {
       color: #011c29;
     }
@@ -124,4 +110,11 @@ button {
   .secondary-actions p {
     margin: 10px;
   }
+}
+
+.google {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }

@@ -178,17 +178,18 @@ export class RecipeService {
           for (const [key, date] of Object.entries(value)) {
             datesArr.push(date);
           }
-          const recItem = {
-            id: key,
-            dates: datesArr,
-            name: recipe.name,
-            image: recipe.imagePath,
-            ingredients: recipe.ingredients,
-            value: datesArr.length,
-          };
-          recipeDates.push(recItem);
+          if (recipe) {
+            const recItem = {
+              id: key,
+              dates: datesArr,
+              name: recipe.name,
+              image: recipe.imagePath,
+              ingredients: recipe.ingredients,
+              value: datesArr.length,
+            };
+            recipeDates.push(recItem);
+          }
         }
-
         return recipeDates;
       });
   }

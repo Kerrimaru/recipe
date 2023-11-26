@@ -4,11 +4,13 @@ import { AuthService } from "./auth.service";
 import { Router } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { DialogService } from "../shared/dialog/dialog.service";
+import { GoogleAuthProvider } from "firebase/auth";
 
 @Component({
   selector: "app-auth",
   templateUrl: "./auth.component.html",
   styleUrls: ["./auth.component.scss"],
+  providers: [],
 })
 export class AuthComponent implements OnInit {
   constructor(
@@ -34,8 +36,14 @@ export class AuthComponent implements OnInit {
     this.isLogin = !this.isLogin;
   }
 
+  googleAuth() {
+    return this.authService
+      .googleLogin(new GoogleAuthProvider())
+      .then((res) => this.router.navigate(["/recipes"]))
+      .catch((err) => console.error(err));
+  }
+
   onSubmit(form: NgForm) {
-    console.log("form: ", form);
     if (!form.valid) {
       return this.openSnackBar("Check your details");
     }
