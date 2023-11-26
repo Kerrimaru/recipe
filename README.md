@@ -56,4 +56,7 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 
 # deploy
 
-Run `ng deploy`
+Checkout master branch and pull changes, then run `ng deploy`
+
+If you receive an error, you may need to re-authenticate into firebase. Just run `firebase login --reauth` in the terminal and follow the promts to login
+You can also run `firebase projects:list` to see your firebase projects
