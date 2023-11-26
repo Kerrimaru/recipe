@@ -174,32 +174,6 @@ div:focus {
   }
 }
 
-.auth-form input:-webkit-autofill,
-.auth-form input:-webkit-autofill:hover,
-.auth-form input:-webkit-autofill:focus,
-.auth-form input:-webkit-autofill:active {
-  box-shadow: 0 0 0 0px white inset !important;
-  transition: background-color 5000s;
-  background-color: #3330 !important;
-}
-
-/* Change Autocomplete styles in Chrome*/
-input:-webkit-autofill,
-input:-webkit-autofill:hover,
-input:-webkit-autofill:focus input:-webkit-autofill,
-textarea:-webkit-autofill,
-textarea:-webkit-autofill:hover textarea:-webkit-autofill:focus,
-select:-webkit-autofill,
-select:-webkit-autofill:hover,
-select:-webkit-autofill:focus {
-  &.reverse {
-    -webkit-text-fill-color: #fff;
-    -webkit-box-shadow: 0 0 0px 0px #000 inset;
-    transition: background-color 5000s ease-in-out 0s;
-    caret-color: #fff;
-  }
-}
-
 .chart-legend div {
   min-width: 200px;
   position: absolute;

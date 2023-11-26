@@ -34,6 +34,20 @@ export class AuthService {
 
   private tokenExpirationCountdown: any;
 
+  googleLogin(provider) {
+    return this.firebaseAuth
+      .signInWithPopup(provider)
+      .then((result) => {
+        // signInWithPopup
+        this.autoLogin(result.user);
+        localStorage.setItem("userData", JSON.stringify(result.user));
+        localStorage.setItem("userToken", JSON.stringify(result.credential));
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
   firebaseLogin(email: string, password: string) {
     return this.firebaseAuth
       .signInWithEmailAndPassword(email, password)
