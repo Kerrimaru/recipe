@@ -1,38 +1,38 @@
-import { NgModule } from "@angular/core";
-import { Routes, RouterModule, PreloadAllModules } from "@angular/router";
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
 import {
   canActivate,
   redirectUnauthorizedTo,
   redirectLoggedInTo,
-} from "@angular/fire/compat/auth-guard";
-import { RecipesResolverService } from "./recipes/recipes-resolver.service";
+} from '@angular/fire/compat/auth-guard';
+import { RecipesResolverService } from './recipes/recipes-resolver.service';
 
-const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(["login"]);
-const redirectLoggedInToRecipes = () => redirectLoggedInTo(["recipes"]);
+const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
+const redirectLoggedInToRecipes = () => redirectLoggedInTo(['recipes']);
 
 const routes: Routes = [
-  { path: "", redirectTo: "/recipes", pathMatch: "full" },
+  { path: '', redirectTo: '/recipes', pathMatch: 'full' },
   // { path: 'recipes', loadChildren: './recipes/recipes.module#RecipesModule' }, <= older syntax
   {
-    path: "recipes",
+    path: 'recipes',
     ...canActivate(redirectUnauthorizedToLogin),
     loadChildren: () =>
-      import("./recipes/recipes.module").then((module) => module.RecipesModule),
+      import('./recipes/recipes.module').then((module) => module.RecipesModule),
   },
   {
-    path: "account",
+    path: 'account',
     resolve: { recipes: RecipesResolverService },
     loadChildren: () =>
-      import("./settings/settings.module").then(
+      import('./settings/settings.module').then(
         (module) => module.SettingsModule
       ),
   },
   {
-    path: "login",
+    path: 'login',
     ...canActivate(redirectLoggedInToRecipes),
     loadChildren: () =>
       // import("./auth/auth.module").then((module) => module.AuthModule),
-      import("./login-landing/login-landing.module").then(
+      import('./login-landing/login-landing.module').then(
         (module) => module.LoginLandingModule
       ),
   },
@@ -42,7 +42,7 @@ const routes: Routes = [
   imports: [
     RouterModule.forRoot(routes, {
       preloadingStrategy: PreloadAllModules,
-      relativeLinkResolution: "legacy",
+      // relativeLinkResolution: 'legacy',
     }),
   ],
   exports: [RouterModule],

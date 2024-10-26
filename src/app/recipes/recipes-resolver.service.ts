@@ -1,17 +1,17 @@
-import { Injectable } from "@angular/core";
+import { Injectable } from '@angular/core';
 import {
   Resolve,
   ActivatedRouteSnapshot,
   RouterStateSnapshot,
-} from "@angular/router";
-import { Recipe } from "./recipe.model";
-import { DataStorageService } from "../shared/data-storage.service";
-import { RecipeService } from "./recipe.service";
-import { map, take, first } from "rxjs/operators";
-import { of } from "rxjs";
-import { AuthService } from "../auth/auth.service";
+} from '@angular/router';
+import { Recipe } from './recipe.model';
+import { DataStorageService } from '../shared/data-storage.service';
+import { RecipeService } from './recipe.service';
+import { map, take, first } from 'rxjs/operators';
+import { of } from 'rxjs';
+import { AuthService } from '../auth/auth.service';
 
-@Injectable({ providedIn: "root" })
+@Injectable({ providedIn: 'root' })
 export class RecipesResolverService implements Resolve<Recipe[]> {
   constructor(
     private datStorageService: DataStorageService,
@@ -21,7 +21,7 @@ export class RecipesResolverService implements Resolve<Recipe[]> {
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     const readOnly = this.authService.readOnly.getValue();
-    const id = route.params.id;
+    const id = route.params['id'];
 
     // if (!recipes.length) {
     return this.recipeService.fetchRecipes().pipe(

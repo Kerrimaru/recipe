@@ -1,4 +1,4 @@
-<div *ngFor="let year of sections | keyvalue: desc" class="year">
+<div *ngFor="let year of sections | keyvalue : desc" class="year">
   <mat-expansion-panel>
     <mat-expansion-panel-header>
       <mat-panel-title
@@ -8,12 +8,12 @@
     <div class="months-container">
       <div
         class="month"
-        *ngFor="let month of year.value | keyvalue: originalOrder | reverse"
+        *ngFor="let month of year.value | keyvalue : originalOrder | reverse"
       >
         <h4>{{ month.key | month }}</h4>
         <div class="dates-container">
           <div class="date" *ngFor="let date of month.value.dates">
-            <div class="date-circle">{{ date.date | date: "d" }}</div>
+            <!-- <div class="date-circle">{{ date.date | date : "d" }}</div> -->
             <a href="/recipes/{{ date.recId }}"
               ><p class="rec-title">{{ date.name }}</p></a
             >

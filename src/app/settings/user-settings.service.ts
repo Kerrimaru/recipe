@@ -1,18 +1,18 @@
-import { Reference } from "@angular/compiler/src/render3/r3_ast";
-import { Injectable } from "@angular/core";
-import { AngularFireAuth } from "@angular/fire/compat/auth";
+// import { Reference } from "@angular/compiler/src/render3/r3_ast";
+import { Injectable } from '@angular/core';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
 import {
   AngularFireDatabase,
   AngularFireList,
-} from "@angular/fire/compat/database";
-import { BehaviorSubject, Observable, Subject, Subscription } from "rxjs";
-import { map } from "rxjs/internal/operators/map";
-import { tap } from "rxjs/internal/operators/tap";
-import { take } from "rxjs/operators";
-import { UserSettings } from "../auth/user.model";
+} from '@angular/fire/compat/database';
+import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs';
+import { map } from 'rxjs/internal/operators/map';
+import { tap } from 'rxjs/internal/operators/tap';
+import { take } from 'rxjs/operators';
+import { UserSettings } from '../auth/user.model';
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root',
 })
 export class UserSettingsService {
   constructor(
@@ -60,9 +60,9 @@ export class UserSettingsService {
   saveChanges(userId) {
     return;
     // disabled until favourites is configured properly
-    const settings = { diet: "vegan", theme: "default" };
+    const settings = { diet: 'vegan', theme: 'default' };
     // to do: set method rewrites all values - could be dangerous for favourites
-    this.fb.database.ref("userSettings/" + userId).update(settings);
+    this.fb.database.ref('userSettings/' + userId).update(settings);
   }
 
   // getFavourites(userId) {
@@ -75,7 +75,7 @@ export class UserSettingsService {
 
   fetchUserSettings(userId) {
     this.userSettingsRef = this.fb.database.ref(`userSettings/${userId}`);
-    this.userSettingsRef.once("value").then((snapshot) => {
+    this.userSettingsRef.once('value').then((snapshot) => {
       this.userSettings = snapshot.val();
     });
   }

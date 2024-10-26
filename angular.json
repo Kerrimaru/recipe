@@ -17,10 +17,17 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "allowedCommonJsDependencies": [
+              "@ckeditor/ckeditor5-build-classic",
+              "lottie-web",
+              "rfdc"
+           ],
             "outputPath": "dist/recipes",
             "index": "src/index.html",
             "main": "src/main.ts",
-            "polyfills": "src/polyfills.ts",
+            "polyfills": [
+              "zone.js"
+            ],
             "tsConfig": "tsconfig.app.json",
             "aot": true,
             "assets": [
@@ -77,14 +84,14 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "recipes:build"
+            "buildTarget": "recipes:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "recipes:build:production"
+              "buildTarget": "recipes:build:production"
             },
             "development": {
-              "browserTarget": "recipes:build:development"
+              "buildTarget": "recipes:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -92,7 +99,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "recipes:build"
+            "buildTarget": "recipes:build"
           }
         },
         "test": {
@@ -145,6 +152,5 @@
         }
       }
     }
-  },
-  "defaultProject": "recipes"
+  }
 }

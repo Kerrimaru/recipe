@@ -1,15 +1,25 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+// import { MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
 import { Observable } from 'rxjs';
 import { DialogService } from '../dialog.service';
+import { MatDialogRef } from '@angular/material/dialog';
+import { CommonModule } from '@angular/common';
 
 @Component({
+  standalone: true,
   selector: 'app-alert',
   templateUrl: './alert.component.html',
   styleUrls: ['./alert.component.scss'],
+  imports: [CommonModule],
 })
 export class AlertComponent implements OnInit {
-  data: any = this.dialog.dialogData;
+  data = {
+    title: '',
+    lines: [],
+    actions: [],
+    class: '',
+    image: '',
+  };
   imagePath: string;
   title: string = this.data.title;
   lines: string[] = this.data.lines || [];
@@ -17,11 +27,17 @@ export class AlertComponent implements OnInit {
   class: string = this.data.class;
   hideClose = false; // true if user selection is required to proceed
 
-  constructor(private dialog: DialogService, public mdDialogRef: MatDialogRef<AlertComponent>) {}
+  constructor(
+    private dialog: DialogService,
+    public mdDialogRef: MatDialogRef<AlertComponent>
+  ) {}
 
   ngOnInit(): void {
-    this.imagePath = this.data.image ? '/assets/images/' + this.data.image : null;
-    console.log('img: ', this.imagePath)
+    this.data = this.dialog.dialogData;
+    this.imagePath = this.data.image
+      ? '/assets/images/' + this.data.image
+      : null;
+    console.log('img: ', this.imagePath);
     if (typeof this.data.lines === 'string') {
       this.lines = [this.data.lines];
     }

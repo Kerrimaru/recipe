@@ -1,25 +1,25 @@
+import { Recipe } from '../recipe.model';
+import { RecipeService } from '../recipe.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { environment } from '../../../environments/environment';
+import { map } from 'rxjs/operators';
+import { Observable, Subscription } from 'rxjs';
 import {
   Component,
   OnInit,
-  Input,
   AfterViewInit,
+  OnDestroy,
+  Input,
+  ViewChildren,
   ElementRef,
   ViewChild,
-  OnDestroy,
   HostListener,
-  ViewChildren,
-} from "@angular/core";
-import { Recipe } from "../recipe.model";
-import { RecipeService } from "../recipe.service";
-import { ActivatedRoute, Router } from "@angular/router";
-import { AuthService } from "src/app/auth/auth.service";
-import { environment } from "../../../environments/environment";
-import { UserSettingsService } from "src/app/settings/user-settings.service";
-import { map } from "rxjs/operators";
-import { DialogService } from "src/app/shared/dialog/dialog.service";
-import { Observable, Subscription } from "rxjs";
-import { User } from "src/app/auth/user.model";
-import { AuthComponent } from "src/app/auth/auth.component";
+} from '@angular/core';
+import { User } from '@angular/fire/auth';
+import { AuthComponent } from '../../auth/auth.component';
+import { AuthService } from '../../auth/auth.service';
+import { UserSettingsService } from '../../settings/user-settings.service';
+import { DialogService } from '../../shared/dialog/dialog.service';
 
 interface Note {
   id: string;
@@ -31,9 +31,9 @@ interface Note {
 }
 
 @Component({
-  selector: "app-recipe-detail",
-  templateUrl: "./recipe-detail.component.html",
-  styleUrls: ["./recipe-detail.component.scss"],
+  selector: 'app-recipe-detail',
+  templateUrl: './recipe-detail.component.html',
+  styleUrls: ['./recipe-detail.component.scss'],
 })
 export class RecipeDetailComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() recipeInput: Recipe;
@@ -43,7 +43,7 @@ export class RecipeDetailComponent implements OnInit, AfterViewInit, OnDestroy {
   loading = true;
   recipes: any;
 
-  user: User;
+  user: User | any; // to do
   showEdit = false;
   showDelete = !environment.production;
   isFavourite: boolean;
@@ -75,9 +75,9 @@ export class RecipeDetailComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // @ViewChild("recipeRef", { static: false }) recipeElRef: ElementRef;
   // @ViewChild("activeNoteRef") activeNoteRef;
-  @ViewChildren("ingredientListRef") ingredientListRef: ElementRef;
-  @ViewChildren("methodRef") methodRef: ElementRef;
-  @ViewChild("ingButton") button: ElementRef;
+  @ViewChildren('ingredientListRef') ingredientListRef: ElementRef;
+  @ViewChildren('methodRef') methodRef: ElementRef;
+  @ViewChild('ingButton') button: ElementRef;
 
   constructor(
     private recipeService: RecipeService,
@@ -88,33 +88,33 @@ export class RecipeDetailComponent implements OnInit, AfterViewInit, OnDestroy {
     private dialog: DialogService
   ) {}
 
-  @HostListener("window:resize", ["$event"])
+  @HostListener('window:resize', ['$event'])
   onResize(event) {
     const width = event.target.innerWidth;
     this.isMobile = width < this.mobileWidth;
   }
 
-  @HostListener("window:scroll", ["$event"])
+  @HostListener('window:scroll', ['$event'])
   checkScroll(event) {
     const offset = window.scrollY;
-    this.scrollDirection = this.previousOffset < offset ? "down" : "up";
+    this.scrollDirection = this.previousOffset < offset ? 'down' : 'up';
     // console.log("scroll ev: ", event);
     if (!this.ingredientListRef) {
-      console.log("no ing ref");
+      console.log('no ing ref');
       return;
     }
-    const ingEl = this.ingredientListRef["last"].nativeElement;
+    const ingEl = this.ingredientListRef['last'].nativeElement;
     const halfway = ingEl.offsetTop + ingEl.clientHeight / 2;
     if (halfway < window.scrollY) {
       this.ingredientsInViewport = false;
     } else {
       // this.ingredientsInViewport = true;
     }
-    const methodEl = this.methodRef["last"].nativeElement;
+    const methodEl = this.methodRef['last'].nativeElement;
 
     if (window.scrollY > methodEl.offsetTop && this.returnScrollPoint) {
       this.opacity = 100 - (window.scrollY - methodEl.offsetTop) / 2;
-      if (this.opacity <= 0 && this.scrollDirection === "down") {
+      if (this.opacity <= 0 && this.scrollDirection === 'down') {
         this.returnScrollPoint = null;
       }
     }
@@ -136,11 +136,11 @@ export class RecipeDetailComponent implements OnInit, AfterViewInit, OnDestroy {
         // a cheat to allow only me to delete recipes, but do this properly at some point
         if (
           environment.production &&
-          this.user.id == "RDN8uluhOqP8aATgV0QxF60yi2F2"
+          this.user.id == 'RDN8uluhOqP8aATgV0QxF60yi2F2'
         ) {
           this.showDelete = true;
         }
-        this.recipeKey = params["id"];
+        this.recipeKey = params['id'];
         this.recSub = this.recipeService
           .getRecipeSub(this.recipeKey)
           .pipe()
@@ -224,7 +224,7 @@ export class RecipeDetailComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   editRecipe() {
-    this.router.navigate(["edit"], { relativeTo: this.route });
+    this.router.navigate(['edit'], { relativeTo: this.route });
   }
 
   deleteRecipe() {
@@ -232,29 +232,29 @@ export class RecipeDetailComponent implements OnInit, AfterViewInit, OnDestroy {
       return;
     }
     this.showConfirm(
-      "recipe",
-      "This will permanently delete this recipe",
-      "Are you sure?",
-      "takeout-delete.png",
+      'recipe',
+      'This will permanently delete this recipe',
+      'Are you sure?',
+      'takeout-delete.png',
       [
-        { text: "Cancel", primary: true },
-        { text: `Delete`, go: "delete", danger: true },
+        { text: 'Cancel', primary: true },
+        { text: `Delete`, go: 'delete', danger: true },
       ]
     ).subscribe((res) => {
       this.recipeService.deleteRecipeByKey(this.recipeKey).then((r) => {
-        this.router.navigate(["/"]);
+        this.router.navigate(['/']);
       });
     });
   }
 
   parseDateAction(action: String | Date) {
-    if (typeof action !== "string") {
+    if (typeof action !== 'string') {
       return this.addDate(action);
     }
     switch (action) {
-      case "signup":
+      case 'signup':
         return this.openSignupDialog();
-      case "today":
+      case 'today':
         return this.addDate();
       default:
         return this.deleteDate(action);
@@ -277,7 +277,7 @@ export class RecipeDetailComponent implements OnInit, AfterViewInit, OnDestroy {
 
   deleteDate(id: string) {
     // this confirm is really annoying and ugly
-    this.showConfirm("date").subscribe((res) => {
+    this.showConfirm('date').subscribe((res) => {
       this.recipeService.deleteUserDateMade(this.user.id, this.recipe.key, id);
     });
   }
@@ -286,7 +286,7 @@ export class RecipeDetailComponent implements OnInit, AfterViewInit, OnDestroy {
     const dialogRef = this.dialog.show(
       AuthComponent,
       { signup: true },
-      { panelClass: "auth-dialog" }
+      { panelClass: 'auth-dialog' }
     );
     const onClose = dialogRef.afterClosed();
     onClose.subscribe((userName) => {
@@ -314,7 +314,7 @@ export class RecipeDetailComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.readOnly) {
       return;
     }
-    this.showConfirm("note").subscribe((res) => {
+    this.showConfirm('note').subscribe((res) => {
       this.recipeService.deleteNote(noteId, this.recipe.key);
     });
   }
@@ -330,8 +330,8 @@ export class RecipeDetailComponent implements OnInit, AfterViewInit, OnDestroy {
       title: title,
       // lines: `This will permanently delete this ${type}`,
       lines: lines || `Delete this ${type}?`,
-      actions: actions || [{ text: "Delete", go: "delete", danger: true }],
-      image: image || "takeout-delete.png",
+      actions: actions || [{ text: 'Delete', go: 'delete', danger: true }],
+      image: image || 'takeout-delete.png',
     });
   }
 
@@ -345,10 +345,10 @@ export class RecipeDetailComponent implements OnInit, AfterViewInit, OnDestroy {
       this.opacity = 100;
       // console.log("op: ", this.opacity, " scroll: ", this.returnScrollPoint);
 
-      this.ingredientListRef["last"].nativeElement.scrollIntoView({
-        behavior: "smooth",
-        block: "end",
-        inline: "nearest",
+      this.ingredientListRef['last'].nativeElement.scrollIntoView({
+        behavior: 'smooth',
+        block: 'end',
+        inline: 'nearest',
       });
       // window.scrollTo({
       //   top: this.ingredientListRef["last"].nativeElement.offsetTop,
@@ -362,7 +362,7 @@ export class RecipeDetailComponent implements OnInit, AfterViewInit, OnDestroy {
     window.scrollTo({
       top: this.returnScrollPoint,
       left: 0,
-      behavior: "smooth",
+      behavior: 'smooth',
     });
     setTimeout(() => {
       this.returnScrollPoint = null;

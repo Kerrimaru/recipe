@@ -1,21 +1,23 @@
-import { Component, OnInit, OnDestroy, HostListener } from "@angular/core";
-import { Recipe } from "../recipe.model";
-import { RecipeService } from "../recipe.service";
-import { Router, ActivatedRoute } from "@angular/router";
-import { Subscription, BehaviorSubject } from "rxjs";
-import { DataStorageService } from "src/app/shared/data-storage.service";
-import { AngularFireDatabase } from "@angular/fire/compat/database";
-import { AngularFireAuth } from "@angular/fire/compat/auth";
-import { UserSettingsService } from "src/app/settings/user-settings.service";
-import { AuthService } from "src/app/auth/auth.service";
-import { DialogService } from "src/app/shared/dialog/dialog.service";
-import { User } from "src/app/auth/user.model";
-import { AuthComponent } from "src/app/auth/auth.component";
-import { RecipeFilterPipe } from "src/app/shared/pipes/recipe-filter.pipe";
+import { Recipe } from '../recipe.model';
+import { RecipeService } from '../recipe.service';
+import { Router, ActivatedRoute } from '@angular/router';
+import { Subscription, BehaviorSubject } from 'rxjs';
+// import { DataStorageService } from "src/app/shared/data-storage.service";
+import { AngularFireDatabase } from '@angular/fire/compat/database';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
+import { RecipeFilterPipe } from '../../shared/pipes/recipe-filter.pipe';
+import { User } from '@angular/fire/auth';
+import { AuthComponent } from '../../auth/auth.component';
+import { AuthService } from '../../auth/auth.service';
+import { UserSettingsService } from '../../settings/user-settings.service';
+import { DataStorageService } from '../../shared/data-storage.service';
+import { DialogService } from '../../shared/dialog/dialog.service';
+
 @Component({
-  selector: "app-recipe-list",
-  templateUrl: "./recipe-list.component.html",
-  styleUrls: ["./recipe-list.component.scss"],
+  selector: 'app-recipe-list',
+  templateUrl: './recipe-list.component.html',
+  styleUrls: ['./recipe-list.component.scss'],
   providers: [RecipeFilterPipe],
 })
 export class RecipeListComponent implements OnInit, OnDestroy {
@@ -32,7 +34,7 @@ export class RecipeListComponent implements OnInit, OnDestroy {
   loading = true;
   filters: string[] = [];
   readOnly: boolean; // true is signed in as guest
-  user: User;
+  user: User | any; // to do
 
   toDoSub: Subscription;
   userSub: Subscription;
@@ -51,7 +53,7 @@ export class RecipeListComponent implements OnInit, OnDestroy {
   scrollShow = 5;
   // gridWidth = "1fr";
 
-  @HostListener("window:scroll", ["$event"])
+  @HostListener('window:scroll', ['$event'])
   checkScroll(event) {
     if (window.pageYOffset > 40) {
       this.searchOn = this.searchTerm ? true : false;
@@ -65,7 +67,7 @@ export class RecipeListComponent implements OnInit, OnDestroy {
     this.scrollShow = 5 * mult > this.scrollShow ? 5 * mult : this.scrollShow;
   }
 
-  @HostListener("window:resize", ["$event"])
+  @HostListener('window:resize', ['$event'])
   onResize(event) {
     const prevCount = this.columnCount;
     this.columnCount = this.setColumnCount(event.target.innerWidth);
@@ -94,10 +96,10 @@ export class RecipeListComponent implements OnInit, OnDestroy {
       this.readOnly = this.authService.readOnly.getValue();
       this.user = user;
     });
-    const notify = this.route.snapshot.queryParams["notify"];
+    const notify = this.route.snapshot.queryParams['notify'];
     if (notify) {
       const testy = history.state.data;
-      let name = "";
+      let name = '';
       if (!!testy && !!testy.name) {
         name = testy.name;
       }
@@ -125,20 +127,20 @@ export class RecipeListComponent implements OnInit, OnDestroy {
   }
 
   showWelcome(messageType: string, userName?: string) {
-    let title = "Welcome";
+    let title = 'Welcome';
     let message: string[];
-    let actions: any = [{ text: "view recipes", primary: true }];
-    if (messageType === "guest") {
-      title += ", Guest!";
+    let actions: any = [{ text: 'view recipes', primary: true }];
+    if (messageType === 'guest') {
+      title += ', Guest!';
       message = [
-        "As a guest, feel free to explore! You will be able to preview the site, but with limited functionality.",
-        "You can view recipes, but cannot:",
-        "add new recipes<br> favourite or bookmark recipes<br> add comments or add dates",
-        "and any changes made will not be saved.",
+        'As a guest, feel free to explore! You will be able to preview the site, but with limited functionality.',
+        'You can view recipes, but cannot:',
+        'add new recipes<br> favourite or bookmark recipes<br> add comments or add dates',
+        'and any changes made will not be saved.',
       ];
     } else {
       if (userName) {
-        title += ", " + userName;
+        title += ', ' + userName;
         // } else {
         //   const testy = history.state.data;
         //   if (!!testy && !!testy.name) {
@@ -147,16 +149,16 @@ export class RecipeListComponent implements OnInit, OnDestroy {
       }
 
       message = [
-        "Thanks for signing up! Get started by",
-        "browsing recipes, or add your own straight away!",
+        'Thanks for signing up! Get started by',
+        'browsing recipes, or add your own straight away!',
       ];
-      actions.push({ text: "add new recipe", go: "new", secondary: true });
+      actions.push({ text: 'add new recipe', go: 'new', secondary: true });
     }
     this.dialog
       .alert({ title: title, lines: message, actions: actions })
       .subscribe((res) => {
-        if (res === "new") {
-          this.router.navigate(["recipes", "new"]);
+        if (res === 'new') {
+          this.router.navigate(['recipes', 'new']);
         }
       });
   }
@@ -178,7 +180,7 @@ export class RecipeListComponent implements OnInit, OnDestroy {
   populateColumns(recipesArray) {
     const columns = [];
     for (let index = 1; index <= this.columnCount; index++) {
-      const name = "column" + index;
+      const name = 'column' + index;
       const indexes = [...Array(recipesArray.length).keys()].filter((i) => {
         // console.log('i: ', i, ' col count: ', this.columnCount, ' modulo: ', i % this.columnCount === index - 1);
         return i % this.columnCount === index - 1;
@@ -216,9 +218,9 @@ export class RecipeListComponent implements OnInit, OnDestroy {
   handleRoute(key: string, recipeArray?: any[]) {
     const recipeArr = recipeArray ? [...recipeArray] : [...this.allRecipes];
     switch (key) {
-      case "to-do":
+      case 'to-do':
         return recipeArr.filter((r) => this.toDoList.includes(r.key));
-      case "favourites":
+      case 'favourites':
         return recipeArr.filter((r) => this.favouritesArr.includes(r.key));
       default:
         return recipeArr;
@@ -227,12 +229,13 @@ export class RecipeListComponent implements OnInit, OnDestroy {
 
   handleQueryParams(key: string) {
     const recipeArr = [...this.allRecipes];
-    if (key === "toDo") {
+    if (key === 'toDo') {
       const filt = recipeArr.filter((r) => {
         return this.toDoList.includes(r.key);
       });
       return filt;
     }
+    return null;
   }
 
   ngOnDestroy() {
@@ -253,9 +256,9 @@ export class RecipeListComponent implements OnInit, OnDestroy {
 
   scroll(el?) {
     if (el) {
-      el.scrollIntoView({ behavior: "smooth" });
+      el.scrollIntoView({ behavior: 'smooth' });
     } else {
-      window.scroll({ top: 0, behavior: "smooth" });
+      window.scroll({ top: 0, behavior: 'smooth' });
     }
   }
 
@@ -271,15 +274,15 @@ export class RecipeListComponent implements OnInit, OnDestroy {
   randomRecipe() {
     const rec =
       this.allRecipes[Math.floor(Math.random() * this.recipes.length)];
-    this.router.navigate(["recipes", rec.key]);
+    this.router.navigate(['recipes', rec.key]);
   }
 
   signup() {
-    console.log("click signup");
+    console.log('click signup');
     const dialogRef = this.dialog.show(
       AuthComponent,
       { signup: true },
-      { panelClass: "auth-dialog" }
+      { panelClass: 'auth-dialog' }
     );
     const onClose = dialogRef.afterClosed();
     onClose.subscribe((userName) => {
@@ -289,7 +292,7 @@ export class RecipeListComponent implements OnInit, OnDestroy {
         //   this.allRecipes = res;
         //   this.recipes = res.reverse();
         // });
-        this.showWelcome("signedup", userName);
+        this.showWelcome('signedup', userName);
         // to do: show welcome message
       }
     });

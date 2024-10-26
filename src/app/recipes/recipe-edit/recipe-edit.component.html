@@ -21,7 +21,7 @@
         <app-tag
           *ngFor="let tag of tags"
           [tag]="tag"
-          [selected]="tag | arrayIncludes: recipe.tags"
+          [selected]="tag | arrayIncludes : recipe.tags"
           (toggleTagEmitter)="toggleTag(tag)"
         ></app-tag>
       </div>
