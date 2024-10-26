@@ -27,7 +27,7 @@
           [showFavouriteIcon]="filter !== 'favourites'"
           [isFavourite]="
             filter !== 'favourites'
-              ? (recipes[recipeIndex].key | favourite: favouritesArr)
+              ? (recipes[recipeIndex].key | favourite : favouritesArr)
               : null
           "
           (favouriteEmitter)="favourite(recipes[recipeIndex])"

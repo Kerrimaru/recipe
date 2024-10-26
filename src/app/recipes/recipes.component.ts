@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { User } from 'src/app/auth/user.model';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
+import { User } from '../auth/user.model';
+import { Component, OnInit } from '@angular/core';
 // const Firebase = require('firebase');
 
 @Component({

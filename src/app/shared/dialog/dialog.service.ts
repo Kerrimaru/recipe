@@ -1,9 +1,13 @@
 import { Injectable } from '@angular/core';
 import { ComponentType } from '@angular/cdk/portal';
-import { MatDialogRef, MatDialog } from '@angular/material/dialog';
+// import {
+//   MatLegacyDialogRef as MatDialogRef,
+//   MatLegacyDialog as MatDialog,
+// } from '@angular/material/legacy-dialog';
 import { AlertComponent } from './alert/alert.component';
 import { Observable, of } from 'rxjs';
 import { takeWhile } from 'rxjs/operators';
+import { MatDialogRef, MatDialog } from '@angular/material/dialog';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +19,11 @@ export class DialogService {
 
   constructor(private mdDialog: MatDialog) {}
 
-  show<T>(component: ComponentType<T>, data?: any, config?: any): MatDialogRef<any> {
+  show<T>(
+    component: ComponentType<T>,
+    data?: any,
+    config?: any
+  ): MatDialogRef<any> {
     this.dialogData = data;
     const dialogRef = this.mdDialog.open(component, config);
 
@@ -49,12 +57,19 @@ export class DialogService {
     this.dialogData = null;
   }
 
-  alert(data?: { title?: string; lines?: string[] | string; actions?: any[]; class?: string, image?: string }): Observable<any> {
-    console.log('img: ', data)
-    const dialog = this.show(AlertComponent, data, {
-      disableClose: true,
-    });
-    return this.observeDialog(dialog);
+  alert(data?: {
+    title?: string;
+    lines?: string[] | string;
+    actions?: any[];
+    class?: string;
+    image?: string;
+  }): Observable<any> {
+    console.log('img: ', data);
+    // const dialog = this.show(AlertComponent, data, {
+    //   disableClose: true,
+    // });
+    // return this.observeDialog(dialog);
+    return null;
   }
 
   observeDialog(dialog: MatDialogRef<any>): Observable<any> {

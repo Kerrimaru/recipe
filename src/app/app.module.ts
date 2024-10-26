@@ -1,33 +1,34 @@
-import { BrowserModule } from "@angular/platform-browser";
-import { NgModule, Injectable } from "@angular/core";
-import { HttpClientModule } from "@angular/common/http";
-import { DragDropModule } from "@angular/cdk/drag-drop";
-import { AngularFireModule } from "@angular/fire/compat";
-import { AngularFireDatabaseModule } from "@angular/fire/compat/database";
-import { environment } from "../environments/environment";
-import { AppRoutingModule } from "./app-routing.module";
-import { SharedModule } from "./shared/shared.module";
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule, Injectable } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { AngularFireModule } from '@angular/fire/compat';
+import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
+import { environment } from '../environments/environment';
+import { AppRoutingModule } from './app-routing.module';
+import { SharedModule } from './shared/shared.module';
 // import { CoreModule } from "./core.module";
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { ServiceWorkerModule } from "@angular/service-worker";
-import { HammerModule } from "@angular/platform-browser";
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { HammerModule } from '@angular/platform-browser';
 
 import {
   HammerGestureConfig,
   HAMMER_GESTURE_CONFIG,
-} from "@angular/platform-browser";
-import * as Hammer from "hammerjs";
+} from '@angular/platform-browser';
+import * as Hammer from 'hammerjs';
 
-import { AppComponent } from "./app.component";
-import { HeaderComponent } from "./header/header.component";
-import { MainNavComponent } from "./main-nav/main-nav.component";
-import { AngularFireStorageModule, BUCKET } from "@angular/fire/compat/storage";
+import { AppComponent } from './app.component';
+import { HeaderComponent } from './header/header.component';
+import { MainNavComponent } from './main-nav/main-nav.component';
+import { AngularFireStorageModule, BUCKET } from '@angular/fire/compat/storage';
+import { CommonModule } from '@angular/common';
 
 @Injectable()
 export class MyHammerConfig extends HammerGestureConfig {
-  buildHammer(element: HTMLElement) {
+  override buildHammer(element: HTMLElement) {
     const mc = new Hammer(element, {
-      touchAction: "pan-y",
+      touchAction: 'pan-y',
     });
 
     return mc;
@@ -38,18 +39,19 @@ export class MyHammerConfig extends HammerGestureConfig {
   declarations: [AppComponent, HeaderComponent, MainNavComponent],
   imports: [
     BrowserModule,
-    AngularFireModule.initializeApp(environment.firebase, "kerr-recipe"),
+    AngularFireModule.initializeApp(environment.firebase, 'kerr-recipe'),
     AngularFireDatabaseModule,
     AppRoutingModule,
     HttpClientModule,
     SharedModule,
     // CoreModule,
+    CommonModule,
     DragDropModule,
     BrowserAnimationsModule,
     HammerModule,
-    ServiceWorkerModule.register("ngsw-worker.js", {
+    ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
-      registrationStrategy: "registerImmediately",
+      registrationStrategy: 'registerImmediately',
     }),
   ],
   providers: [

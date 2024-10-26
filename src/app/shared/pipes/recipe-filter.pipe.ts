@@ -18,6 +18,7 @@ export class RecipeFilterPipe implements PipeTransform {
         return true;
       }
     }
+    return '';
   }
 
   transform(recipes: any[], searchTerm: string): any[] {

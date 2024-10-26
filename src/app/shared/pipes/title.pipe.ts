@@ -6,7 +6,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class TitlePipe implements PipeTransform {
   transform(input: string): string {
     if (!input) {
-      return;
+      return '';
     }
     // console.log('input: ', input);
     const words = input.trim().split(' ');
@@ -24,7 +24,21 @@ export class TitlePipe implements PipeTransform {
   }
 
   private isJoiningWord(word: string): boolean {
-    const words = ['of', 'the', 'is', 'and', 'on', 'by', 'with', 'and', 'au', 'le', 'les', 'la', 'in'];
+    const words = [
+      'of',
+      'the',
+      'is',
+      'and',
+      'on',
+      'by',
+      'with',
+      'and',
+      'au',
+      'le',
+      'les',
+      'la',
+      'in',
+    ];
     return words.includes(word.toLowerCase());
   }
 

@@ -1,10 +1,12 @@
-import { KeyValue } from "@angular/common";
-import { Component, Input, OnInit } from "@angular/core";
+import { CommonModule, KeyValue } from '@angular/common';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
-  selector: "app-date-list",
-  templateUrl: "./date-list.component.html",
-  styleUrls: ["./date-list.component.scss"],
+  selector: 'app-date-list',
+  templateUrl: './date-list.component.html',
+  styleUrls: ['./date-list.component.scss'],
+  // standalone: true,
+  // imports: [CommonModule],
 })
 export class DateListComponent implements OnInit {
   constructor() {}
@@ -53,7 +55,7 @@ export class DateListComponent implements OnInit {
       }
     });
     this.secArray = arr;
-    console.log("arr: ", arr);
+    console.log('arr: ', arr);
   }
 
   sortDates(dates) {

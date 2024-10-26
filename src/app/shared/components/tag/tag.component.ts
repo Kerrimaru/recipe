@@ -1,9 +1,10 @@
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { CommonModule } from '@angular/common';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
-  selector: "app-tag",
-  templateUrl: "./tag.component.html",
-  styleUrls: ["./tag.component.scss"],
+  selector: 'app-tag',
+  templateUrl: './tag.component.html',
+  styleUrls: ['./tag.component.scss'],
 })
 export class TagComponent implements OnInit {
   @Input() tag: string;

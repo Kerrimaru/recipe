@@ -55,9 +55,9 @@ export class LottieDirective implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     // console.log('change lotte: ', changes, this);
     // console.log('this: ', this);
-    if (changes.play) {
+    if (changes['play']) {
       // this.playAnimation();
-      this.playAnimation(changes.play.currentValue);
+      this.playAnimation(changes['play'].currentValue);
     }
   }
 

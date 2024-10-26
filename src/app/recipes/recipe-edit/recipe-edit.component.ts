@@ -1,27 +1,32 @@
-import { Component, OnInit } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
-import { FormGroup, FormControl, FormArray, Validators } from "@angular/forms";
-import { RecipeService } from "../recipe.service";
-import { NutritionConst, Recipe } from "../recipe.model";
-import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
-import * as ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import { AuthService } from "src/app/auth/auth.service";
-import { Observable, of } from "rxjs";
-import { TagsConst } from "src/app/shared/constants/tags.const";
-import { __assign } from "tslib";
-import { AngularFireStorage } from "@angular/fire/compat/storage";
-import * as uuid from "uuid";
-import { finalize } from "rxjs/operators";
+import { ActivatedRoute, Router } from '@angular/router';
+import {
+  UntypedFormGroup,
+  UntypedFormControl,
+  UntypedFormArray,
+  Validators,
+} from '@angular/forms';
+import { RecipeService } from '../recipe.service';
+import { NutritionConst, Recipe } from '../recipe.model';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { Observable, of } from 'rxjs';
+import { __assign } from 'tslib';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
+import * as uuid from 'uuid';
+import { finalize } from 'rxjs/operators';
+import { TagsConst } from '../../shared/constants/tags.const';
+import { AuthService } from '../../auth/auth.service';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: "app-recipe-edit",
-  templateUrl: "./recipe-edit.component.html",
-  styleUrls: ["./recipe-edit.component.scss"],
+  selector: 'app-recipe-edit',
+  templateUrl: './recipe-edit.component.html',
+  styleUrls: ['./recipe-edit.component.scss'],
 })
 export class RecipeEditComponent implements OnInit {
   selectedRecipeId: string;
   editMode = false;
-  recipeForm: FormGroup;
+  recipeForm: UntypedFormGroup;
   fileToUpload: File = null;
   recipe: Recipe;
   readOnly: boolean;
@@ -32,8 +37,8 @@ export class RecipeEditComponent implements OnInit {
   public recipeImgUrl; // saved image
   public message: string;
   public Editor = ClassicEditor;
-  ingredientsArrayRef: FormArray;
-  tagsArrayRef: FormArray;
+  ingredientsArrayRef: UntypedFormArray;
+  tagsArrayRef: UntypedFormArray;
   // prepTime: number = null;
 
   previewImage: any; // image added by user, but not yet saved
@@ -55,14 +60,14 @@ export class RecipeEditComponent implements OnInit {
     this.readOnly = this.auth.readOnly.getValue();
 
     this.route.params.subscribe((params) => {
-      this.selectedRecipeId = params["id"];
-      this.editMode = !!params["id"];
+      this.selectedRecipeId = params['id'];
+      this.editMode = !!params['id'];
       this.initForm();
     });
   }
 
   private initForm() {
-    this.ingredientsArrayRef = new FormArray([]);
+    this.ingredientsArrayRef = new UntypedFormArray([]);
 
     if (this.editMode) {
       this.recipe = this.recipeService.getRecipeByKey(this.selectedRecipeId);
@@ -93,11 +98,14 @@ export class RecipeEditComponent implements OnInit {
       }
     }
 
-    this.recipeForm = new FormGroup({
-      name: new FormControl(this.recipe.name, Validators.required),
-      imagePath: new FormControl(this.recipe.imagePath, Validators.required),
-      time: new FormControl(this.recipe.time),
-      description: new FormControl(
+    this.recipeForm = new UntypedFormGroup({
+      name: new UntypedFormControl(this.recipe.name, Validators.required),
+      imagePath: new UntypedFormControl(
+        this.recipe.imagePath,
+        Validators.required
+      ),
+      time: new UntypedFormControl(this.recipe.time),
+      description: new UntypedFormControl(
         this.recipe.description,
         Validators.required
       ),
@@ -134,7 +142,7 @@ export class RecipeEditComponent implements OnInit {
   onSubmit() {
     // to do: show better errors
     if (!this.recipeForm.valid || this.readOnly) {
-      console.warn("form invalid! ", this.recipeForm);
+      console.warn('form invalid! ', this.recipeForm);
       return;
     }
 
@@ -146,7 +154,7 @@ export class RecipeEditComponent implements OnInit {
   }
 
   timeChange() {
-    console.log("changed");
+    console.log('changed');
   }
 
   saveRecipe() {
@@ -154,7 +162,7 @@ export class RecipeEditComponent implements OnInit {
     const ingArr = this.ingredientsArrayRef.value
       .filter((i) => !!i.name)
       .map((_i) => _i.name);
-    console.log("rec form: ", this.recipeForm.value);
+    console.log('rec form: ', this.recipeForm.value);
     const _recipe = Object.assign(this.recipe, {
       ...this.recipeForm.value,
       ingredients: ingArr,
@@ -166,15 +174,15 @@ export class RecipeEditComponent implements OnInit {
       this.onCancel();
     } else {
       const key = this.recipeService.addRecipe(_recipe);
-      this.router.navigate(["recipes", key]);
+      this.router.navigate(['recipes', key]);
     }
   }
 
   onAddIngredient(ingredient?: string) {
     // leave as form group in case I decide to add ingredient amount again, or other details in future
     this.ingredientsArrayRef.push(
-      new FormGroup({
-        name: new FormControl(ingredient ? ingredient : null),
+      new UntypedFormGroup({
+        name: new UntypedFormControl(ingredient ? ingredient : null),
       })
     );
   }
@@ -184,7 +192,7 @@ export class RecipeEditComponent implements OnInit {
   }
 
   onCancel() {
-    this.router.navigate(["../"], { relativeTo: this.route });
+    this.router.navigate(['../'], { relativeTo: this.route });
   }
 
   checkIfLast(index: number) {
@@ -209,18 +217,18 @@ export class RecipeEditComponent implements OnInit {
     // remove images/alt text
     // this is a bad gousto hack, until I can figure out how to remove images/alt text reliably
     const containsImages = e.clipboardData
-      .getData("text/html")
-      .includes("<img");
+      .getData('text/html')
+      .includes('<img');
     let text;
     let ingArray;
     if (!containsImages) {
-      text = (e.originalEvent || e).clipboardData.getData("text/plain");
+      text = (e.originalEvent || e).clipboardData.getData('text/plain');
       ingArray = text.split(/\n/);
     } else {
-      text = e.clipboardData.getData("text/html").replace(/<img[^>]*>/g, "\n");
+      text = e.clipboardData.getData('text/html').replace(/<img[^>]*>/g, '\n');
       const parser = new DOMParser();
-      const doc = parser.parseFromString(text, "text/html");
-      const bod = doc.getElementsByTagName("body")[0];
+      const doc = parser.parseFromString(text, 'text/html');
+      const bod = doc.getElementsByTagName('body')[0];
       ingArray = bod.innerText.split(/\n/);
     }
 
@@ -247,13 +255,13 @@ export class RecipeEditComponent implements OnInit {
 
     const mimeType = files[0].type;
     if (mimeType.match(/image\/*/) === null) {
-      this.message = "Only images are supported.";
+      this.message = 'Only images are supported.';
       return;
     }
     this.fileToUpload = files[0];
 
     this.markDirty();
-    this.recipeForm.get("imagePath").setErrors(null);
+    this.recipeForm.get('imagePath').setErrors(null);
 
     // show preview, but dont upload yet
     const reader = new FileReader();
@@ -273,7 +281,7 @@ export class RecipeEditComponent implements OnInit {
       this.deleteImgFile(this.recipeImgUrl);
     }
     const filePath =
-      (this.auth.user.value.id || "unassigned") + "/" + uuid.v4();
+      (this.auth.user.value.id || 'unassigned') + '/' + uuid.v4();
     const fileRef = this.storage.ref(filePath);
     const task = this.storage.upload(filePath, this.fileToUpload);
     this.uploadPercent = task.percentageChanges();
@@ -283,7 +291,7 @@ export class RecipeEditComponent implements OnInit {
       .pipe(
         finalize(() => {
           fileRef.getDownloadURL().subscribe((imgURL) => {
-            const imgCtrl = this.recipeForm.get("imagePath");
+            const imgCtrl = this.recipeForm.get('imagePath');
             imgCtrl.setValue(imgURL);
             this.saveRecipe();
           });
@@ -305,13 +313,13 @@ export class RecipeEditComponent implements OnInit {
         const img = new Image();
         img.src = (ev.target as any).result;
         (img.onload = () => {
-          const elem = document.createElement("canvas") as HTMLCanvasElement; // Use Angular's Renderer2 method
+          const elem = document.createElement('canvas') as HTMLCanvasElement; // Use Angular's Renderer2 method
           const scaleFactor = width / img.width;
           elem.width = width;
           elem.height = img.height * scaleFactor;
-          const ctx = <CanvasRenderingContext2D>elem.getContext("2d");
+          const ctx = <CanvasRenderingContext2D>elem.getContext('2d');
           ctx.drawImage(img, 0, 0, width, img.height * scaleFactor);
-          const dataurl = elem.toDataURL("image/jpeg", 0.8);
+          const dataurl = elem.toDataURL('image/jpeg', 0.8);
           observer.next(dataurl);
         }),
           (reader.onerror = (error) => observer.error(error));

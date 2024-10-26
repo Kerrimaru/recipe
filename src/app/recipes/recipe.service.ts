@@ -1,18 +1,18 @@
-import { Recipe } from "./recipe.model";
-import { EventEmitter, Injectable } from "@angular/core";
+import { Recipe } from './recipe.model';
+import { EventEmitter, Injectable } from '@angular/core';
 // import { Ingredient } from '../shared/ingredient.model';
-import { Subject, Observable, of, BehaviorSubject } from "rxjs";
+import { Subject, Observable, of, BehaviorSubject } from 'rxjs';
 // import { DataStorageService } from '../shared/data-storage.service';
 import {
   AngularFireDatabase,
   AngularFireList,
   snapshotChanges,
-} from "@angular/fire/compat/database";
-import { finalize, map, tap } from "rxjs/operators";
-import { AngularFireStorage } from "@angular/fire/compat/storage";
-import * as uuid from "uuid";
+} from '@angular/fire/compat/database';
+import { finalize, map, tap } from 'rxjs/operators';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
+import * as uuid from 'uuid';
 
-@Injectable({ providedIn: "root" })
+@Injectable({ providedIn: 'root' })
 export class RecipeService {
   constructor(
     private fb: AngularFireDatabase,
@@ -55,8 +55,10 @@ export class RecipeService {
         if (res) {
           this.getRecipeByKey(key);
         }
+        return null;
       });
     }
+    return null;
   }
 
   getRecipeSub(key: string) {
@@ -95,7 +97,7 @@ export class RecipeService {
 
   // i've removed limit for guests
   fetchRecipes(limit?: number) {
-    this.recipeList = this.fb.list("recipes", (ref) => {
+    this.recipeList = this.fb.list('recipes', (ref) => {
       if (limit) {
         return ref.limitToFirst(limit);
       }
@@ -117,10 +119,10 @@ export class RecipeService {
 
   // hack to update the db
   uploadFile(recipe: Recipe) {
-    const filePath = (recipe.userId || "unassigned") + "/" + uuid.v4();
+    const filePath = (recipe.userId || 'unassigned') + '/' + uuid.v4();
     const fileRef = this.storage.ref(filePath);
     const ref = this.storage.ref(filePath);
-    const task = ref.putString(recipe.imagePath, "data_url");
+    const task = ref.putString(recipe.imagePath, 'data_url');
     task
       .snapshotChanges()
       .pipe(
@@ -140,13 +142,13 @@ export class RecipeService {
   ) {
     const recipeNote = { ...note, date: Date.now() };
     const notesRef = this.fb.database
-      .ref("recipeNotes")
+      .ref('recipeNotes')
       .child(recipeId)
       .push(recipeNote);
   }
 
   fetchRecipeNotes(recipeId: string) {
-    return this.fb.database.ref("recipeNotes").child(recipeId).once("value");
+    return this.fb.database.ref('recipeNotes').child(recipeId).once('value');
   }
 
   getNotesSub(key: string) {
@@ -163,13 +165,14 @@ export class RecipeService {
     if (recipeKey) {
       return this.fb.list(`userDateMade/${userId}/${recipeKey}`);
     }
+    return null;
   }
 
   getRecipesMadeSnap(userId: string) {
     return this.fb.database
-      .ref("userDateMade")
+      .ref('userDateMade')
       .child(userId)
-      .once("value")
+      .once('value')
       .then((snapshot) => {
         let recipeDates = [];
         for (const [key, value] of Object.entries(snapshot.val())) {
@@ -196,7 +199,7 @@ export class RecipeService {
 
   setUserDateMade(userId: string, recipeId: string, date: string) {
     this.fb.database
-      .ref("userDateMade")
+      .ref('userDateMade')
       .child(userId)
       .child(recipeId)
       .push(date);
