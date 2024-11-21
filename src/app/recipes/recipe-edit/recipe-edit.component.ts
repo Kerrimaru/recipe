@@ -33,6 +33,23 @@ export class RecipeEditComponent implements OnInit {
 
   test: any;
   tags: string[] = [...TagsConst];
+  ckConfig = {
+    toolbar: [
+      'undo',
+      'redo',
+      '|',
+      'heading',
+      'paragraph',
+      'bold',
+      'italic',
+      'link',
+      '|',
+      'numberedList',
+      'bulletedList',
+      'indent',
+    ],
+    height: '300px',
+  };
 
   public recipeImgUrl; // saved image
   public message: string;
@@ -63,6 +80,21 @@ export class RecipeEditComponent implements OnInit {
       this.selectedRecipeId = params['id'];
       this.editMode = !!params['id'];
       this.initForm();
+    });
+  }
+
+  onEditorReady(editor: any) {
+    // Attach the keydown event listener
+    editor.editing.view.document.on('keydown', (event: any, data: any) => {
+      // temp hack to fix enter key not working
+      if (data.keyCode === 13) {
+        const model = editor.model;
+        const selection = model.document.selection;
+
+        editor.execute('insertParagraph', {
+          position: selection.getFirstPosition(),
+        });
+      }
     });
   }
 

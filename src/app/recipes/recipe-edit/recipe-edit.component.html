@@ -139,8 +139,9 @@
         <div class="editor">
           <ckeditor
             [editor]="Editor"
-            [config]="{ height: '300px' }"
+            [config]="ckConfig"
             formControlName="description"
+            (ready)="onEditorReady($event)"
           ></ckeditor>
         </div>
       </div>
